@@ -2,7 +2,7 @@ package com.revlearn.team1.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import com.revlearn.team1.model.UserModel;
+import com.revlearn.team1.model.User;
 
 @Entity
 @Data
