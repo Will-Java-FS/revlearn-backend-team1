@@ -1,9 +1,10 @@
 package com.revlearn.team1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -13,31 +14,35 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="discussion_posts")
+@Table(name = "discussion_posts")
 public class DiscussionPost {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="discussion_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "discussion_id")
     private long discussionId;
 
     @ManyToOne
-    @JoinColumn(name="course_id", nullable=false)
+    @JoinColumn(name = "course_id", nullable = false)
+    @JsonIgnore
     private Course course;
 
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name="content")
+    @Column(name = "content")
     private String content;
 
     @CreationTimestamp
-    @Column(name="created_at")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
 }
