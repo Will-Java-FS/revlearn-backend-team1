@@ -13,23 +13,6 @@ import java.util.Set;
 @Entity
 public class Course {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Lob
-    private Object courseContent;
-
-    @ManyToOne
-    @JoinColumn(name = "institution_id", nullable = false)
-    private User institution;
-
     @ManyToMany
     @JoinTable(
             name = "course_educators",
@@ -37,7 +20,6 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "educator_id")
     )
     private final Set<User> educators = new HashSet<>();
-
     @ManyToMany
     @JoinTable(
             name = "course_students",
@@ -45,10 +27,21 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
     private final Set<User> students = new HashSet<>();
-
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private final Set<DiscussionPost> discussionPosts = new HashSet<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false)
+    private String name;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
+    @OneToOne
+    private CourseContent courseContent;
+    @ManyToOne
+    @JoinColumn(name = "institution_id", nullable = false)
+    private User institution;
     @Column(nullable = false)
     private LocalDate startDate;
 

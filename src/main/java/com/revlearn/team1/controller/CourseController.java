@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/Course")
 @RequiredArgsConstructor
 public class CourseController {
-    CourseService courseService;
+    private final CourseService courseService;
 
     @GetMapping("/{id}")
     public Course getCourseById(@RequestParam Long courseId) {

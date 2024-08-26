@@ -1,15 +1,13 @@
 package com.revlearn.team1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-public class DiscussionPost {
+public class CourseContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    @ManyToOne
-    @JsonIgnore
+    @OneToOne
     private Course course;
 }
