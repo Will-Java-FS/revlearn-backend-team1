@@ -2,6 +2,7 @@ package com.revlearn.team1.model;
 
 import com.revlearn.team1.enums.AttendanceMethod;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Data
 public class Course {
 
     @ManyToMany
