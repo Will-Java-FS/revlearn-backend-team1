@@ -1,17 +1,16 @@
 package com.revlearn.team1.service;
 
-import com.revlearn.team1.dto.TransactionDTO;
-import com.revlearn.team1.exceptions.CourseNotFoundException;
-import com.revlearn.team1.exceptions.TransactionNotFoundException;
-import com.revlearn.team1.mapper.TransactionMapper;
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.TransactionModel;
-import com.revlearn.team1.repository.TransactionRepo;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.revlearn.team1.dto.TransactionDTO;
+import com.revlearn.team1.exceptions.TransactionNotFoundException;
+import com.revlearn.team1.mapper.TransactionMapper;
+import com.revlearn.team1.model.TransactionModel;
+import com.revlearn.team1.repository.TransactionRepo;
 
 @Service
 public class TransactionServiceImp implements TransactionService
@@ -52,7 +51,7 @@ public class TransactionServiceImp implements TransactionService
     @Override
     public void deleteTransactionById(int transactionId)
     {
-        TransactionModel retrievedTransaction = transactionRepo.findById(transactionId).orElseThrow(
+        transactionRepo.findById(transactionId).orElseThrow(
                 () -> new TransactionNotFoundException(String.format("Could not find transaction to delete by that Id in Database.  Transaction ID: %d", transactionId))
         );
 
