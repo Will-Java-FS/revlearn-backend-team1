@@ -43,10 +43,11 @@ public class Course {
     private CourseContent courseContent;
     @ManyToOne
     @JoinColumn(name = "institution_id"
-//            , nullable = false
+            //TODO: uncomment this once User model is implemented
+            // nullable = false
     )
     private User institution;
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private LocalDate startDate;
 
     @Column(nullable = false)

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public record CourseDTO(
+        Long id,
         User institution,
         LocalDate startDate,
         LocalDate endDate,
