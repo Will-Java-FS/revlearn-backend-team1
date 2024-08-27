@@ -13,7 +13,7 @@ import com.revlearn.team1.model.User;
 public class TransactionModel
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @OneToOne(cascade = CascadeType.ALL)
