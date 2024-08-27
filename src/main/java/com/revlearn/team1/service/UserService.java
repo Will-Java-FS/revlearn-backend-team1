@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService{
+
     @Autowired
     private UserRepository userRepository;
 
@@ -61,6 +62,6 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Invalid username."));
     }
 }
