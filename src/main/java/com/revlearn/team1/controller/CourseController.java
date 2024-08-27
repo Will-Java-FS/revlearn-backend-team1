@@ -31,23 +31,25 @@ public class CourseController {
     }
 
     @PutMapping("/update")
-    public CourseDTO updateCourse(@RequestBody CourseDTO courseDTO){
+    public CourseDTO updateCourse(@RequestBody CourseDTO courseDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security in service layer.
         return courseService.updateCourse(courseDTO);
     }
+
     @PatchMapping("/addEducator")
-    public CourseEducatorResDTO addEducator(@RequestBody CourseEducatorDTO courseEducatorDTO){
+    public CourseEducatorResDTO addEducator(@RequestBody CourseEducatorDTO courseEducatorDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.addEducator(courseEducatorDTO);
     }
 
     @PatchMapping("/removeEducator")
-    public CourseEducatorResDTO removeEducator(@RequestBody CourseEducatorDTO courseEducatorDTO){
+    public CourseEducatorResDTO removeEducator(@RequestBody CourseEducatorDTO courseEducatorDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
     }
+
     @DeleteMapping("/delete/{id}")
-    public String deleteCourse(@PathVariable Long id){
+    public String deleteCourse(@PathVariable Long id) {
         return courseService.deleteById(id);
     }
 }
