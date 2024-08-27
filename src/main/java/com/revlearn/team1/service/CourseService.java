@@ -2,7 +2,9 @@ package com.revlearn.team1.service;
 
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.request.CourseStudentDTO;
 import com.revlearn.team1.dto.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.response.CourseStudentResDTO;
 
 import java.util.List;
 
@@ -15,8 +17,15 @@ public interface CourseService {
 
     public CourseDTO updateCourse(CourseDTO courseDTO);
 
+    public String deleteById(Long id);
+
     public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO);
 
     public CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO);
+
+    public CourseStudentResDTO addStudent(CourseStudentDTO courseStudentDTO);
+
+    public CourseStudentResDTO removeStudent(CourseStudentDTO courseStudentDTO);
+
 
 }

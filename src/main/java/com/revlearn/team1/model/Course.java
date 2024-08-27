@@ -62,4 +62,5 @@ public class Course {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
 }

@@ -172,7 +172,24 @@ public class CourseServiceImpTest {
         Mockito.verify(courseRepo).save(course);
         Mockito.verify(courseMapper).toDto(course);
     }
+    @Test
+    public void testUpdateCourseNotFound() {
+        // Arrange
+        CourseDTO courseDTO = new CourseDTO(
+                1L,
+                null,
+                LocalDate.of(2024, 5, 27),
+                LocalDate.of(2024, 8, 27),
+                AttendanceMethod.HYBRID,
+                "TestCourse",
+                "A course to test methods",
+                null,
+                null);
+        Mockito.when(courseRepo.findById(1L)).thenReturn(Optional.empty());
 
+        // Act & Assert
+        assertThrows(CourseNotFoundException.class, () -> courseService.updateCourse(courseDTO));
+    }
     @Test
     public void testAddEducatorSuccess() {
         // Arrange

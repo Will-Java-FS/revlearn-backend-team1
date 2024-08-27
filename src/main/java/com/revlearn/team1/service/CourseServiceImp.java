@@ -2,7 +2,9 @@ package com.revlearn.team1.service;
 
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.request.CourseStudentDTO;
 import com.revlearn.team1.dto.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.response.CourseStudentResDTO;
 import com.revlearn.team1.exceptions.CourseNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.mapper.CourseMapper;
@@ -18,11 +20,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CourseServiceImp {
+public class CourseServiceImp implements CourseService {
     private final CourseRepo courseRepo;
     private final CourseMapper courseMapper;
     private final UserRepository userRepo;
 
+    @Override
     public List<CourseDTO> getAll() {
         //TODO: Consider pagination instead of the return of every course
         try {
@@ -32,6 +35,7 @@ public class CourseServiceImp {
         }
     }
 
+    @Override
     public CourseDTO getById(Long courseId) {
         Course retrievedCourse = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("CourseService.getById()", courseId));
@@ -46,6 +50,7 @@ public class CourseServiceImp {
         return courseMapper.toDto(savedCourse);
     }
 
+    @Override
     public CourseDTO updateCourse(CourseDTO courseDTO) {
         //This function should only be accessible by educators and institutions
 
@@ -67,7 +72,18 @@ public class CourseServiceImp {
         return courseMapper.toDto(savedCourse);
     }
 
+    @Override
+    public String deleteById(Long id) {
+        //verify course exists
+        Course course = courseRepo.findById(id).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
+        //delete
+        courseRepo.deleteById(id);
+        return String.format("Successfully deleted course %d.", id);
+    }
 
+
+    @Override
     public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO) {
         //verify course and educator exist
         Course course = courseRepo.findById(courseEducatorDTO.courseId()).orElseThrow(
@@ -88,6 +104,7 @@ public class CourseServiceImp {
         return new CourseEducatorResDTO("Successfully added educator to course.", savedCourse.getId(), savedEducator.getId());
     }
 
+    @Override
     public CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO) {
         //verify course and educator exist
         Course course = courseRepo.findById(courseEducatorDTO.courseId()).orElseThrow(
@@ -108,12 +125,43 @@ public class CourseServiceImp {
         return new CourseEducatorResDTO("Successfully removed educator from course.", savedCourse.getId(), savedEducator.getId());
     }
 
-    public String deleteById(Long id) {
-        //verify course exists
-        Course course = courseRepo.findById(id).orElseThrow(
-                () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
-        //delete
-        courseRepo.deleteById(id);
-        return String.format("Successfully deleted course %d.", id);
+    @Override
+    public CourseStudentResDTO addStudent(CourseStudentDTO courseStudentDTO) {
+        //verify course and student exit
+        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
+        User student = userRepo.findById(courseStudentDTO.studentId()).orElseThrow(
+                //TODO: replace generic runtime exception with custom exception
+                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
+
+        //TODO: verify authenticated user is provided student (Clean this up later when security is implemented.  Use security context to get current user)
+
+        course.getStudents().add(student);
+        student.getEnrolledCourses().add(course);
+
+        Course savedCourse = courseRepo.save(course);
+        User savedUser = userRepo.save(student);
+
+        return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), savedUser.getId());    }
+
+    @Override
+    public CourseStudentResDTO removeStudent(CourseStudentDTO courseStudentDTO) {
+        //verify course and student exit
+        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
+        User student = userRepo.findById(courseStudentDTO.studentId()).orElseThrow(
+                //TODO: replace generic runtime exception with custom exception
+                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
+
+        //TODO: verify authenticated user is provided student (Clean this up later when security is implemented.  Use security context to get current user)
+
+        course.getStudents().remove(student);
+        student.getEnrolledCourses().remove(course);
+
+        Course savedCourse = courseRepo.save(course);
+        User savedUser = userRepo.save(student);
+
+        return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), savedUser.getId());
     }
+
 }
