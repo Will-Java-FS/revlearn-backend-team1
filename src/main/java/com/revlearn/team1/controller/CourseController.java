@@ -2,7 +2,9 @@ package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.request.CourseStudentDTO;
 import com.revlearn.team1.dto.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.response.CourseStudentResDTO;
 import com.revlearn.team1.service.CourseServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -51,5 +53,14 @@ public class CourseController {
     @DeleteMapping("/delete/{id}")
     public String deleteCourse(@PathVariable Long id) {
         return courseService.deleteById(id);
+    }
+
+    @PatchMapping("/enroll")
+    public CourseStudentResDTO enrollStudent(@RequestBody CourseStudentDTO courseStudentDTO){
+        return courseService.enrollStudent(courseStudentDTO);
+    }
+    @PatchMapping("/withdraw")
+    public CourseStudentResDTO withdrawStudent(@RequestBody CourseStudentDTO courseStudentDTO){
+        return courseService.withdrawStudent(courseStudentDTO);
     }
 }

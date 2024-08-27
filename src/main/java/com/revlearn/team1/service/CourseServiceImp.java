@@ -126,7 +126,7 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public CourseStudentResDTO addStudent(CourseStudentDTO courseStudentDTO) {
+    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO) {
         //verify course and student exit
         Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
                 () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
@@ -134,7 +134,8 @@ public class CourseServiceImp implements CourseService {
                 //TODO: replace generic runtime exception with custom exception
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
 
-        //TODO: verify authenticated user is provided student (Clean this up later when security is implemented.  Use security context to get current user)
+        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
+        // (Clean this up later when security is implemented.  Use security context to get current user)
 
         course.getStudents().add(student);
         student.getEnrolledCourses().add(course);
@@ -145,7 +146,7 @@ public class CourseServiceImp implements CourseService {
         return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), savedUser.getId());    }
 
     @Override
-    public CourseStudentResDTO removeStudent(CourseStudentDTO courseStudentDTO) {
+    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO) {
         //verify course and student exit
         Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
                 () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
@@ -153,7 +154,8 @@ public class CourseServiceImp implements CourseService {
                 //TODO: replace generic runtime exception with custom exception
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
 
-        //TODO: verify authenticated user is provided student (Clean this up later when security is implemented.  Use security context to get current user)
+        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
+        // (Clean this up later when security is implemented.  Use security context to get current user)
 
         course.getStudents().remove(student);
         student.getEnrolledCourses().remove(course);

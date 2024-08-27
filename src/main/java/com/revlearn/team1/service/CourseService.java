@@ -23,9 +23,9 @@ public interface CourseService {
 
     public CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO);
 
-    public CourseStudentResDTO addStudent(CourseStudentDTO courseStudentDTO);
+    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO);
 
-    public CourseStudentResDTO removeStudent(CourseStudentDTO courseStudentDTO);
+    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
 
 
 }
