@@ -11,5 +11,4 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Add other fields, constructors, getters, and setters
 }
