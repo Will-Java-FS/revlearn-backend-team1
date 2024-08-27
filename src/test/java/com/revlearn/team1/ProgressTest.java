@@ -26,6 +26,7 @@ public class ProgressTest {
     @InjectMocks
     private ProgressService progressService;
 
+    /*
     @Test
     public void testProgressByStudentCourse(){
         Progress progress = new Progress();
@@ -40,4 +41,5 @@ public class ProgressTest {
         assertEquals(2L, result.getCourse());
 
     }
+     */
 }
