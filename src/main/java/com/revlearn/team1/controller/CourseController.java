@@ -46,4 +46,8 @@ public class CourseController {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
     }
+    @DeleteMapping("/delete/{id}")
+    public String deleteCourse(@PathVariable Long id){
+        return courseService.deleteById(id);
+    }
 }

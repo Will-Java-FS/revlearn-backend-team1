@@ -28,14 +28,13 @@ public class CourseServiceImp {
         try {
             return courseRepo.findAll().stream().map(courseMapper::toDto).toList();
         } catch (DataAccessException ex) {
-            throw new ServiceLayerDataAccessException("Course service failed to retrieve all courses because of a data access exception.", ex);
+            throw new ServiceLayerDataAccessException("CourseService.getAll() failed to retrieve all courses because of a data access exception.", ex);
         }
     }
 
     public CourseDTO getById(Long courseId) {
         Course retrievedCourse = courseRepo.findById(courseId).orElseThrow(
-                () -> new CourseNotFoundException(String.format("Could not find course by Id %d in Database.", courseId))
-        );
+                () -> new CourseNotFoundException("CourseService.getById()", courseId));
         return courseMapper.toDto(retrievedCourse);
     }
 
@@ -55,7 +54,7 @@ public class CourseServiceImp {
 
         //Verify course already exists in database
         Course course = courseRepo.findById(courseDTO.id()).orElseThrow(
-                () -> new CourseNotFoundException(String.format("Could not find course by ID %d in database.", courseDTO.id())));
+                () -> new CourseNotFoundException("CourseService.updateCourse()", courseDTO.id()));
 
 
         //Update retrieved course object with courseDTO information
@@ -72,7 +71,7 @@ public class CourseServiceImp {
     public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO) {
         //verify course and educator exist
         Course course = courseRepo.findById(courseEducatorDTO.courseId()).orElseThrow(
-                () -> new CourseNotFoundException(String.format("Course service's addEducator method failed because it could not find a course by ID %d in database.", courseEducatorDTO.courseId())));
+                () -> new CourseNotFoundException("CourseService.addEducator()", courseEducatorDTO.courseId()));
         User educator = userRepo.findById(courseEducatorDTO.educatorId()).orElseThrow(
                 //TODO: replace generic runtimeexception with custom exception
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
@@ -92,13 +91,13 @@ public class CourseServiceImp {
     public CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO) {
         //verify course and educator exist
         Course course = courseRepo.findById(courseEducatorDTO.courseId()).orElseThrow(
-                () -> new CourseNotFoundException(String.format("Course service's remove educator method failed because it could not find a course by ID %d in database.", courseEducatorDTO.courseId())));
+                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseEducatorDTO.courseId()));
         User educator = userRepo.findById(courseEducatorDTO.educatorId()).orElseThrow(
-                //TODO: replace generic runtimeexception with custom exception
+                //TODO: replace generic runtime exception with custom exception
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
-        //verify authenticated user owns course
-        //TODO
+        //TODO: verify authenticated user owns course
+        //
 
         course.getEducators().remove(educator);
         educator.getTaughtCourses().remove(course);
@@ -107,5 +106,14 @@ public class CourseServiceImp {
         User savedEducator = userRepo.save(educator);
 
         return new CourseEducatorResDTO("Successfully removed educator from course.", savedCourse.getId(), savedEducator.getId());
+    }
+
+    public String deleteById(Long id) {
+        //verify course exists
+        Course course = courseRepo.findById(id).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
+        //delete
+        courseRepo.deleteById(id);
+        return String.format("Successfully deleted course %d.", id);
     }
 }
