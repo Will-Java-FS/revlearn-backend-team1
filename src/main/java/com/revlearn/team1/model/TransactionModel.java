@@ -34,5 +34,5 @@ public class TransactionModel
     User from_user;
 
     float price;
-    String Description;
+    String description;
 }
