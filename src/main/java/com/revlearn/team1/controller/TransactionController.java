@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/transaction")
 public class TransactionController
@@ -24,5 +26,18 @@ public class TransactionController
     public ResponseEntity<TransactionDTO> findTransactionById(@PathVariable int id)
     {
         return new ResponseEntity<>(transactionService.getTransactionById(id), HttpStatus.OK);
+    }
+
+    @GetMapping // This should be formatted so that only institutions can access this endpoint
+    public ResponseEntity<List<TransactionDTO>> getTransactions()
+    {
+        return new ResponseEntity<>(transactionService.getTransactions(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}") // Again, this should only be accessed by an institution
+    public HttpStatus deleteTransactionById(@PathVariable int id)
+    {
+        transactionService.deleteTransactionById(id);
+        return HttpStatus.OK; // Delete before error?
     }
 }

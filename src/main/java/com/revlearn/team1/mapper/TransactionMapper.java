@@ -2,7 +2,9 @@ package com.revlearn.team1.mapper;
 
 import com.revlearn.team1.dto.TransactionDTO;
 import com.revlearn.team1.model.TransactionModel;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TransactionMapper
 {
     public TransactionDTO toDTO(TransactionModel transaction)
