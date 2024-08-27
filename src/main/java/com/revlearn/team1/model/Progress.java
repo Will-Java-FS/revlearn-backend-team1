@@ -6,10 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,13 +21,14 @@ public class Progress {
     @GeneratedValue
     private Long id;
 
-    //Need other entities for relationship
+    //Need other entities and database for relationship
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    //how to find by id when role == student
+    @JoinColumn(name = "student_id")
     private Student student;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @JoinColumn(name = "course_id")
     private Course course;
 
     private Float progressPercentage;
