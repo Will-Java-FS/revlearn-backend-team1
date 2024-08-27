@@ -54,7 +54,7 @@ public class Course {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private AttendanceMethod type;
+    private AttendanceMethod attendanceMethod;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

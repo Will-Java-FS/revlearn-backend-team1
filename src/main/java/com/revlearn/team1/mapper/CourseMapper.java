@@ -17,7 +17,7 @@ public class CourseMapper {
                 course.getInstitution(),
                 course.getStartDate(),
                 course.getEndDate(),
-                course.getType(),
+                course.getAttendanceMethod(),
                 course.getName(),
                 course.getDescription(),
                 course.getStudents(),
@@ -31,7 +31,7 @@ public class CourseMapper {
         course.setInstitution(courseDTO.institution());
         course.setStartDate(courseDTO.startDate());
         course.setEndDate(courseDTO.endDate());
-        course.setType(courseDTO.type());
+        course.setAttendanceMethod(courseDTO.attendanceMethod());
         course.setName(courseDTO.name());
         course.setDescription(courseDTO.description());
 

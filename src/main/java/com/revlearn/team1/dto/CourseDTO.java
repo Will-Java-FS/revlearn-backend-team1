@@ -10,7 +10,7 @@ public record CourseDTO(
         User institution,
         LocalDate startDate,
         LocalDate endDate,
-        AttendanceMethod type,
+        AttendanceMethod attendanceMethod,
         String name,
         String description,
         Set<User> students,
