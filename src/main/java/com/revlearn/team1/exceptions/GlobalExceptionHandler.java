@@ -25,4 +25,9 @@ public class GlobalExceptionHandler {
         }
         return new ResponseEntity<>(responseBody, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<String> handleTransactionNotFoundException(TransactionNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
