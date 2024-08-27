@@ -1,13 +1,16 @@
 package com.revlearn.team1.mapper;
 
-import com.revlearn.team1.dto.TransactionDTO;
+import com.revlearn.team1.dto.TransactionRequestDTO;
+import com.revlearn.team1.dto.TransactionResponseDTO;
 import com.revlearn.team1.model.TransactionModel;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TransactionMapper
 {
-    public TransactionDTO toDTO(TransactionModel transaction)
+    public TransactionResponseDTO toDTO(TransactionModel transaction)
     {
-        return new TransactionDTO(
+        return new TransactionResponseDTO(
                 transaction.getTo_user(),
                 transaction.getFrom_user(),
                 transaction.getPrice(),
@@ -15,7 +18,7 @@ public class TransactionMapper
         );
     }
 
-    public TransactionModel fromDTO(TransactionDTO transactionDTO)
+    public TransactionModel fromDTO(TransactionRequestDTO transactionDTO)
     {
         TransactionModel transaction = new TransactionModel();
         transaction.setTo_user(transactionDTO.toUser());

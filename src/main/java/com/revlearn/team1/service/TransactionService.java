@@ -1,11 +1,12 @@
 package com.revlearn.team1.service;
 
-import com.revlearn.team1.dto.TransactionDTO;
+import com.revlearn.team1.dto.TransactionRequestDTO;
+import com.revlearn.team1.dto.TransactionResponseDTO;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface TransactionService
 {
-    public TransactionDTO createTransaction(TransactionDTO transaction);
-    public TransactionDTO getTransactionById(int transactionId);
+    public TransactionResponseDTO createTransaction(TransactionRequestDTO transaction);
+    public TransactionResponseDTO getTransactionById(int transactionId);
 }
