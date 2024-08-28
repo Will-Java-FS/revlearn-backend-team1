@@ -1,5 +1,10 @@
 package com.revlearn.team1.service;
 
+import java.util.List;
+
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.request.CourseStudentDTO;
@@ -12,11 +17,8 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +45,7 @@ public class CourseServiceImp implements CourseService {
         return courseMapper.toDto(retrievedCourse);
     }
 
+    @Override
     public CourseDTO createCourse(CourseDTO courseDTO) {
         //TODO: Secure so that only instructors and institutions can create courses
         // Maybe we require user information as parameter
@@ -76,7 +79,7 @@ public class CourseServiceImp implements CourseService {
         //TODO: Secure method. verification requesters' are course owner: educator or institution
 
         //verify course exists
-        Course course = courseRepo.findById(id).orElseThrow(
+        courseRepo.findById(id).orElseThrow(
                 () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
         //delete
         courseRepo.deleteById(id);
