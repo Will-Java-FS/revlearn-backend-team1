@@ -26,8 +26,8 @@
     }
   ],
   "transactions": [
-    {"fromUserId": 1, "toUserId": 2, "amount": 100.50, "description": "Payment for services"},
-    {"fromUserId": 2, "toUserId": 1, "amount": 200.00, "description": "Refund for overpayment"},
-    {"fromUserId": 1, "toUserId": 1, "amount": 50.25, "description": "Personal transfer"}
+    {"fromUserId": 1, "toUserId": 2, "price": 100.50, "description": "Payment for services"},
+    {"fromUserId": 2, "toUserId": 1, "price": 200.00, "description": "Refund for overpayment"},
+    {"fromUserId": 2, "toUserId": 1, "price": 50.25, "description": "Personal transfer"}
   ]
 }
