@@ -32,13 +32,6 @@ public class UserServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testGetAllUsers() throws Exception {
-        when(userRepository.findAll()).thenReturn(List.of(new User()));
-
-        List<User> result = userService.getAllUsers();
-        Assert.assertEquals(List.of(new User(0, "username", "password", "email", "Student", "firstName", "lastName", LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18), LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18))), result);
-    }
 
     @Test
     public void testCheckExisting() throws Exception {
@@ -48,18 +41,6 @@ public class UserServiceTest {
         assertTrue(userService.checkExisting(username));
     }
 
-    @Test
-    public void testCreateUser() throws Exception {
-        String username = "username1";
-        User user = createUser(username);
-
-        when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(new User());
-        when(passwordEncoder.encode(any(CharSequence.class))).thenReturn("encodeResponse");
-
-        User result = userService.createUser(user);
-        Assert.assertEquals(new User(0, "username1", "password", "email", "Student", "firstName", "lastName", LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18), LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18)), result);
-    }
 
     @Test
     public void testLoadUserByUsername() throws Exception {

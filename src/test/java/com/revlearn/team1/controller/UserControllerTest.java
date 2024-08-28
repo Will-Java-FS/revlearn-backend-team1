@@ -1,59 +1,61 @@
 package com.revlearn.team1.controller;
 
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revlearn.team1.model.User;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revlearn.team1.service.UserService;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.revlearn.team1.model.User;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import com.revlearn.team1.util.JwtUtil;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
-    @InjectMocks
-    private UserController userController;
+
+    private MockMvc mockMvc;
 
     @Mock
-    private UserService userService;
+    private UserService userService; // Mock UserService
+
+    @InjectMocks
+    private UserController userController; // Inject UserService into UserController
+
+    @Mock
+    private JwtUtil jwtUtil;
+
+    private ObjectMapper objectMapper;
 
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
-    private User user;
-    private MockMvc mockMvc;
-    private ObjectMapper objectMapper;
-
     @BeforeEach
     public void setUp() {
+        // Initialize mocks
+        MockitoAnnotations.openMocks(this);
 
-
+        // Set up ObjectMapper
         objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        // Set up MockMvc
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        MockitoAnnotations.openMocks(this);
+
     }
 
     @Test
@@ -62,28 +64,54 @@ public class UserControllerTest {
         String temp2 = "username2";
         List<User> users = List.of(createUser(temp1), createUser(temp2));
 
+        // Set up mock behavior
         when(userService.getAllUsers()).thenReturn(users);
 
+        // Perform the test
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/users"));
         resultActions.andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(users)));
     }
 
+
     @Test
     public void testLogin() throws Exception {
-        when(userService.loadUserByUsername(anyString())).thenReturn(new User(0, "username", "password", "email", "role", "firstName", "lastName", LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53), LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53)));
-        when(passwordEncoder.matches(any(CharSequence.class), anyString())).thenReturn(true);
+        User user = createUser("username4");
+        String userJson = objectMapper.writeValueAsString(user);
+        String token = "mocked_token";
+        String rawPassword = "password";
 
-        ResponseEntity<Object> result = userController.login(new User(0, "username", "password", "email", "role", "firstName", "lastName", LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53), LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53)));
-        Assert.assertEquals(new ResponseEntity<Object>("body", null, 200), result);
+        // Set up mock behavior
+        when(userService.loadUserByUsername(user.getUsername())).thenReturn(user);
+
+        when(passwordEncoder.matches(rawPassword, user.getPassword())).thenReturn(true);
+
+        when(jwtUtil.generateToken(user)).thenReturn(token);
+
+        // Perform the test
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson));
+
+        // Assert
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.accessToken").value("Bearer " + token))
+                .andExpect(jsonPath("$.tokenType").value("Bearer"));
     }
 
     @Test
     public void testRegisterUser() throws Exception {
-        when(userService.createUser(any(User.class))).thenReturn(new User(0, "username", "password", "email", "role", "firstName", "lastName", LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53), LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53)));
+        User user = createUser("username3");
+        String userJson = objectMapper.writeValueAsString(user);
 
-        ResponseEntity<?> result = userController.registerUser(new User(0, "username", "password", "email", "role", "firstName", "lastName", LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53), LocalDateTime.of(2024, Month.AUGUST, 28, 8, 47, 53)));
-        Assert.assertEquals(new ResponseEntity<Object>(null, null, 201), result);
+        when(userService.checkExisting(user.getUsername())).thenReturn(false);
+        when(userService.createUser(user)).thenReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJson))
+                .andExpect(status().isCreated())
+                .andExpect(content().json(userJson));
     }
 
 
