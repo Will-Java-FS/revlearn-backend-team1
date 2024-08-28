@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public @ResponseBody ResponseEntity<?> login(@RequestBody User user) {
+    public @ResponseBody ResponseEntity<Object> login(@RequestBody User user) {
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
         if (!(userDetails instanceof User)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password.");
