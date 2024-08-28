@@ -1,6 +1,5 @@
 package com.revlearn.team1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,15 +19,14 @@ public class DiscussionPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "discussion_id")
-    private long discussionId;
+    private Long discussionId;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    @JsonIgnore
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "content")
