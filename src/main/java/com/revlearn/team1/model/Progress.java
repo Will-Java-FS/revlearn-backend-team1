@@ -1,5 +1,6 @@
 package com.revlearn.team1.model;
 
+import com.revlearn.team1.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
