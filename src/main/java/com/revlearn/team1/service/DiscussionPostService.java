@@ -22,8 +22,8 @@ public class DiscussionPostService{
         this.disMapper = disMapper;
     }
 
-    public DiscussionPostDTO getDiscussionById(Long courseId) {
-        DiscussionPost retrievedDis = disRepo.findById(courseId).orElseThrow(() -> new DiscussionPostNotFoundException("Cannot find Discussion Post with id" + courseId));
+    public DiscussionPostDTO getDiscussionById(Long discussionId) {
+        DiscussionPost retrievedDis = disRepo.findById(discussionId).orElseThrow(() -> new DiscussionPostNotFoundException("Cannot find Discussion Post with id" + discussionId));
         return disMapper.toDto(retrievedDis);
     }
 
@@ -33,19 +33,18 @@ public class DiscussionPostService{
         return disMapper.toDto(savedDis);
     }
 
-    public ResponseEntity<DiscussionPostDTO> updateDiscussionPost(Long id, DiscussionPostDTO disDto){
+    public DiscussionPostDTO updateDiscussionPost(Long id, DiscussionPostDTO disDto){
         DiscussionPost updateDis = disRepo.findById(id).orElseThrow(() -> new DiscussionPostNotFoundException("Discussion Post with id" + id + "not found."));
 
         updateDis.setContent(disDto.content());
         updateDis.setUpdatedAt(LocalDateTime.now()); //probably will get value from front end
 
-        DiscussionPostDTO updatedDis = disMapper.toDto(disRepo.save(updateDis));
-
-        return ResponseEntity.ok(updatedDis);
+        return disMapper.toDto(disRepo.save(updateDis));
     }
 
-    public void deleteDiscussionById(Long id){
+    public String deleteDiscussionById(Long id){
         DiscussionPost deleteDis = disRepo.findById(id).orElseThrow(() -> new DiscussionPostNotFoundException("Discussion Post with id" + id + "not found."));
         disRepo.deleteById(id);
+        return String.format("Discussion post with id: %d deleted", id);
     }
 }

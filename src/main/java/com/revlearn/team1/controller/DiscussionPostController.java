@@ -35,13 +35,14 @@ public class DiscussionPostController {
 
     @PutMapping("/{id}")
     public ResponseEntity<DiscussionPostDTO> updateDiscussionPost(@PathVariable Long id, @RequestBody DiscussionPostDTO disDto){
-        return disServ.updateDiscussionPost(id, disDto);
+        DiscussionPostDTO updatedDis = disServ.updateDiscussionPost(id, disDto);
+        return new ResponseEntity<>(updatedDis, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteDiscussionById(@PathVariable Long id){
-        disServ.deleteDiscussionById(id);
-        return ResponseEntity.ok("Don't worry about it");
+        String deletedDis = disServ.deleteDiscussionById(id);
+        return new ResponseEntity<>(deletedDis, HttpStatus.OK);
     }
 
 }
