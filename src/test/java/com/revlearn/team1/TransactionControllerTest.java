@@ -17,10 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.revlearn.team1.controller.TransactionController;
-import com.revlearn.team1.dto.TransactionRequestDTO;
-import com.revlearn.team1.dto.TransactionResponseDTO;
+import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
+import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.TransactionServiceImp;
+import com.revlearn.team1.service.transaction.TransactionServiceImp;
 
 class TransactionControllerTest {
 
@@ -37,8 +37,8 @@ class TransactionControllerTest {
 
     @Test
     void createTransactionTest() {
-        User fromUser = new User(); // Replace with actual initialization
-        User toUser = new User(); // Replace with actual initialization
+        User fromUser = new User();
+        User toUser = new User();
         TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(toUser, fromUser, 100.0f,
                 "Sample Transaction");
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, 100.0f,
@@ -57,8 +57,8 @@ class TransactionControllerTest {
     @Test
     void findTransactionByIdTest() {
         int id = 1;
-        User fromUser = new User(); // Replace with actual initialization
-        User toUser = new User(); // Replace with actual initialization
+        User fromUser = new User();
+        User toUser = new User();
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, 100.0f,
                 "Sample Transaction");
 
@@ -74,8 +74,8 @@ class TransactionControllerTest {
     @Test
     void getTransactionsTest() {
         List<TransactionResponseDTO> transactions = new ArrayList<>();
-        User fromUser = new User(); // Replace with actual initialization
-        User toUser = new User(); // Replace with actual initialization
+        User fromUser = new User();
+        User toUser = new User();
         transactions.add(new TransactionResponseDTO(toUser, fromUser, 100.0f, "Sample Transaction"));
 
         when(transactionService.getTransactions()).thenReturn(transactions);
