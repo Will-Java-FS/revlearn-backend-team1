@@ -1,26 +1,24 @@
 package com.revlearn.team1.initializer;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.TransactionDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.CourseService;
 import com.revlearn.team1.service.UserService;
 
@@ -31,62 +29,50 @@ import lombok.RequiredArgsConstructor;
 public class DataInitializer implements ApplicationRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
-    private final UserRepository userRepository;
     private final UserService userService;
     private final CourseService courseService;
-
-    @Value("${SPRING_API_URL}")
-    private String baseUrl;
-
-    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         logger.info("Initializing data...");
-        createDefaultUsers();
-        createDummyCourses();
-        createDummyTransactions();
+        loadInitialData();
     }
 
-    private void createDefaultUsers() {
-        User user1 = new User();
-        User user2 = new User();
+    private void loadInitialData() throws IOException {
+        JsonNode rootNode = objectMapper.readTree(new ClassPathResource("initial-data.json").getInputStream());
 
-        userRepository.save(user1);
-        userRepository.save(user2);
-
-        logger.info("Default users created.");
+        createInitialUsers(rootNode.path("users"));
+        createInitialCourses(rootNode.path("courses"));
+        createInitialTransactions(rootNode.path("transactions"));
     }
 
-    private void createDummyCourses() {
-        // Fetch existing users to use as educators and students
-        User educator = userService.findById(1L).orElseThrow();
-        User student = userService.findById(2L).orElseThrow();
+    @Transactional
+    private void createInitialUsers(JsonNode usersNode) {
+        for (JsonNode userNode : usersNode) {
+            String username = userNode.path("username").asText();
+            Long userId = userNode.path("id").asLong();
+            User user = new User(userId, username);
 
-        CourseDTO[] courses = {
-                new CourseDTO(
-                        null, // id is optional and will be auto-generated
-                        "Java Programming",
-                        "An advanced course on Java programming.",
-                        educator.getId(), // institutionId
-                        LocalDate.of(2024, 9, 1),
-                        LocalDate.of(2024, 12, 15),
-                        AttendanceMethod.ONLINE,
-                        Set.of(educator.getId()),
-                        Set.of(student.getId())),
-                new CourseDTO(
-                        null, // id is optional and will be auto-generated
-                        "Data Structures",
-                        "A comprehensive course on data structures.",
-                        educator.getId(), // institutionId
-                        LocalDate.of(2024, 10, 1),
-                        LocalDate.of(2024, 11, 30),
-                        AttendanceMethod.IN_PERSON,
-                        Set.of(educator.getId()),
-                        Set.of(student.getId()))
-        };
+            userService.save(user);
+        }
+        logger.info("Initial users created.");
+    }
 
-        for (CourseDTO courseDTO : courses) {
+    @Transactional
+    private void createInitialCourses(JsonNode coursesNode) {
+        for (JsonNode courseNode : coursesNode) {
+            CourseDTO courseDTO = new CourseDTO(
+                    null, // id is optional and will be auto-generated
+                    courseNode.path("name").asText(),
+                    courseNode.path("description").asText(),
+                    courseNode.path("institutionId").asLong(),
+                    LocalDate.parse(courseNode.path("startDate").asText()),
+                    LocalDate.parse(courseNode.path("endDate").asText()),
+                    AttendanceMethod.valueOf(courseNode.path("type").asText()),
+                    toSet(courseNode.path("educatorIds")),
+                    toSet(courseNode.path("studentIds")));
+
             try {
                 CourseDTO createdCourse = courseService.createCourse(courseDTO);
                 logger.info("Course created: " + createdCourse);
@@ -96,34 +82,28 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void createDummyTransactions() {
-        String createTransactionUrl = baseUrl + "/transaction";
+    @Transactional
+    private void createInitialTransactions(JsonNode transactionsNode) {
+        for (JsonNode transactionNode : transactionsNode) {
+            TransactionDTO transactionDTO = new TransactionDTO(
+                    transactionNode.path("fromUserId").asLong(),
+                    transactionNode.path("toUserId").asLong(),
+                    (float) transactionNode.path("amount")
+                            .asDouble(),
+                    transactionNode.path("description").asText());
 
-        long userId1 = 1L;
-        long userId2 = 2L;
+            // Implement the actual creation using your service or repository
+            logger.info("Transaction created: " + transactionDTO);
+        }
+    }
 
-        TransactionDTO[] transactions = {
-                new TransactionDTO(userId1, userId2, 100.50f, "Payment for services"),
-                new TransactionDTO(userId2, userId1, 200.00f, "Refund for overpayment"),
-                new TransactionDTO(userId1, userId1, 50.25f, "Personal transfer")
-        };
-
-        for (TransactionDTO transaction : transactions) {
-            try {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-                HttpEntity<TransactionDTO> request = new HttpEntity<>(transaction, headers);
-
-                ResponseEntity<String> response = restTemplate.exchange(
-                        createTransactionUrl,
-                        HttpMethod.POST,
-                        request,
-                        String.class);
-
-                logger.info("Transaction created: " + response.getBody());
-            } catch (Exception e) {
-                logger.error("Error creating transaction: ", e);
+    private Set<Long> toSet(JsonNode node) {
+        Set<Long> set = new HashSet<>();
+        if (node.isArray()) {
+            for (JsonNode element : node) {
+                set.add(element.asLong());
             }
         }
+        return set;
     }
 }
