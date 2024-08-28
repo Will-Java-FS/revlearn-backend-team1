@@ -1,10 +1,11 @@
 package com.revlearn.team1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -14,10 +15,15 @@ public class User {
     private Long id;
 
     @ManyToMany(mappedBy = "educators")
-    private Set<Course> taughtCourses = new HashSet<>();
+    @JsonIgnore
+    private List<Course> taughtCourses = new ArrayList<>();
+
     @ManyToMany(mappedBy = "students")
-    private Set<Course> enrolledCourses = new HashSet<>();
+    @JsonIgnore
+    private List<Course> enrolledCourses = new ArrayList<>();
+
     @OneToMany(mappedBy = "institution")
-    private Set<Course> institutionCourses = new HashSet<>();
+    @JsonIgnore
+    private List<Course> institutionCourses = new ArrayList<>();
 
 }

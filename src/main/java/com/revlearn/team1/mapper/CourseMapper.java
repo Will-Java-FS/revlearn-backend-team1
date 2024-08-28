@@ -4,6 +4,7 @@ import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.model.Course;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 @Component
@@ -39,23 +40,20 @@ public class CourseMapper {
         if (courseDTO.students() != null) {
             course.getStudents().addAll(courseDTO.students());
         } else {
-            course.setStudents(new HashSet<>()); // Optional, ensures an empty set
+            course.setStudents(new ArrayList<>()); // Optional, ensures an empty set
         }
 
         if (courseDTO.educators() != null) {
             course.getEducators().addAll(courseDTO.educators());
         } else {
-            course.setEducators(new HashSet<>()); // Optional, ensures an empty set
+            course.setEducators(new ArrayList<>()); // Optional, ensures an empty set
         }
 
         return course;
     }
 
     public void updateCourseFromDto(Course course, CourseDTO courseDTO) {
-        //Only meant for educators to use
-
-        //Should not ever need to set id
-        // if (courseDTO.id() != null) course.setId(courseDTO.id());
+        //Only meant for educators or institutions to use
 
         if (courseDTO.startDate() != null) course.setStartDate(courseDTO.startDate());
         if (courseDTO.endDate() != null) course.setEndDate(courseDTO.endDate());
@@ -63,8 +61,5 @@ public class CourseMapper {
         if (courseDTO.description() != null) course.setDescription(courseDTO.description());
         if (courseDTO.attendanceMethod() != null) course.setAttendanceMethod(courseDTO.attendanceMethod());
 
-        //Will make separate functions to:
-        // add and remove educators,
-        // add and remove students -- enroll in course method
     }
 }

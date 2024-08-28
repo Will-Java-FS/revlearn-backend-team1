@@ -19,6 +19,12 @@ public interface CourseService {
 
     public String deleteById(Long id);
 
+    public List<CourseDTO> getAllByEducatorId(Long educatorId);
+
+    public List<CourseDTO> getAllByInstitutionId(Long institutionId);
+
+    public List<CourseDTO> getAllByStudentId(Long studentId);
+
     public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO);
 
     public CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO);
@@ -26,6 +32,5 @@ public interface CourseService {
     public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO);
 
     public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
-
 
 }

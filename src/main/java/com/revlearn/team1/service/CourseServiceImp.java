@@ -28,6 +28,7 @@ public class CourseServiceImp implements CourseService {
     @Override
     public List<CourseDTO> getAll() {
         //TODO: Consider pagination instead of the return of every course
+        //TODO: Add sort methods: alphabetical, by program
         try {
             return courseRepo.findAll().stream().map(courseMapper::toDto).toList();
         } catch (DataAccessException ex) {
@@ -52,8 +53,6 @@ public class CourseServiceImp implements CourseService {
 
     @Override
     public CourseDTO updateCourse(CourseDTO courseDTO) {
-        //This function should only be accessible by educators and institutions
-
         //TODO: Secure so that only course owners (educator(s) or institution) can modify.
         // Compare provided course information (educator(s), institution) to authenticated user properties.
 
@@ -74,6 +73,8 @@ public class CourseServiceImp implements CourseService {
 
     @Override
     public String deleteById(Long id) {
+        //TODO: Secure method. verification requesters' are course owner: educator or institution
+
         //verify course exists
         Course course = courseRepo.findById(id).orElseThrow(
                 () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
@@ -92,8 +93,10 @@ public class CourseServiceImp implements CourseService {
                 //TODO: replace generic runtimeexception with custom exception
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
-        //verify authenticated user owns course
-        //TODO
+        //TODO: verify authenticated user owns course
+
+        //TODO: verify educator does not already exist in course. add custom exception.
+
 
         course.getEducators().add(educator);
         educator.getTaughtCourses().add(course);
@@ -114,7 +117,7 @@ public class CourseServiceImp implements CourseService {
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
         //TODO: verify authenticated user owns course
-        //
+        //TODO: verify educator and course are connected, first? add custom exception.
 
         course.getEducators().remove(educator);
         educator.getTaughtCourses().remove(course);
@@ -136,14 +139,16 @@ public class CourseServiceImp implements CourseService {
 
         //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
         // (Clean this up later when security is implemented.  Use security context to get current user)
+        //TODO: verify student does not already exist in course. add custom exception.
 
-        course.getStudents().add(student);
-        student.getEnrolledCourses().add(course);
+//        course.getStudents().add(student);
+//        student.getEnrolledCourses().add(course);
 
         Course savedCourse = courseRepo.save(course);
         User savedUser = userRepo.save(student);
 
-        return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), savedUser.getId());    }
+        return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), savedUser.getId());
+    }
 
     @Override
     public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO) {
@@ -156,9 +161,10 @@ public class CourseServiceImp implements CourseService {
 
         //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
         // (Clean this up later when security is implemented.  Use security context to get current user)
+        //TODO: verify student and course are connected, first? add custom exception.
 
-        course.getStudents().remove(student);
-        student.getEnrolledCourses().remove(course);
+//        course.getStudents().remove(student);
+//        student.getEnrolledCourses().remove(course);
 
         Course savedCourse = courseRepo.save(course);
         User savedUser = userRepo.save(student);
@@ -166,4 +172,28 @@ public class CourseServiceImp implements CourseService {
         return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), savedUser.getId());
     }
 
+    @Override
+    public List<CourseDTO> getAllByEducatorId(Long educatorId) {
+        User user = userRepo.findById(educatorId).orElseThrow(() -> new RuntimeException("Could not find user."));
+        return user.getTaughtCourses().stream().map(courseMapper::toDto).toList();
+    }
+
+    @Override
+    public List<CourseDTO> getAllByInstitutionId(Long institutionId) {
+        return null;
+    }
+
+    @Override
+    public List<CourseDTO> getAllByStudentId(Long studentId) {
+        return null;
+    }
+
+    /*TODO: Remove these methods when User model is implemented */
+    public User getUserTestById(Long userId) {
+        return userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User Not found"));
+    }
+
+    public User addUserTest(User user) {
+        return userRepo.save(user);
+    }
 }

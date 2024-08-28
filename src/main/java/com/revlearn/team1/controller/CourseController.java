@@ -5,6 +5,7 @@ import com.revlearn.team1.dto.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.request.CourseStudentDTO;
 import com.revlearn.team1.dto.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.response.CourseStudentResDTO;
+import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.CourseServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,11 @@ public class CourseController {
         return courseService.updateCourse(courseDTO);
     }
 
+    @DeleteMapping("/delete/{id}")//TODO: Secure so that only course owners (instructors and institutions) can delete courses
+    public String deleteCourse(@PathVariable Long id) {
+        return courseService.deleteById(id);
+    }
+
     @PatchMapping("/addEducator")
     public CourseEducatorResDTO addEducator(@RequestBody CourseEducatorDTO courseEducatorDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
@@ -50,17 +56,29 @@ public class CourseController {
         return courseService.removeEducator(courseEducatorDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteCourse(@PathVariable Long id) {
-        return courseService.deleteById(id);
-    }
-
     @PatchMapping("/enroll")
-    public CourseStudentResDTO enrollStudent(@RequestBody CourseStudentDTO courseStudentDTO){
+    public CourseStudentResDTO enrollStudent(@RequestBody CourseStudentDTO courseStudentDTO) {
         return courseService.enrollStudent(courseStudentDTO);
     }
+
     @PatchMapping("/withdraw")
-    public CourseStudentResDTO withdrawStudent(@RequestBody CourseStudentDTO courseStudentDTO){
+    public CourseStudentResDTO withdrawStudent(@RequestBody CourseStudentDTO courseStudentDTO) {
         return courseService.withdrawStudent(courseStudentDTO);
+    }
+
+    @GetMapping("/educator/{id}")
+    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
+        return courseService.getAllByEducatorId(id);
+    }
+
+    /* TODO: Remove user routes once User model is implemented */
+    @GetMapping("/test/user/{id}")
+    public User getUser(@PathVariable Long id) {
+        return courseService.getUserTestById(id);
+    }
+
+    @PostMapping("/test/user")
+    public User createUser(@RequestBody User user) {
+        return courseService.addUserTest(user);
     }
 }
