@@ -2,25 +2,6 @@
 
 Backend Repo for revlearn - team 1
 
-## API Documentation
-
-### Swagger
-
-1. Turn on (run) your application.
-2. Copy and paste this whole URL into your web browser.
-
-```
-http://localhost:8080/swagger-ui.html
-```
-
-3. You should see a page like this: ![Swagger page screenshot](./docs/images/Swagger.png)
-4. Each section is a collection of routes.
-5. Each route is exactly what you append to our application's base URL: 
-* Development: http://localhost:8080/ 
-* Production: TBD
-6. Expand any route to view example JSON formats for requests and
-   responses. ![Swagger Expanded Route](./docs/images/SwaggerExpandedRoute.png)
-
 ## Environment Variables
 
 ### Development Build
