@@ -23,7 +23,7 @@ public class PaymentModel
     private String firstName;
     private String lastName;
     private String email;
-    private int cardNumber;
+    private long cardNumber;
     private String expirationDate;
     private int cvc;
     private int zip;

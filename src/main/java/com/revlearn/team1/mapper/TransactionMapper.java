@@ -14,8 +14,8 @@ public class TransactionMapper
     public TransactionResponseDTO toDTO(TransactionModel transaction)
     {
         return new TransactionResponseDTO(
-                transaction.getTo_user(),
-                transaction.getFrom_user(),
+                transaction.getTo_payment(),
+                transaction.getFrom_payment(),
                 transaction.getPrice(),
                 transaction.getDescription()
         );
@@ -24,8 +24,8 @@ public class TransactionMapper
     public TransactionModel fromDTO(TransactionRequestDTO transactionDTO)
     {
         TransactionModel transaction = new TransactionModel();
-        transaction.setTo_user(transactionDTO.toUser());
-        transaction.setFrom_user(transactionDTO.fromUser());
+        transaction.setTo_payment(transactionDTO.toPayment());
+        transaction.setFrom_payment(transactionDTO.fromPayment());
         transaction.setPrice(transactionDTO.price());
         transaction.setDescription(transactionDTO.description());
 

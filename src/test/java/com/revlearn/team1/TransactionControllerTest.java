@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.revlearn.team1.model.PaymentModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,8 +39,8 @@ class TransactionControllerTest {
 
     @Test
     void createTransactionTest() {
-        User fromUser = new User();
-        User toUser = new User();
+        PaymentModel fromUser = new PaymentModel();
+        PaymentModel toUser = new PaymentModel();
         TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(toUser, fromUser, 100.0f,
                 "Sample Transaction");
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, 100.0f,
@@ -57,8 +59,8 @@ class TransactionControllerTest {
     @Test
     void findTransactionByIdTest() {
         int id = 1;
-        User fromUser = new User();
-        User toUser = new User();
+        PaymentModel fromUser = new PaymentModel();
+        PaymentModel toUser = new PaymentModel();
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, 100.0f,
                 "Sample Transaction");
 
@@ -74,8 +76,8 @@ class TransactionControllerTest {
     @Test
     void getTransactionsTest() {
         List<TransactionResponseDTO> transactions = new ArrayList<>();
-        User fromUser = new User();
-        User toUser = new User();
+        PaymentModel fromUser = new PaymentModel();
+        PaymentModel toUser = new PaymentModel();
         transactions.add(new TransactionResponseDTO(toUser, fromUser, 100.0f, "Sample Transaction"));
 
         when(transactionService.getTransactions()).thenReturn(transactions);

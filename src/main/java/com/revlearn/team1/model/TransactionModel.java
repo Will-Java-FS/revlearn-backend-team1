@@ -24,12 +24,12 @@ public class TransactionModel
     int id;
 
     @ManyToOne
-    @JoinColumn(name = "to_id", referencedColumnName = "id")
-    User to_user;
+    @JoinColumn(name = "to_id", referencedColumnName = "payment_id")
+    PaymentModel to_payment;
 
     @ManyToOne
-    @JoinColumn(name = "from_id", referencedColumnName = "id")
-    User from_user;
+    @JoinColumn(name = "from_id", referencedColumnName = "payment_id")
+    PaymentModel from_payment;
 
     float price;
     String description;
