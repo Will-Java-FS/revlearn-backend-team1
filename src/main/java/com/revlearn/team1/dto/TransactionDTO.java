@@ -1,11 +1,8 @@
 package com.revlearn.team1.dto;
 
-import com.revlearn.team1.model.User;
-
 public record TransactionDTO(
-        User toUser,
-        User fromUser,
+        Long toUserId,
+        Long fromUserId,
         float price,
-        String description
-)
-{}
+        String description) {
+}
