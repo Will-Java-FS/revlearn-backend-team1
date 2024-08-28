@@ -1,4 +1,5 @@
 # revlearn-backend-team1
+
 Backend Repo for revlearn - team 1
 
 ## Database
@@ -11,6 +12,25 @@ Instead of "create-drop", you can choose "update".
 spring.jpa.hibernate.ddl-auto=update
 ```
 See [Spring Boot Database Initialization Documentation](https://docs.spring.io/spring-boot/docs/1.1.0.M1/reference/html/howto-database-initialization.html) for more information.
+## API Documentation
+
+### Swagger
+
+1. Turn on (run) your application.
+2. Copy and paste this whole URL into your web browser.
+
+```
+http://localhost:8080/swagger-ui.html
+```
+
+3. You should see a page like this: ![Swagger page screenshot](./docs/images/Swagger.png)
+4. Each section is a collection of routes.
+5. Each route is exactly what you append to our application's base URL: 
+* Development: http://localhost:8080/ 
+* Production: TBD
+6. Expand any route to view example JSON formats for requests and
+   responses. ![Swagger Expanded Route](./docs/images/SwaggerExpandedRoute.png)
+
 ## Environment Variables
 
 ### .env File Creation
