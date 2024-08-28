@@ -1,17 +1,15 @@
 package com.revlearn.team1.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -25,14 +23,20 @@ public class TransactionModel
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "to_id")
+    @ManyToOne
+    @JoinColumn(name = "to_id", referencedColumnName = "id")
     User to_user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "from_id")
+    @ManyToOne
+    @JoinColumn(name = "from_id", referencedColumnName = "id")
     User from_user;
 
     float price;
     String description;
+
+    @CreationTimestamp
+    Timestamp createdAt;
+
+    @UpdateTimestamp
+    Timestamp updatedAt;
 }
