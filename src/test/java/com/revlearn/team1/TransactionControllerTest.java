@@ -1,23 +1,26 @@
 package com.revlearn.team1;
 
-import com.revlearn.team1.dto.TransactionDTO;
-import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.TransactionServiceImp;
-import com.revlearn.team1.controller.TransactionController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import com.revlearn.team1.controller.TransactionController;
+import com.revlearn.team1.dto.TransactionDTO;
+import com.revlearn.team1.service.TransactionServiceImp;
+
+@ExtendWith(MockitoExtension.class)
 class TransactionControllerTest {
 
     @Mock
@@ -26,14 +29,13 @@ class TransactionControllerTest {
     @InjectMocks
     private TransactionController transactionController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void createTransactionTest() {
-        TransactionDTO transactionDTO = new TransactionDTO(new User(), new User(), 100.0f, "Sample Transaction");
+        Long toUserId = 1L;
+        Long fromUserId = 2L;
+        float price = 100.0f;
+        String description = "Sample Transaction";
+        TransactionDTO transactionDTO = new TransactionDTO(toUserId, fromUserId, price, description);
         when(transactionService.createTransaction(any(TransactionDTO.class))).thenReturn(transactionDTO);
 
         ResponseEntity<TransactionDTO> response = transactionController.createTransaction(transactionDTO);
@@ -46,7 +48,11 @@ class TransactionControllerTest {
     @Test
     void findTransactionByIdTest() {
         int id = 1;
-        TransactionDTO transactionDTO = new TransactionDTO(new User(), new User(), 100.0f, "Sample Transaction");
+        Long toUserId = 1L;
+        Long fromUserId = 2L;
+        float price = 100.0f;
+        String description = "Sample Transaction";
+        TransactionDTO transactionDTO = new TransactionDTO(toUserId, fromUserId, price, description);
         when(transactionService.getTransactionById(id)).thenReturn(transactionDTO);
 
         ResponseEntity<TransactionDTO> response = transactionController.findTransactionById(id);
@@ -58,8 +64,12 @@ class TransactionControllerTest {
 
     @Test
     void getTransactionsTest() {
+        Long toUserId = 1L;
+        Long fromUserId = 2L;
+        float price = 100.0f;
+        String description = "Sample Transaction";
         List<TransactionDTO> transactions = new ArrayList<>();
-        transactions.add(new TransactionDTO(new User(), new User(), 100.0f, "Sample Transaction"));
+        transactions.add(new TransactionDTO(toUserId, fromUserId, price, description));
         when(transactionService.getTransactions()).thenReturn(transactions);
 
         ResponseEntity<List<TransactionDTO>> response = transactionController.getTransactions();
