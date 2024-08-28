@@ -5,6 +5,9 @@ import com.revlearn.team1.dto.TransactionResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.revlearn.team1.exceptions.TransactionNotFoundException;
 import com.revlearn.team1.mapper.TransactionMapper;
 import com.revlearn.team1.model.TransactionModel;
@@ -32,8 +35,27 @@ public class TransactionServiceImp implements TransactionService
     public TransactionResponseDTO getTransactionById(int transactionId)
     {
         TransactionModel retrievedTransaction = transactionRepo.findById(transactionId).orElseThrow(
-                () -> new TransactionNotFoundException(String.format("Could not find transaction by Id in Database.  Course ID: %d", transactionId))
+                () -> new TransactionNotFoundException(String.format("Could not find transaction by Id in Database.  Transaction ID: %d", transactionId))
         );
         return transactionMapper.toDTO(retrievedTransaction);
+    }
+
+    @Override
+    public List<TransactionResponseDTO> getTransactions()
+    {
+        List<TransactionModel> transactionModels = transactionRepo.findAll();
+        return transactionModels.stream()
+                .map(transactionMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteTransactionById(int transactionId)
+    {
+        transactionRepo.findById(transactionId).orElseThrow(
+                () -> new TransactionNotFoundException(String.format("Could not find transaction to delete by that Id in Database.  Transaction ID: %d", transactionId))
+        );
+
+        transactionRepo.deleteById(transactionId); // if no exception, delete the id
     }
 }
