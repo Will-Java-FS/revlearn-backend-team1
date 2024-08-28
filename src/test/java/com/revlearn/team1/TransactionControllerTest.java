@@ -1,4 +1,4 @@
-package com.revlearn.team1.unit.controller;
+package com.revlearn.team1;
 
 import com.revlearn.team1.dto.TransactionDTO;
 import com.revlearn.team1.model.User;
