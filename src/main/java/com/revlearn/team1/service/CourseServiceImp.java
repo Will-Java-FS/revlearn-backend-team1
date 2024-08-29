@@ -99,7 +99,7 @@ public class CourseServiceImp implements CourseService {
         //TODO: Secure method. verify requesters' are course owner: educator or institution
 
         //verify course exists
-        Course course = courseRepo.findById(id).orElseThrow(
+        courseRepo.findById(id).orElseThrow(
                 () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
         //delete
         courseRepo.deleteById(id);
