@@ -156,7 +156,7 @@ public class CourseControllerTest2 {
         when(courseService.addEducator(any(CourseEducatorDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        mockMvc.perform(patch("/api/v1/course/addEducator")
+        mockMvc.perform(patch("/api/v1/course/educatorAdd")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"courseId\":1, \"educatorId\":2 }"))
                 .andExpect(status().isOk())
@@ -171,7 +171,7 @@ public class CourseControllerTest2 {
         when(courseService.removeEducator(any(CourseEducatorDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        mockMvc.perform(patch("/api/v1/course/removeEducator")
+        mockMvc.perform(patch("/api/v1/course/educatorRemove")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"courseId\":1, \"educatorId\":2 }"))
                 .andExpect(status().isOk())
