@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,12 +32,22 @@ class TransactionControllerTest {
     @InjectMocks
     private TransactionController transactionController;
 
+    private User toUser;
+    private User fromUser;
+    private float price;
+    private String description;
+
+    @BeforeEach
+    void setUp() {
+        // Initialize common test data
+        toUser = new User("toUser123");
+        fromUser = new User("fromUser123");
+        price = 100.0f;
+        description = "Sample Transaction";
+    }
+
     @Test
     void createTransactionTest() {
-        User toUser = new User(); // Example user; adjust as needed
-        User fromUser = new User(); // Example user; adjust as needed
-        float price = 100.0f;
-        String description = "Sample Transaction";
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, price,
                 description);
         TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(1L, 2L, price, description);
@@ -54,10 +65,6 @@ class TransactionControllerTest {
     @Test
     void findTransactionByIdTest() {
         int id = 1;
-        User toUser = new User(); // Example user; adjust as needed
-        User fromUser = new User(); // Example user; adjust as needed
-        float price = 100.0f;
-        String description = "Sample Transaction";
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, price,
                 description);
 
@@ -72,10 +79,6 @@ class TransactionControllerTest {
 
     @Test
     void getTransactionsTest() {
-        User toUser = new User(); // Example user; adjust as needed
-        User fromUser = new User(); // Example user; adjust as needed
-        float price = 100.0f;
-        String description = "Sample Transaction";
         List<TransactionResponseDTO> transactions = new ArrayList<>();
         transactions.add(new TransactionResponseDTO(toUser, fromUser, price, description));
 
