@@ -1,29 +1,36 @@
 package com.revlearn.team1.service;
 
 import com.revlearn.team1.dto.CourseDTO;
-import com.revlearn.team1.exceptions.CourseNotFoundException;
-import com.revlearn.team1.mapper.CourseMapper;
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.repository.CourseRepo;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.revlearn.team1.dto.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.request.CourseStudentDTO;
+import com.revlearn.team1.dto.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.response.CourseStudentResDTO;
 
-@Service
-@RequiredArgsConstructor
-public class CourseService {
-    private final CourseRepo courseRepo;
-    private final CourseMapper courseMapper;
+import java.util.List;
 
-    public CourseDTO getById(Long courseId) {
-        Course retrievedCourse = courseRepo.findById(courseId).orElseThrow(
-                () -> new CourseNotFoundException(String.format("Could not find course by Id in Database.  Course ID: %d", courseId))
-        );
-        return courseMapper.toDto(retrievedCourse);
-    }
+public interface CourseService {
+    public List<CourseDTO> getAll();
 
-    public CourseDTO createCourse(CourseDTO courseDTO) {
-        Course course = courseMapper.fromDto(courseDTO);
-        Course savedCourse = courseRepo.save(course);
-        return courseMapper.toDto(savedCourse);
-    }
+    public CourseDTO getById(Long courseId);
+
+    public CourseDTO createCourse(CourseDTO courseDTO);
+
+    public CourseDTO updateCourse(CourseDTO courseDTO);
+
+    public String deleteById(Long id);
+
+    public List<CourseDTO> getAllByEducatorId(Long educatorId);
+
+    public List<CourseDTO> getAllByInstitutionId(Long institutionId);
+
+    public List<CourseDTO> getAllByStudentId(Long studentId);
+
+    public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO);
+
+    public CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO);
+
+    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO);
+
+    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
+
 }
