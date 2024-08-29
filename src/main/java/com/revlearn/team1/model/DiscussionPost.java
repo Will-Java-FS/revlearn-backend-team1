@@ -34,7 +34,7 @@ public class DiscussionPost {
     private Course course;
 
     @ManyToOne(optional = true)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "content")
