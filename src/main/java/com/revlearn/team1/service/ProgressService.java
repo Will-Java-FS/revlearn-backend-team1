@@ -15,6 +15,10 @@ public class ProgressService {
     @Autowired
     private ProgressRepo progressRepo;
 
+    public ProgressService(ProgressRepo progressRepo){
+        this.progressRepo = progressRepo;
+    }
+
     /*Things we want to do:
     Students:
     - Get overall progress

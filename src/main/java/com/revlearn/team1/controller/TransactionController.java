@@ -22,7 +22,7 @@ public class TransactionController
         return new ResponseEntity<>(transactionService.createTransaction(transaction), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}") // This should be formatted so that only institutions can access this endpoint
+    @GetMapping("/{progress_id}") // This should be formatted so that only institutions can access this endpoint
     public ResponseEntity<TransactionDTO> findTransactionById(@PathVariable int id)
     {
         return new ResponseEntity<>(transactionService.getTransactionById(id), HttpStatus.OK);
@@ -34,7 +34,7 @@ public class TransactionController
         return new ResponseEntity<>(transactionService.getTransactions(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}") // Again, this should only be accessed by an institution
+    @DeleteMapping("/{progress_id}") // Again, this should only be accessed by an institution
     public HttpStatus deleteTransactionById(@PathVariable int id)
     {
         transactionService.deleteTransactionById(id);

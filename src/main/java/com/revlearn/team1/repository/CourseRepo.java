@@ -7,5 +7,5 @@ import com.revlearn.team1.model.Course;
 
 @Repository
 public interface CourseRepo extends JpaRepository<Course, Long> {
-//    Optional<CourseDTO> findCourseDTOById(Long id);
+//    Optional<CourseDTO> findCourseDTOById(Long progress_id);
 }

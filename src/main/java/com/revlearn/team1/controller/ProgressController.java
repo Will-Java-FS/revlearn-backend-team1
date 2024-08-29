@@ -15,9 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProgressController {
 
-    @Autowired
     private ProgressService progressService;
 
+    @Autowired
+    public ProgressController(ProgressService progressService){
+        this.progressService = progressService;
+    }
     /*
     Endpoints Needed:
     - GET progress
@@ -28,6 +31,9 @@ public class ProgressController {
     @GetMapping("progress/{student_id}")
     public ResponseEntity<List<Progress>> getStudentProgress(@PathVariable Long student_id){
         List<Progress> studentProgress = progressService.getProgressByStudent(student_id);
+        if(studentProgress.isEmpty()){
+            return ResponseEntity.status(404).body(null);
+        }
         return ResponseEntity.status(200).body(studentProgress);
     }
 

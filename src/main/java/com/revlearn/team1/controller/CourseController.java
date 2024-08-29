@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class CourseController {
     private final CourseService courseService;
 
-    @GetMapping("/{id}")
+    @GetMapping("/{progress_id}")
     public CourseDTO getCourseById(@PathVariable Long id) {
         return courseService.getById(id);
     }

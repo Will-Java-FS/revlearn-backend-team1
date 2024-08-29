@@ -55,6 +55,6 @@ public class TransactionServiceImp implements TransactionService
                 () -> new TransactionNotFoundException(String.format("Could not find transaction to delete by that Id in Database.  Transaction ID: %d", transactionId))
         );
 
-        transactionRepo.deleteById(transactionId); // if no exception, delete the id
+        transactionRepo.deleteById(transactionId); // if no exception, delete the progress_id
     }
 }
