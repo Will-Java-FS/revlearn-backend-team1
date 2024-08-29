@@ -37,8 +37,10 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<User> deleteUserById(@PathVariable Long id) {
+        User user = userService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Could not find user with ID: " + id));
         userService.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(user);
     }
 }
