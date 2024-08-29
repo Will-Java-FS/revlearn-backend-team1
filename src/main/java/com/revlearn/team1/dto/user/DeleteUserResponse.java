@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class DeleteResponse {
+public class DeleteUserResponse {
     private User user;
     private String message;
 }
