@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revlearn.team1.dto.user.DeleteResponse;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserService;
 
@@ -42,12 +43,12 @@ public class UserController {
         return user.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<DeleteResponse> deleteUserById(@PathVariable Long id) {
         User user = userService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Could not find user with ID: " + id));
         userService.deleteById(id);
-        return ResponseEntity.ok(user);
-    }
+    DeleteResponse response = new DeleteResponse(user, "User deleted successfully");
+    return ResponseEntity.ok(response);
+}
 }
