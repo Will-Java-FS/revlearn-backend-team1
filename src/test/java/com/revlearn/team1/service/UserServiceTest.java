@@ -50,7 +50,7 @@ public class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         UserDetails result = userService.loadUserByUsername(username);
-        Assert.assertEquals(new User(0, "username", "password", "email", "Student", "firstName", "lastName", LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18), LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18)), result);
+        Assert.assertEquals(user, result);
     }
 
     private User createUser(String username) {

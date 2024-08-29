@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -52,6 +53,18 @@ public class User implements UserDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "educators")
+    @JsonIgnore
+    private List<Course> taughtCourses = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "students")
+    @JsonIgnore
+    private List<Course> enrolledCourses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "institution")
+    @JsonIgnore
+    private List<Course> institutionCourses = new ArrayList<>();
 
 
     @JsonIgnore
