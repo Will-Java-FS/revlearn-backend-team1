@@ -1,0 +1,33 @@
+{
+  "users": [
+    {"id": 1, "username": "JohnDoe"},
+    {"id": 2, "username": "JaneSmith"}
+  ],
+  "courses": [
+    {
+      "name": "Java Programming",
+      "description": "An advanced course on Java programming.",
+      "institutionId": 1,
+      "startDate": "2024-09-01",
+      "endDate": "2024-12-15",
+      "type": "ONLINE",
+      "educatorIds": [1],
+      "studentIds": [2]
+    },
+    {
+      "name": "Data Structures",
+      "description": "A comprehensive course on data structures.",
+      "institutionId": 1,
+      "startDate": "2024-10-01",
+      "endDate": "2024-11-30",
+      "type": "IN_PERSON",
+      "educatorIds": [1],
+      "studentIds": [2]
+    }
+  ],
+  "transactions": [
+    {"fromUserId": 1, "toUserId": 2, "price": 100.50, "description": "Payment for services"},
+    {"fromUserId": 2, "toUserId": 1, "price": 200.00, "description": "Refund for overpayment"},
+    {"fromUserId": 2, "toUserId": 1, "price": 50.25, "description": "Personal transfer"}
+  ]
+}
