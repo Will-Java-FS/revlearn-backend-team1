@@ -15,7 +15,6 @@ public class CourseContent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "course_id", nullable = true)
+    @OneToOne(mappedBy = "courseContent")
     private Course course;
 }
