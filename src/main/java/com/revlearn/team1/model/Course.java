@@ -72,7 +72,8 @@ public class Course {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_content_id", nullable = true, referencedColumnName = "id")
     private CourseContent courseContent;
 
     @Column(nullable = false)
@@ -84,6 +85,9 @@ public class Course {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AttendanceMethod attendanceMethod;
+
+    @OneToMany(mappedBy = "course")
+    private List<TransactionModel> transactions;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
