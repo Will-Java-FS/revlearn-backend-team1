@@ -1,9 +1,9 @@
 package com.revlearn.team1.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.revlearn.team1.dto.DiscussionPostDTO;
 import com.revlearn.team1.model.DiscussionPost;
-import lombok.Getter;
-import org.springframework.stereotype.Component;
 
 @Component
 public class DiscussionPostMapper{

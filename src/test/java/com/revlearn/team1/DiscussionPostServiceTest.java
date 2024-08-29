@@ -1,6 +1,21 @@
 package com.revlearn.team1;
 
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
+
 import com.revlearn.team1.dto.DiscussionPostDTO;
 import com.revlearn.team1.exceptions.DiscussionPostNotFoundException;
 import com.revlearn.team1.mapper.DiscussionPostMapper;
@@ -9,20 +24,7 @@ import com.revlearn.team1.model.DiscussionPost;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.DiscussionPostRepo;
 import com.revlearn.team1.service.DiscussionPostService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
-
-import com.revlearn.team1.exceptions.DiscussionPostNotFoundException;
 
 class DiscussionPostServiceTest{
 
@@ -61,10 +63,20 @@ class DiscussionPostServiceTest{
     }
 
     @Test
-    void testGetDiscussionByIdFail(){
-        when(disRepo.findById(11L)).thenReturn(Optional.empty());
+    void testGetDiscussionByIdFail() {
+        // Arrange
+        Long discussionId = 11L;
+        when(disRepo.findById(discussionId)).thenReturn(Optional.empty());
 
-        assertThrows(DiscussionPostNotFoundException.class, () -> disServ.getDiscussionById(11L));
+        // Act and Assert
+        DiscussionPostNotFoundException thrownException = assertThrows(
+                DiscussionPostNotFoundException.class,
+                () -> disServ.getDiscussionById(discussionId),
+                "Expected getDiscussionById() to throw DiscussionPostNotFoundException, but it didn't");
+
+        // Optionally, verify the exception message if your exception contains a
+        // meaningful message
+        assertEquals("Cannot find Discussion Post with ID 11", thrownException.getMessage());
     }
 
     @Test
@@ -116,18 +128,23 @@ class DiscussionPostServiceTest{
     }
 
     @Test
-    void testUpdateDiscussionPostFail(){
+    void testUpdateDiscussionPostFail() {
+        // Arrange
         DiscussionPostDTO disDto = new DiscussionPostDTO(
                 11L,
                 new Course(),
                 new User(),
                 "content",
-                LocalDateTime.of(2024,5,1,13,30),
-                LocalDateTime.of(2024,5,1,13,30)
-        );
+                LocalDateTime.of(2024, 5, 1, 13, 30),
+                LocalDateTime.of(2024, 5, 1, 13, 30));
         when(disRepo.findById(11L)).thenReturn(Optional.empty());
 
-        assertThrows(DiscussionPostNotFoundException.class, () -> disServ.updateDiscussionPost(11L, disDto));
+        // Act & Assert
+        DiscussionPostNotFoundException thrownException = assertThrows(
+                DiscussionPostNotFoundException.class,
+                () -> disServ.updateDiscussionPost(11L, disDto));
+
+        assertEquals("Discussion Post with ID 11 not found.", thrownException.getMessage());
     }
 
     @Test
@@ -145,9 +162,17 @@ class DiscussionPostServiceTest{
     }
 
     @Test
-    void testDeleteDiscussionByIdFail(){
-        when(disRepo.findById(11L)).thenReturn(Optional.empty());
+    void testDeleteDiscussionByIdFail() {
+        // Arrange
+        Long discussionId = 11L;
+        when(disRepo.findById(discussionId)).thenReturn(Optional.empty());
 
-        assertThrows(DiscussionPostNotFoundException.class, () -> disServ.deleteDiscussionById(11L));
+        // Act and Assert
+        DiscussionPostNotFoundException thrownException = assertThrows(
+                DiscussionPostNotFoundException.class,
+                () -> disServ.deleteDiscussionById(discussionId),
+                "Expected deleteDiscussionById() to throw DiscussionPostNotFoundException, but it didn't");
+
+        assertEquals("Discussion Post with ID 11 not found.", thrownException.getMessage());
     }
 }
