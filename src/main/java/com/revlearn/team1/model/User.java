@@ -1,6 +1,7 @@
 package com.revlearn.team1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,9 +38,11 @@ public class User {
     private List<Course> institutionCourses = new ArrayList<>();
 
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
+    @JsonManagedReference("user-to-transaction")
     private List<TransactionModel> proceeds;
 
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
+    @JsonManagedReference("user-from-transaction")
     private List<TransactionModel> purchases;
 
     public User() {

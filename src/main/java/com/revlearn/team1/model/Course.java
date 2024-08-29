@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.revlearn.team1.enums.AttendanceMethod;
 
 import jakarta.persistence.CascadeType;
@@ -87,6 +88,7 @@ public class Course {
     private AttendanceMethod attendanceMethod;
 
     @OneToMany(mappedBy = "course")
+    @JsonManagedReference("course-transactions")
     private List<TransactionModel> transactions;
 
     @CreationTimestamp
