@@ -76,7 +76,7 @@ public class CourseServiceImp implements CourseService {
 
     @Override
     public String deleteById(Long id) {
-        //TODO: Secure method. verification requesters' are course owner: educator or institution
+        //TODO: Secure method. verify requesters' are course owner: educator or institution
 
         //verify course exists
         courseRepo.findById(id).orElseThrow(
@@ -97,7 +97,6 @@ public class CourseServiceImp implements CourseService {
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
         //TODO: verify authenticated user owns course
-
         //TODO: verify educator does not already exist in course. add custom exception.
 
 

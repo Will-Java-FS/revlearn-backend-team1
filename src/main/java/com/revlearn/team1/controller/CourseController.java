@@ -1,5 +1,17 @@
 package com.revlearn.team1.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.request.CourseStudentDTO;
@@ -7,10 +19,8 @@ import com.revlearn.team1.dto.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.response.CourseStudentResDTO;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.CourseServiceImp;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/course")
@@ -44,38 +54,28 @@ public class CourseController {
         return courseService.deleteById(id);
     }
 
-    @PatchMapping("/addEducator")
+    @PatchMapping("/studentEnroll")
+    public CourseStudentResDTO enrollStudent(@RequestBody CourseStudentDTO courseStudentDTO) {
+        return courseService.enrollStudent(courseStudentDTO);
+    }
+
+    @PatchMapping("/studentWithdraw")
+    public CourseStudentResDTO withdrawStudent(@RequestBody CourseStudentDTO courseStudentDTO) {
+        return courseService.withdrawStudent(courseStudentDTO);
+    }
+
+    @PatchMapping("/educatorAdd")
     public CourseEducatorResDTO addEducator(@RequestBody CourseEducatorDTO courseEducatorDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.addEducator(courseEducatorDTO);
     }
 
-    @PatchMapping("/removeEducator")
+    @PatchMapping("/educatorRemove")
     public CourseEducatorResDTO removeEducator(@RequestBody CourseEducatorDTO courseEducatorDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
     }
 
-    @PatchMapping("/enroll")
-    public CourseStudentResDTO enrollStudent(@RequestBody CourseStudentDTO courseStudentDTO) {
-        return courseService.enrollStudent(courseStudentDTO);
-    }
-
-    @PatchMapping("/withdraw")
-    public CourseStudentResDTO withdrawStudent(@RequestBody CourseStudentDTO courseStudentDTO) {
-        return courseService.withdrawStudent(courseStudentDTO);
-    }
-
-    @GetMapping("/educator/{id}")
-    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
-        return courseService.getAllByEducatorId(id);
-    }
-
-    /* TODO: Remove user routes once User model is implemented */
-    @GetMapping("/test/user/{id}")
-    public User getUser(@PathVariable Long id) {
-        return courseService.getUserTestById(id);
-    }
 
     @PostMapping("/test/user")
     public User createUser(@RequestBody User user) {
