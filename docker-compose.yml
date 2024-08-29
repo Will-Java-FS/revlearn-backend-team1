@@ -27,4 +27,5 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5433"
+    command: postgres -c 'port=5433'
 
