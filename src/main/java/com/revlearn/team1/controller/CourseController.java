@@ -38,6 +38,23 @@ public class CourseController {
         return courseService.getById(id);
     }
 
+    @GetMapping("/student/{id}")
+    public List<CourseDTO> getCoursesOfStudent(@PathVariable Long id) {
+        return courseService.getAllByStudentId(id);
+    }
+
+    @GetMapping("/educator/{id}")
+    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
+        return courseService.getAllByEducatorId(id);
+    }
+
+    // Does not need security because an institution's course list should be
+    // publicly available
+    @GetMapping("/institution/{id}")
+    public List<CourseDTO> getCoursesOfInstitution(@PathVariable Long id) {
+        return courseService.getAllByInstitutionId(id);
+    }
+
     @PostMapping("/create")//TODO: Secure so that only instructors and institutions can create courses
     public CourseDTO postCourse(@RequestBody CourseDTO courseDTO) {
         return courseService.createCourse(courseDTO);
@@ -76,6 +93,11 @@ public class CourseController {
         return courseService.removeEducator(courseEducatorDTO);
     }
 
+    /* TODO: Remove user routes once User model is implemented */
+    @GetMapping("/test/user/{id}")
+    public User getUser(@PathVariable Long id) {
+        return courseService.getUserTestById(id);
+    }
 
     @PostMapping("/test/user")
     public User createUser(@RequestBody User user) {

@@ -175,19 +175,29 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
+    public List<CourseDTO> getAllByStudentId(Long studentId) {
+        // TODO: Secure so only specified student or admin-like account ("counselor"?)
+        // can retrieve data.
+        // Will probably use Security context to obtain student id instead of path
+        // variable
+        User student = userRepo.findById(studentId).orElseThrow(() -> new RuntimeException("Could not find user."));
+        return student.getEnrolledCourses().stream().map(courseMapper::toDto).toList();
+    }
+
+    @Override
     public List<CourseDTO> getAllByEducatorId(Long educatorId) {
-        User user = userRepo.findById(educatorId).orElseThrow(() -> new RuntimeException("Could not find user."));
-        return user.getTaughtCourses().stream().map(courseMapper::toDto).toList();
+        // TODO: Secure so only specified educator can retrieve data.
+        // Will probably use Security context to obtain educator id instead of path
+        // variable
+        User educator = userRepo.findById(educatorId).orElseThrow(() -> new RuntimeException("Could not find user."));
+        return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
     }
 
     @Override
     public List<CourseDTO> getAllByInstitutionId(Long institutionId) {
-        return null;
-    }
-
-    @Override
-    public List<CourseDTO> getAllByStudentId(Long studentId) {
-        return null;
+        User institution = userRepo.findById(institutionId).orElseThrow(() -> new RuntimeException("Could not find user."));
+        return institution.getInstitutionCourses().stream()
+                .map(courseMapper::toDto).toList();
     }
 
     /*TODO: Remove these methods when User model is implemented */
