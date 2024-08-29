@@ -28,5 +28,4 @@ public class TransactionModel {
     //What was purchased
     @ManyToOne
     @JoinColumn(name = "course_id")
-    Course course;
-}
+    private Course course;}

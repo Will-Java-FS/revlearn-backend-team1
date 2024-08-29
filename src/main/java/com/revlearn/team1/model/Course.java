@@ -87,7 +87,7 @@ public class Course {
     private AttendanceMethod attendanceMethod;
 
     @OneToMany(mappedBy = "course")
-    private TransactionModel transactions;
+    private List<TransactionModel> transactions;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
