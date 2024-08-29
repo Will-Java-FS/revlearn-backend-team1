@@ -13,9 +13,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Entity
@@ -28,7 +28,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NonNull
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -43,5 +43,9 @@ public class User {
     @OneToMany(mappedBy = "institution")
     @JsonIgnore
     private List<Course> institutionCourses = new ArrayList<>();
+
+    public User() {
+        this.username = "default-user";
+    }
 
 }
