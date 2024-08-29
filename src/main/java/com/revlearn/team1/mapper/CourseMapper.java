@@ -1,11 +1,11 @@
 package com.revlearn.team1.mapper;
 
-import com.revlearn.team1.dto.CourseDTO;
-import com.revlearn.team1.model.Course;
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import com.revlearn.team1.dto.CourseDTO;
+import com.revlearn.team1.model.Course;
 
 @Component
 public class CourseMapper {
