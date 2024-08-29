@@ -36,6 +36,12 @@ public class User {
     @JsonIgnore
     private List<Course> institutionCourses = new ArrayList<>();
 
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
+    private List<TransactionModel> proceeds;
+
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
+    private List<TransactionModel> purchases;
+
     public User() {
         this.username = "default-user";
     }
