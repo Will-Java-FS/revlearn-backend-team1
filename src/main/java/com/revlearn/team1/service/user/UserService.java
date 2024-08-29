@@ -1,5 +1,6 @@
 package com.revlearn.team1.service.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.revlearn.team1.model.User;
@@ -10,5 +11,6 @@ public interface UserService {
     User save(User user);
 
     void deleteById(Long id);
-    // Other user-related methods can be defined here
+
+    List<User> getAll();
 }

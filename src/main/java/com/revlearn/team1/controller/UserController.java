@@ -1,5 +1,6 @@
 package com.revlearn.team1.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAll();
+        return ResponseEntity.ok(users);
+    }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {

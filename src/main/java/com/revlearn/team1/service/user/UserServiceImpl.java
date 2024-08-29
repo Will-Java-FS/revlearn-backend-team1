@@ -1,5 +1,6 @@
 package com.revlearn.team1.service.user;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll(); // Use findAll() to get all users
     }
 }
