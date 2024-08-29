@@ -29,6 +29,9 @@ public class DataInitializer implements ApplicationRunner {
     @Value("${SPRING_API_URL}")
     private String apiUrl;
 
+    @Value("${app.runner.enabled}")
+    private boolean isRunnerEnabled;
+
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -36,6 +39,10 @@ public class DataInitializer implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
+        if (!isRunnerEnabled) {
+            logger.info("Skipping data initialization...");
+            return;
+        }
         logger.info("Initializing data...");
         loadInitialData();
     }
@@ -57,7 +64,7 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void createInitialCourses(JsonNode coursesNode) {
-        String requestUrl = apiUrl + "/course";
+        String requestUrl = apiUrl + "/course/create";
         for (JsonNode courseNode : coursesNode) {
             sendRequest(requestUrl, HttpMethod.POST, courseNode);
         }

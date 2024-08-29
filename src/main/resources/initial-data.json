@@ -1,33 +1,49 @@
 {
   "users": [
-    {"id": 1, "username": "JohnDoe"},
-    {"id": 2, "username": "JaneSmith"}
+    {"id": 1, "username": "StudentOne"},
+    {"id": 2, "username": "StudentTwo"},
+    {"id": 3, "username": "StudentThree"},
+    {"id": 4, "username": "EducatorOne"},
+    {"id": 5, "username": "EducatorTwo"},
+    {"id": 6, "username": "EducatorThree"},
+    {"id": 7, "username": "InstitutionOne"},
+    {"id": 8, "username": "InstitutionTwo"},
+    {"id": 9, "username": "InstitutionThree"}
   ],
   "courses": [
     {
       "name": "Java Programming",
       "description": "An advanced course on Java programming.",
-      "institutionId": 1,
+      "institution": {"id": 7, "username": "InstitutionOne"},
       "startDate": "2024-09-01",
       "endDate": "2024-12-15",
-      "type": "ONLINE",
-      "educatorIds": [1],
-      "studentIds": [2]
+      "attendanceMethod": "HYBRID",
+      "educators": [
+        {"id": 4, "username": "EducatorOne"}
+      ],
+      "students": [
+        {"id": 1, "username": "StudentOne"}
+      ]
     },
     {
       "name": "Data Structures",
       "description": "A comprehensive course on data structures.",
-      "institutionId": 1,
+      "institution": {"id": 8, "username": "InstitutionTwo"},
       "startDate": "2024-10-01",
       "endDate": "2024-11-30",
-      "type": "IN_PERSON",
-      "educatorIds": [1],
-      "studentIds": [2]
+      "attendanceMethod": "ONLINE",
+      "educators": [
+        {"id": 4, "username": "EducatorOne"}
+      ],
+      "students": [
+        {"id": 1, "username": "StudentOne"}
+      ]
     }
   ],
   "transactions": [
-    {"fromUserId": 1, "toUserId": 2, "price": 100.50, "description": "Payment for services"},
-    {"fromUserId": 2, "toUserId": 1, "price": 200.00, "description": "Refund for overpayment"},
-    {"fromUserId": 2, "toUserId": 1, "price": 50.25, "description": "Personal transfer"}
-  ]
+    {"toUserId": 2, "fromUserId": 1, "price": 100.50, "description": "Payment for services"},
+    {"toUserId": 1, "fromUserId": 2, "price": 200.00, "description": "Refund for overpayment"},
+    {"toUserId": 3, "fromUserId": 2, "price": 50.25, "description": "Personal transfer"}
+  ],
+  "tests": []
 }
