@@ -1,22 +1,14 @@
 package com.revlearn.team1.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NonNull
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -43,5 +35,15 @@ public class User {
     @OneToMany(mappedBy = "institution")
     @JsonIgnore
     private List<Course> institutionCourses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
+    private List<TransactionModel> proceeds;
+
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
+    private List<TransactionModel> purchases;
+
+    public User() {
+        this.username = "default-user";
+    }
 
 }

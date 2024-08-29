@@ -12,20 +12,22 @@ import lombok.*;
 public class TransactionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "to_id")
-    User to_user; //this should be an institution (unless it is a refund)
+    @ManyToOne
+    @JoinColumn(name = "to_user_id")
+    private User toUser;//this should be an institution (unless it is a refund)
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", referencedColumnName = "from_id")
-    User from_user; //this should be a student (unless it is a refund)
+    @ManyToOne
+    @JoinColumn(name = "from_user_id")
+    private User fromUser;//this should be a student (unless it is a refund)
 
-    float price;
-    String description;
+    private float price;
+    private String description;
 
     //What was purchased
     @ManyToOne
     @JoinColumn(name = "course_id")
-    private Course course;}
+    private Course course;
+
+}
