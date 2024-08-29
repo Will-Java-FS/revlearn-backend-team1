@@ -37,12 +37,35 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
+    public List<CourseDTO> getAllByStudentId(Long studentId) {
+        //TODO: Secure so only specified student or admin-like account ("counselor"?) can retrieve data.
+        // Will probably use Security context to obtain student id instead of path variable
+        User student = userRepo.findById(studentId).orElseThrow(() -> new RuntimeException("Could not find user."));
+        return student.getEnrolledCourses().stream().map(courseMapper::toDto).toList();
+    }
+
+    @Override
+    public List<CourseDTO> getAllByEducatorId(Long educatorId) {
+        //TODO: Secure so only specified educator can retrieve data.
+        // Will probably use Security context to obtain educator id instead of path variable
+        User educator = userRepo.findById(educatorId).orElseThrow(() -> new RuntimeException("Could not find user."));
+        return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
+    }
+
+    @Override
+    public List<CourseDTO> getAllByInstitutionId(Long institutionId) {
+        User institution = userRepo.findById(institutionId).orElseThrow(() -> new RuntimeException("Could not find user."));
+        return institution.getInstitutionCourses().stream().map(courseMapper::toDto).toList();
+    }
+
+    @Override
     public CourseDTO getById(Long courseId) {
         Course retrievedCourse = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("CourseService.getById()", courseId));
         return courseMapper.toDto(retrievedCourse);
     }
 
+    @Override
     public CourseDTO createCourse(CourseDTO courseDTO) {
         //TODO: Secure so that only instructors and institutions can create courses
         // Maybe we require user information as parameter
@@ -73,7 +96,7 @@ public class CourseServiceImp implements CourseService {
 
     @Override
     public String deleteById(Long id) {
-        //TODO: Secure method. verification requesters' are course owner: educator or institution
+        //TODO: Secure method. verify requesters' are course owner: educator or institution
 
         //verify course exists
         Course course = courseRepo.findById(id).orElseThrow(
@@ -83,6 +106,49 @@ public class CourseServiceImp implements CourseService {
         return String.format("Successfully deleted course %d.", id);
     }
 
+    @Override
+    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO) {
+        //verify course and student exist
+        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
+        User student = userRepo.findById(courseStudentDTO.studentId()).orElseThrow(
+                //TODO: replace generic runtime exception with custom exception
+                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
+
+        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
+        // (Clean this up later when security is implemented.  Use security context to get current user)
+        //TODO: verify student does not already exist in course. add custom exception.
+
+        course.getStudents().add(student);
+        student.getEnrolledCourses().add(course);
+
+        Course savedCourse = courseRepo.save(course);
+        User savedUser = userRepo.save(student);
+
+        return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), savedUser.getId());
+    }
+
+    @Override
+    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO) {
+        //verify course and student exist
+        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
+        User student = userRepo.findById(courseStudentDTO.studentId()).orElseThrow(
+                //TODO: replace generic runtime exception with custom exception
+                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
+
+        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
+        // (Clean this up later when security is implemented.  Use security context to get current user)
+        //TODO: verify student and course are connected, first? add custom exception.
+
+        course.getStudents().remove(student);
+        student.getEnrolledCourses().remove(course);
+
+        Course savedCourse = courseRepo.save(course);
+        User savedUser = userRepo.save(student);
+
+        return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), savedUser.getId());
+    }
 
     @Override
     public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO) {
@@ -94,7 +160,6 @@ public class CourseServiceImp implements CourseService {
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
         //TODO: verify authenticated user owns course
-
         //TODO: verify educator does not already exist in course. add custom exception.
 
 
@@ -126,66 +191,6 @@ public class CourseServiceImp implements CourseService {
         User savedEducator = userRepo.save(educator);
 
         return new CourseEducatorResDTO("Successfully removed educator from course.", savedCourse.getId(), savedEducator.getId());
-    }
-
-    @Override
-    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO) {
-        //verify course and student exit
-        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
-                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
-        User student = userRepo.findById(courseStudentDTO.studentId()).orElseThrow(
-                //TODO: replace generic runtime exception with custom exception
-                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
-
-        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
-        // (Clean this up later when security is implemented.  Use security context to get current user)
-        //TODO: verify student does not already exist in course. add custom exception.
-
-//        course.getStudents().add(student);
-//        student.getEnrolledCourses().add(course);
-
-        Course savedCourse = courseRepo.save(course);
-        User savedUser = userRepo.save(student);
-
-        return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), savedUser.getId());
-    }
-
-    @Override
-    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO) {
-        //verify course and student exit
-        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
-                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
-        User student = userRepo.findById(courseStudentDTO.studentId()).orElseThrow(
-                //TODO: replace generic runtime exception with custom exception
-                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
-
-        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
-        // (Clean this up later when security is implemented.  Use security context to get current user)
-        //TODO: verify student and course are connected, first? add custom exception.
-
-//        course.getStudents().remove(student);
-//        student.getEnrolledCourses().remove(course);
-
-        Course savedCourse = courseRepo.save(course);
-        User savedUser = userRepo.save(student);
-
-        return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), savedUser.getId());
-    }
-
-    @Override
-    public List<CourseDTO> getAllByEducatorId(Long educatorId) {
-        User user = userRepo.findById(educatorId).orElseThrow(() -> new RuntimeException("Could not find user."));
-        return user.getTaughtCourses().stream().map(courseMapper::toDto).toList();
-    }
-
-    @Override
-    public List<CourseDTO> getAllByInstitutionId(Long institutionId) {
-        return null;
-    }
-
-    @Override
-    public List<CourseDTO> getAllByStudentId(Long studentId) {
-        return null;
     }
 
     /*TODO: Remove these methods when User model is implemented */
