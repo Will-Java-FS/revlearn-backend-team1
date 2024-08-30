@@ -199,13 +199,4 @@ public class CourseServiceImp implements CourseService {
         return institution.getInstitutionCourses().stream()
                 .map(courseMapper::toDto).toList();
     }
-
-    /*TODO: Remove these methods when User model is implemented */
-    public User getUserTestById(Long userId) {
-        return userRepo.findById(Math.toIntExact(userId)).orElseThrow(() -> new RuntimeException("User Not found"));
-    }
-
-    public User addUserTest(User user) {
-        return userRepo.save(user);
-    }
 }
