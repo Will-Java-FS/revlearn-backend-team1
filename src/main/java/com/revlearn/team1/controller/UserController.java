@@ -17,15 +17,13 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     public UserService userService;
-
-    private final JwtUtil jwtUtil;
-
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
@@ -56,8 +54,7 @@ public class UserController {
     @PostMapping("/register")
     public @ResponseBody ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
-            if(userService.checkExisting(user.getUsername()))
-            {
+            if (userService.checkExisting(user.getUsername())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
             }
             User u = userService.createUser(user);
@@ -68,9 +65,22 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers()
-    {
+    public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        Optional<User> user = userService.findById(id);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DeleteUserResponse> deleteUserById(@PathVariable Long id) {
+        User user = userService.findById(id).orElseThrow(() -> new RuntimeException("Could not find user with ID: " + id));
+        userService.deleteById(id);
+        DeleteUserResponse response = new DeleteUserResponse(user, "User deleted successfully");
+        return ResponseEntity.ok(response);
+    }
 }

@@ -1,11 +1,11 @@
 package com.revlearn.team1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeId;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import jakarta.persistence.*;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,17 +17,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-@Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@RequiredArgsConstructor
+@Data
+@Table(name = "\"user\"") // user is a reserved keyword in H2 testing db, needs quotes to properly parse
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", updatable = false)
     private int id;
 
+    @NonNull
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
@@ -66,30 +68,44 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Course> institutionCourses = new ArrayList<>();
 
+    @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
+    private List<TransactionModel> proceeds;
+
+    @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
+    private List<TransactionModel> purchases;
+
+    public User() {
+        this.username = "default-user";
+    }
 
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Set.of(() -> role);
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return UserDetails.super.isAccountNonExpired();
     }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return UserDetails.super.isAccountNonLocked();
     }
+
     @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return UserDetails.super.isCredentialsNonExpired();
     }
+
     @JsonIgnore
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }
