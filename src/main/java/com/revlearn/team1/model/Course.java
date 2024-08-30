@@ -60,7 +60,6 @@ public class Course {
             //TODO: uncomment this once User model is implemented
             // nullable = false
     )
-    @JsonIgnore
     private User institution;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)

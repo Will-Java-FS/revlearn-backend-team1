@@ -1,10 +1,5 @@
 package com.revlearn.team1.service;
 
-import java.util.List;
-
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
-
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.request.CourseStudentDTO;
@@ -17,8 +12,11 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -172,6 +170,20 @@ public class CourseServiceImp implements CourseService {
         User savedUser = userRepo.save(student);
 
         return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), savedUser.getId());
+    }
+
+    @Override
+    public List<User> getAllStudentsByCourseId(Long courseId) {
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
+        return course.getStudents();
+    }
+
+    @Override
+    public List<User> getAllEducatorsByCourseId(Long courseId) {
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(()->new CourseNotFoundException("getAllEducatorsByCourseId()",courseId));
+        return course.getEducators();
     }
 
     @Override

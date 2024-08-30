@@ -5,6 +5,7 @@ import com.revlearn.team1.dto.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.request.CourseStudentDTO;
 import com.revlearn.team1.dto.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.response.CourseStudentResDTO;
+import com.revlearn.team1.model.User;
 
 import java.util.List;
 
@@ -33,4 +34,7 @@ public interface CourseService {
 
     public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
 
+    List<User> getAllStudentsByCourseId(Long courseId);
+
+    List<User> getAllEducatorsByCourseId(Long courseId);
 }

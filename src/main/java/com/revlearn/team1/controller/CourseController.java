@@ -55,6 +55,16 @@ public class CourseController {
         return courseService.getAllByInstitutionId(id);
     }
 
+    @GetMapping("/{courseId}/allStudents")
+    public List<User> getAllStudentsByCourseId(@PathVariable Long courseId){
+        return courseService.getAllStudentsByCourseId(courseId);
+    }
+
+    @GetMapping("/{courseId}/allEducators")
+    public List<User> getAllEducatorsByCourseId(@PathVariable Long courseId){
+        return courseService.getAllEducatorsByCourseId(courseId);
+    }
+
     @PostMapping("/create")//TODO: Secure so that only instructors and institutions can create courses
     public CourseDTO postCourse(@RequestBody CourseDTO courseDTO) {
         return courseService.createCourse(courseDTO);
