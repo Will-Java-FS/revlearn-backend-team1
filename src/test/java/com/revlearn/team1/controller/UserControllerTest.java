@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.revlearn.team1.service.UserService;
+import com.revlearn.team1.service.user.UserServiceImp;
 import com.revlearn.team1.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -30,7 +29,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private UserService userService; // Mock UserService
+    private UserServiceImp userService; // Mock UserService
 
     @InjectMocks
     private UserController userController; // Inject UserService into UserController

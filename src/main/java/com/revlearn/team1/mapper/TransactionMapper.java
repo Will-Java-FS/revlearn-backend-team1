@@ -29,9 +29,9 @@ public class TransactionMapper
 
     public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) {
         // Retrieve User entities using the UserService
-        User toUser = userService.findById(transactionDTO.toUserId())
+        User toUser = userService.findById(Math.toIntExact(transactionDTO.toUserId()))
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + transactionDTO.toUserId()));
-        User fromUser = userService.findById(transactionDTO.fromUserId())
+        User fromUser = userService.findById(Math.toIntExact(transactionDTO.fromUserId()))
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + transactionDTO.fromUserId()));
 
         TransactionModel transaction = new TransactionModel();

@@ -2,6 +2,7 @@ package com.revlearn.team1.service;
 
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
+import com.revlearn.team1.service.user.UserServiceImp;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,7 +25,7 @@ public class UserServiceTest {
     @Mock
     BCryptPasswordEncoder passwordEncoder;
     @InjectMocks
-    UserService userService;
+    UserServiceImp userService;
 
     @Before
     public void setUp() {

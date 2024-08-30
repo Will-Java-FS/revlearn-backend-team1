@@ -1,8 +1,9 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.UserDTO;
+import com.revlearn.team1.dto.user.DeleteUserResponse;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.UserService;
+import com.revlearn.team1.service.user.UserServiceImp;
 import com.revlearn.team1.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 @RestController
@@ -23,10 +25,10 @@ public class UserController {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserService userService;
+    public UserServiceImp userService;
 
     @Autowired
-    public UserController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+    public UserController(UserServiceImp userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
@@ -71,13 +73,13 @@ public class UserController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
         Optional<User> user = userService.findById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeleteUserResponse> deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<DeleteUserResponse> deleteUserById(@PathVariable int id) {
         User user = userService.findById(id).orElseThrow(() -> new RuntimeException("Could not find user with ID: " + id));
         userService.deleteById(id);
         DeleteUserResponse response = new DeleteUserResponse(user, "User deleted successfully");
