@@ -102,15 +102,4 @@ public class CourseController {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
     }
-
-    /* TODO: Remove user routes once User model is implemented */
-    @GetMapping("/test/user/{id}")
-    public User getUser(@PathVariable Long id) {
-        return courseService.getUserTestById(id);
-    }
-
-    @PostMapping("/test/user")
-    public User createUser(@RequestBody User user) {
-        return courseService.addUserTest(user);
-    }
 }
