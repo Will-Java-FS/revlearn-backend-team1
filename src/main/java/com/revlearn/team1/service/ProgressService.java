@@ -12,9 +12,10 @@ import java.util.Optional;
 
 @Service
 public class ProgressService {
-    @Autowired
+
     private ProgressRepo progressRepo;
 
+    @Autowired
     public ProgressService(ProgressRepo progressRepo){
         this.progressRepo = progressRepo;
     }

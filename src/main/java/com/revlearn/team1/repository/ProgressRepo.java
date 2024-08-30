@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 @Repository
-public interface ProgressRepo extends JpaRepository<Long, Progress> {
+public interface ProgressRepo extends JpaRepository<Progress, Long> {
     Optional<List<Progress>> findByStudent_id(Long student_id);
     Optional<Progress> findByStudent_idAndCourse_id(Long student_id, Long course_id);
 }
