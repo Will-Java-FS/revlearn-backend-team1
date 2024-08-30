@@ -37,13 +37,12 @@ public class UserController {
     @PostMapping("/login")
     public @ResponseBody ResponseEntity<Map<String, Object>> login(@RequestBody UserDTO user) {
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
-        if (!(userDetails instanceof User)) {
+        if (!(userDetails instanceof User u)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid username or password."));
         }
 
-        User u = (User) userDetails;
-        String encodedpassword = u.getPassword();
-        if (!passwordEncoder.matches(user.getPassword(), encodedpassword)) {
+        String encodedPassword = u.getPassword();
+        if (!passwordEncoder.matches(user.getPassword(), encodedPassword)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid username or password."));
         }
         String token = jwtUtil.generateToken(u);

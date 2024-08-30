@@ -67,7 +67,7 @@ public class UserControllerTest {
         when(userService.getAllUsers()).thenReturn(users);
 
         // Perform the test
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/users"));
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/user"));
         resultActions.andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(users)));
     }
@@ -88,7 +88,7 @@ public class UserControllerTest {
         when(jwtUtil.generateToken(user)).thenReturn(token);
 
         // Perform the test
-        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/users/login")
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userJson));
 
@@ -106,7 +106,7 @@ public class UserControllerTest {
         when(userService.checkExisting(user.getUsername())).thenReturn(false);
         when(userService.createUser(user)).thenReturn(user);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/users/register")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
                 .andExpect(status().isCreated())
