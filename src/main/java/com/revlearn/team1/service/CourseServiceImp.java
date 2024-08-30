@@ -1,10 +1,5 @@
 package com.revlearn.team1.service;
 
-import java.util.List;
-
-import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Service;
-
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.request.CourseStudentDTO;
@@ -17,8 +12,11 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

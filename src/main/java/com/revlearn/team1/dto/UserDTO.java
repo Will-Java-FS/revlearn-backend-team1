@@ -1,12 +1,5 @@
 package com.revlearn.team1.dto;
 
-import jakarta.persistence.Column;
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class UserDTO {
 
     private String username;
