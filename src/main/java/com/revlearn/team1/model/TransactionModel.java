@@ -1,7 +1,6 @@
 package com.revlearn.team1.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +11,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class TransactionModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -26,7 +26,9 @@ public class TransactionModel {
     @JsonBackReference("user-from-transaction")
     private User fromUser;//this should be a student (unless it is a refund)
 
+
     private float price;
+
     private String description;
 
     //What was purchased

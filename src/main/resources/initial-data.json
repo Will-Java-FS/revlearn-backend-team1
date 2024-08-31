@@ -1,43 +1,117 @@
 {
   "users": [
-    {"id": 1, "username": "StudentOne"},
-    {"id": 2, "username": "StudentTwo"},
-    {"id": 3, "username": "StudentThree"},
-    {"id": 4, "username": "EducatorOne"},
-    {"id": 5, "username": "EducatorTwo"},
-    {"id": 6, "username": "EducatorThree"},
-    {"id": 7, "username": "InstitutionOne"},
-    {"id": 8, "username": "InstitutionTwo"},
-    {"id": 9, "username": "InstitutionThree"}
-  ],
+    {
+      "id": 1,
+      "username": "johndoe123",
+      "password": "Passw0rd!",
+      "email": "john.doe@example.com",
+      "role": "Student",
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    {
+      "id": 2,
+      "username": "janesmith456",
+      "password": "SecureP@ss",
+      "email": "jane.smith@example.com",
+      "role": "Educator",
+      "firstName": "Jane",
+      "lastName": "Smith"
+    },
+    {
+      "id": 3,
+      "username": "alexbrown789",
+      "password": "Br0wnieS3cure",
+      "email": "alex.brown@example.com",
+      "role": "Institution",
+      "firstName": "Alex",
+      "lastName": "Brown"
+    },
+    {
+      "id": 4,
+      "username": "michaeljohnson001",
+      "password": "M1cha3lRocks",
+      "email": "michael.johnson@example.com",
+      "role": "Student",
+      "firstName": "Michael",
+      "lastName": "Johnson"
+    },
+    {
+      "id": 5,
+      "username": "emilydavis002",
+      "password": "D@v1sEmily",
+      "email": "emily.davis@example.com",
+      "role": "Educator",
+      "firstName": "Emily",
+      "lastName": "Davis"
+    },
+    {
+      "id": 6,
+      "username": "sarahwilson003",
+      "password": "S@rahW1ls0n",
+      "email": "sarah.wilson@example.com",
+      "role": "Institution",
+      "firstName": "Sarah",
+      "lastName": "Wilson"
+    },
+    {
+      "id": 7,
+      "username": "davidmiller004",
+      "password": "M1ll3rD@vid",
+      "email": "david.miller@example.com",
+      "role": "Student",
+      "firstName": "David",
+      "lastName": "Miller"
+    },
+    {
+      "id": 8,
+      "username": "amandalee005",
+      "password": "L33Amanda",
+      "email": "amanda.lee@example.com",
+      "role": "Educator",
+      "firstName": "Amanda",
+      "lastName": "Lee"
+    },
+    {
+      "id": 9,
+      "username": "chrisgarcia006",
+      "password": "Garci@Chr1s",
+      "email": "chris.garcia@example.com",
+      "role": "Institution",
+      "firstName": "Chris",
+      "lastName": "Garcia"
+    },
+    {
+      "id": 10,
+      "username": "rachelmoore007",
+      "password": "R@ch3lM00re",
+      "email": "rachel.moore@example.com",
+      "role": "Student",
+      "firstName": "Rachel",
+      "lastName": "Moore"
+    }
+  ]
+,
   "courses": [
     {
       "name": "Java Programming",
       "description": "An advanced course on Java programming.",
-      "institution": {"id": 7, "username": "InstitutionOne"},
+      "institutionId": 1,
       "startDate": "2024-09-01",
       "endDate": "2024-12-15",
       "attendanceMethod": "HYBRID",
-      "educators": [
-        {"id": 4, "username": "EducatorOne"}
-      ],
-      "students": [
-        {"id": 1, "username": "StudentOne"}
-      ]
+      "educatorsIds": [2],
+      "studentsIds": [ 3,  4]
     },
     {
       "name": "Data Structures",
       "description": "A comprehensive course on data structures.",
-      "institution": {"id": 8, "username": "InstitutionTwo"},
+      "institutionId": 1,
       "startDate": "2024-10-01",
       "endDate": "2024-11-30",
       "attendanceMethod": "ONLINE",
-      "educators": [
-        {"id": 4, "username": "EducatorOne"}
-      ],
-      "students": [
-        {"id": 1, "username": "StudentOne"}
-      ]
+      "educatorsIds": [5],
+      "studentsIds": [3, 6, 7]
     }
   ],
   "transactions": [
