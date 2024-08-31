@@ -2,7 +2,7 @@
 Backend Repo for revlearn - team 1
 
 ## Database
-We recommend the creation of a new database for this application because Spring JPA is set to erase and recreate its database on every run.  If you need to persist data for tests you can change this setting in the application.properties file on this line.
+We recommend the creation of a new database for local development of this application because Spring JPA is set to erase and recreate its database on every run.  If you need to persist data for tests you can change this JPA setting in the application.properties file on this line.
 ```
 spring.jpa.hibernate.ddl-auto=create-drop
 ```
@@ -15,11 +15,10 @@ See [Spring Boot Database Initialization Documentation](https://docs.spring.io/s
 ## Environment Variables
 
 ### .env File Creation
-1. Create an .env file in your backend root directory.
-2. Assign your Database Name, Database Username, and Database Password values to the
-respective variables. Mine looks like this:
+1. Create an .env file in your backend root directory with this information:
 
 ```
+# Assign values to these three variables with information from your local Postgres DB installation:
 POSTGRES_DB=p2team1
 POSTGRES_USER=p2team1_user
 POSTGRES_PASSWORD=password
@@ -27,8 +26,16 @@ POSTGRES_PASSWORD=password
 SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
 SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/${POSTGRES_DB}
+# Not entirely sure what this does, yet.  Could change.
+SPRING_API_URL=http://localhost:8080
+
+DOCKER_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
 ```
-3. This will enable you to run the application in either a development environment like in the IntelliJ IDE, or as a Docker container.
+2. Assign values to these three variables with information from your local Postgres DB installation:
+* POSTGRES_DB
+* POSTGRES_USER
+* POSTGRES_PASSWORD     
+3. You can now run this backend application in either a development environment like the IntelliJ IDE, or as a Docker stack.
 ### Development (IntelliJ IDE) Build
 
 Load the .env file into your run configuration's environment variables setting.
@@ -38,12 +45,13 @@ Run the application.
 ### Production (Docker) Build
 
 1. Download Docker
-2. In your root directory, run 
+2. In a terminal, navigate to this project's root directory, and run:
 ```
 docker compose up --build
 ```
-3.  Docker should auto-build your project with the variables in your .env    
 
+Docker will build the Spring Boot application, and the configured Postgres DB into two images, instantiate containers from the images, and start the containers.
+* Note: If you need to directly access the containerized Postgres DB (like through pgadmin4), it is mapped to your host machine's port 5433 (not 5432 like normal because that would conflict with local Postgres installations).
 ## API Documentation
 
 ### Swagger
