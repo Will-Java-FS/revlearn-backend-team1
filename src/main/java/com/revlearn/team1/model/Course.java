@@ -1,32 +1,16 @@
 package com.revlearn.team1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revlearn.team1.enums.AttendanceMethod;
+import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.revlearn.team1.enums.AttendanceMethod;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.UniqueConstraint;
-import lombok.Data;
 
 @Entity
 @Data
@@ -56,10 +40,7 @@ public class Course {
     private List<User> students = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "institution_id"
-            //TODO: uncomment this once User model is implemented
-            // nullable = false
-    )
+    @JoinColumn(name = "institution_id")
     private User institution;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)

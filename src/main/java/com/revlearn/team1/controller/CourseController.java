@@ -1,17 +1,5 @@
 package com.revlearn.team1.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.request.CourseStudentDTO;
@@ -19,8 +7,10 @@ import com.revlearn.team1.dto.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.response.CourseStudentResDTO;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.CourseServiceImp;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/course")
@@ -38,30 +28,14 @@ public class CourseController {
         return courseService.getById(id);
     }
 
-    @GetMapping("/student/{id}")
-    public List<CourseDTO> getCoursesOfStudent(@PathVariable Long id) {
-        return courseService.getAllByStudentId(id);
-    }
-
-    @GetMapping("/educator/{id}")
-    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
-        return courseService.getAllByEducatorId(id);
-    }
-
-    // Does not need security because an institution's course list should be
-    // publicly available
-    @GetMapping("/institution/{id}")
-    public List<CourseDTO> getCoursesOfInstitution(@PathVariable Long id) {
-        return courseService.getAllByInstitutionId(id);
-    }
 
     @GetMapping("/{courseId}/allStudents")
-    public List<User> getAllStudentsByCourseId(@PathVariable Long courseId){
+    public List<User> getAllStudentsByCourseId(@PathVariable Long courseId) {
         return courseService.getAllStudentsByCourseId(courseId);
     }
 
     @GetMapping("/{courseId}/allEducators")
-    public List<User> getAllEducatorsByCourseId(@PathVariable Long courseId){
+    public List<User> getAllEducatorsByCourseId(@PathVariable Long courseId) {
         return courseService.getAllEducatorsByCourseId(courseId);
     }
 
@@ -76,7 +50,8 @@ public class CourseController {
         return courseService.updateCourse(courseDTO);
     }
 
-    @DeleteMapping("/delete/{id}")//TODO: Secure so that only course owners (instructors and institutions) can delete courses
+    @DeleteMapping("/delete/{id}")
+//TODO: Secure so that only course owners (instructors and institutions) can delete courses
     public String deleteCourse(@PathVariable Long id) {
         return courseService.deleteById(id);
     }
@@ -102,4 +77,22 @@ public class CourseController {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
     }
+
+    //TODO: Hand off the responsibility of these three functions to User controller
+//    @GetMapping("/student/{id}")
+//    public List<CourseDTO> getCoursesOfStudent(@PathVariable Long id) {
+//        return courseService.getAllByStudentId(id);
+//    }
+//
+//    @GetMapping("/educator/{id}")
+//    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
+//        return courseService.getAllByEducatorId(id);
+//    }
+//
+//    // Does not need security because an institution's course list should be
+//    // publicly available
+//    @GetMapping("/institution/{id}")
+//    public List<CourseDTO> getCoursesOfInstitution(@PathVariable Long id) {
+//        return courseService.getAllByInstitutionId(id);
+//    }
 }
