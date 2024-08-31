@@ -1,19 +1,21 @@
 package com.revlearn.team1.dto;
 
-import java.time.LocalDate;
-import java.util.Set;
-
 import com.revlearn.team1.enums.AttendanceMethod;
+import com.revlearn.team1.model.User;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public record CourseDTO(
         Long id,
-        String name,
-        String description,
-        Long institutionId, 
+        User institution,
         LocalDate startDate,
         LocalDate endDate,
-        AttendanceMethod type,
-        Set<Long> educatorIds, 
-        Set<Long> studentIds 
+        AttendanceMethod attendanceMethod,
+        String name,
+        String description,
+        List<User> students,
+        List<User> educators
+
 ) {
 }

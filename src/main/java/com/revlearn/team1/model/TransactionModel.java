@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Data
@@ -18,20 +20,31 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class TransactionModel
-{
+public class TransactionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "to_user_id")
+    private User toUser;//this should be an institution (unless it is a refund)
 
     @ManyToOne
     @JoinColumn(name = "to_user_id")
     private User toUser;
+    @ManyToOne
+    @JoinColumn(name = "from_user_id")
+    private User fromUser;//this should be a student (unless it is a refund)
 
     @ManyToOne
     @JoinColumn(name = "from_user_id")
     private User fromUser;
+    private float price;
+    private String description;
 
-    float price;
-    String description;
+    //What was purchased
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
 }
