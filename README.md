@@ -70,3 +70,39 @@ http://localhost:8080/swagger-ui.html
 * Production: TBD
 6. Expand any route to view example JSON formats for requests and
    responses. ![Swagger Expanded Route](./docs/images/SwaggerExpandedRoute.png)
+
+
+## Production Deployment
+The general steps are:
+1. Build Docker image of application
+2. Push Docker image to Docker Repository
+3. Pull Docker image to EC2 Instance
+4. Initialize Docker container from Docker image with production environment variables
+
+### Dockerize application
+Navigate to the project's root directory and run the terminal command: 
+```
+docker build -t revlearn:latest .
+```
+### Push image to Docker repo
+You need to set up an account on a Docker repository.  [Docker Hub](https://hub.docker.com/) is a popular choice.  Create a personal repository (public is easier), and use its name to tag the Docker image:
+```
+docker tag revlearn:latest <myDockerRepoName>/<revlearn>:latest
+```
+Log into your repository account in terminal:
+```
+docker login
+```
+Push the image to your repository:
+```
+docker push <myDockerRepoName>/<revlearn>:latest
+```
+Verify your push succeeded via a web browser visit to physically see your Docker repository's contents, or pull it in the terminal:
+```
+docker pull <myDockerRepoName>/<revlearn>:latest
+```
+### Pull to EC2 Instance
+Secure Shell into your AWS EC2 instance.
+```
+ssh -i ~/.ssh/myPemKeyFile.pem ec2-user@<EC2-IP-Address>
+```
