@@ -21,6 +21,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class TransactionModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -30,16 +31,12 @@ public class TransactionModel {
     private User toUser;//this should be an institution (unless it is a refund)
 
     @ManyToOne
-    @JoinColumn(name = "to_user_id")
-    private User toUser;
-    @ManyToOne
     @JoinColumn(name = "from_user_id")
     private User fromUser;//this should be a student (unless it is a refund)
 
-    @ManyToOne
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;
+
     private float price;
+
     private String description;
 
     //What was purchased

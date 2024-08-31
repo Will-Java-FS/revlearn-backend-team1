@@ -8,14 +8,14 @@ import java.util.List;
 
 public record CourseDTO(
         Long id,
-        User institution,
+        Long institutionId,
         LocalDate startDate,
         LocalDate endDate,
         AttendanceMethod attendanceMethod,
         String name,
         String description,
-        List<User> students,
-        List<User> educators
+        List<Long> studentsIds,
+        List<Long> educatorsIds
 
 ) {
 }

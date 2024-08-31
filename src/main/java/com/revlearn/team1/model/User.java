@@ -32,10 +32,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Data
 @Table(name = "\"user\"") // user is a reserved keyword in H2 testing db, needs quotes to properly parse
-@Data
-@AllArgsConstructor
-@RequiredArgsConstructor
-public class User {
 public class User implements UserDetails {
 
     @Id
@@ -88,6 +84,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
     private List<TransactionModel> purchases;
 
+
     public User() {
         this.username = "default-user";
     }
@@ -121,9 +118,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
-
-    @NotNull
-    @Column(unique = true, nullable = false)
-    private String username;
 
 }
