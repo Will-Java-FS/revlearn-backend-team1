@@ -197,7 +197,7 @@ public class CourseServiceImpTest {
         Course course = new Course();
         User educator = new User();
         Mockito.when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-        Mockito.when(userRepo.findById(2L)).thenReturn(Optional.of(educator));
+        Mockito.when(userRepo.findById(2)).thenReturn(Optional.of(educator));
         Mockito.when(courseRepo.save(course)).thenReturn(course);
         Mockito.when(userRepo.save(educator)).thenReturn(educator);
 
@@ -207,7 +207,7 @@ public class CourseServiceImpTest {
         // Assert
         assertEquals("Successfully added educator to course.", result.message());
         Mockito.verify(courseRepo).findById(1L);
-        Mockito.verify(userRepo).findById(2L);
+        Mockito.verify(userRepo).findById(2);
         Mockito.verify(courseRepo).save(course);
         Mockito.verify(userRepo).save(educator);
     }
@@ -219,7 +219,7 @@ public class CourseServiceImpTest {
         Course course = new Course();
         User educator = new User();
         Mockito.when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-        Mockito.when(userRepo.findById(2L)).thenReturn(Optional.of(educator));
+        Mockito.when(userRepo.findById(2)).thenReturn(Optional.of(educator));
         Mockito.when(courseRepo.save(course)).thenReturn(course);
         Mockito.when(userRepo.save(educator)).thenReturn(educator);
 
@@ -229,7 +229,7 @@ public class CourseServiceImpTest {
         // Assert
         assertEquals("Successfully removed educator from course.", result.message());
         Mockito.verify(courseRepo).findById(1L);
-        Mockito.verify(userRepo).findById(2L);
+        Mockito.verify(userRepo).findById(2);
         Mockito.verify(courseRepo).save(course);
         Mockito.verify(userRepo).save(educator);
     }
