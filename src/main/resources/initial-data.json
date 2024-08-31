@@ -1,16 +1,97 @@
 {
   "users": [
-    {"id": 1, "username": "testUser1"},
-    {"id": 2, "username": "testUser2"},
-    {"id": 3, "username": "testUser3"},
-    {"id": 4, "username": "testUser4"},
-    {"id": 5, "username": "testUser5"},
-    {"id": 6, "username": "testUser6"},
-    {"id": 7, "username": "testUser7"},
-    {"id": 8, "username": "testUser8"},
-    {"id": 9, "username": "testUser9"},
-    {"id": 10, "username": "testUser10"}
-  ],
+    {
+      "id": 1,
+      "username": "johndoe123",
+      "password": "Passw0rd!",
+      "email": "john.doe@example.com",
+      "role": "Student",
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    {
+      "id": 2,
+      "username": "janesmith456",
+      "password": "SecureP@ss",
+      "email": "jane.smith@example.com",
+      "role": "Educator",
+      "firstName": "Jane",
+      "lastName": "Smith"
+    },
+    {
+      "id": 3,
+      "username": "alexbrown789",
+      "password": "Br0wnieS3cure",
+      "email": "alex.brown@example.com",
+      "role": "Institution",
+      "firstName": "Alex",
+      "lastName": "Brown"
+    },
+    {
+      "id": 4,
+      "username": "michaeljohnson001",
+      "password": "M1cha3lRocks",
+      "email": "michael.johnson@example.com",
+      "role": "Student",
+      "firstName": "Michael",
+      "lastName": "Johnson"
+    },
+    {
+      "id": 5,
+      "username": "emilydavis002",
+      "password": "D@v1sEmily",
+      "email": "emily.davis@example.com",
+      "role": "Educator",
+      "firstName": "Emily",
+      "lastName": "Davis"
+    },
+    {
+      "id": 6,
+      "username": "sarahwilson003",
+      "password": "S@rahW1ls0n",
+      "email": "sarah.wilson@example.com",
+      "role": "Institution",
+      "firstName": "Sarah",
+      "lastName": "Wilson"
+    },
+    {
+      "id": 7,
+      "username": "davidmiller004",
+      "password": "M1ll3rD@vid",
+      "email": "david.miller@example.com",
+      "role": "Student",
+      "firstName": "David",
+      "lastName": "Miller"
+    },
+    {
+      "id": 8,
+      "username": "amandalee005",
+      "password": "L33Amanda",
+      "email": "amanda.lee@example.com",
+      "role": "Educator",
+      "firstName": "Amanda",
+      "lastName": "Lee"
+    },
+    {
+      "id": 9,
+      "username": "chrisgarcia006",
+      "password": "Garci@Chr1s",
+      "email": "chris.garcia@example.com",
+      "role": "Institution",
+      "firstName": "Chris",
+      "lastName": "Garcia"
+    },
+    {
+      "id": 10,
+      "username": "rachelmoore007",
+      "password": "R@ch3lM00re",
+      "email": "rachel.moore@example.com",
+      "role": "Student",
+      "firstName": "Rachel",
+      "lastName": "Moore"
+    }
+  ]
+,
   "courses": [
     {
       "name": "Java Programming",

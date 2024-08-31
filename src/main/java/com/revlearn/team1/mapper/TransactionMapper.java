@@ -16,7 +16,7 @@ public class TransactionMapper {
     // TODO: @Mapper annotation can automatically generate these methods. Implement
     // later if needed
     public TransactionResponseDTO toDTO(TransactionModel transaction) {
-        return new TransactionResponseDTO(transaction.getToUser(), transaction.getFromUser(), transaction.getPrice(), transaction.getDescription());
+        return new TransactionResponseDTO((long) transaction.getToUser().getId(), (long) transaction.getFromUser().getId(), transaction.getPrice(), transaction.getDescription());
     }
 
     public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) {
