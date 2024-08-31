@@ -96,22 +96,22 @@
     {
       "name": "Java Programming",
       "description": "An advanced course on Java programming.",
-      "institution": {"id":1},
+      "institutionId": 1,
       "startDate": "2024-09-01",
       "endDate": "2024-12-15",
       "attendanceMethod": "ONLINE",
-      "educators": [{"id": 2}],
-      "students": [{"id": 3}, {"id": 4}]
+      "educatorsIds": [2],
+      "studentsIds": [ 3,  4]
     },
     {
       "name": "Data Structures",
       "description": "A comprehensive course on data structures.",
-      "institution": {"id":1},
+      "institutionId": 1,
       "startDate": "2024-10-01",
       "endDate": "2024-11-30",
       "attendanceMethod": "IN_PERSON",
-      "educators": [{"id": 5}],
-      "students": [{"id": 3},{"id": 6}, {"id": 7}]
+      "educatorsIds": [5],
+      "studentsIds": [3, 6, 7]
     }
   ],
   "transactions": [
