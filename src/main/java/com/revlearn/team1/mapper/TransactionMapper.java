@@ -18,8 +18,6 @@ public class TransactionMapper {
 
     // TODO: @Mapper annotation can automatically generate these methods. Implement
     // later if needed
-    public TransactionResponseDTO toDTO(TransactionModel transaction) {
-        return new TransactionResponseDTO((long) transaction.getToUser().getId(), (long) transaction.getFromUser().getId(), transaction.getPrice(), transaction.getDescription());
     public TransactionDTO toDTO(TransactionModel transaction) {
         return new TransactionDTO(
                 transaction.getToUser() != null ? (long) transaction.getToUser().getId() : null,
@@ -29,15 +27,11 @@ public class TransactionMapper {
     }
 
     public TransactionResponseDTO toResDTO(TransactionModel transaction) {
-        return new TransactionResponseDTO(transaction.getToUser(), transaction.getFromUser(), transaction.getPrice(), transaction.getDescription());
+        return new TransactionResponseDTO((long) transaction.getToUser().getId(), (long) transaction.getFromUser().getId(), transaction.getPrice(), transaction.getDescription());
     }
 
     public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) {
-        // Retrieve User entities using the UserService
-        User toUser = userService.findById(Math.toIntExact(transactionDTO.toUserId())).orElseThrow(() -> new RuntimeException("User not found with ID: " + transactionDTO.toUserId()));
-        User fromUser = userService.findById(Math.toIntExact(transactionDTO.fromUserId())).orElseThrow(() -> new RuntimeException("User not found with ID: " + transactionDTO.fromUserId()));
-
-        TransactionModel transaction = new TransactionModel();
+              TransactionModel transaction = new TransactionModel();
 
         // Fetch the actual User entities from the database
         User toUser = userService.findById(Math.toIntExact(transactionDTO.toUserId()))
