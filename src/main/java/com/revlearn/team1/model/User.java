@@ -79,9 +79,11 @@ public class User implements UserDetails {
     private List<Course> institutionCourses = new ArrayList<>();
 
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<TransactionModel> proceeds;
 
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<TransactionModel> purchases;
 
 
