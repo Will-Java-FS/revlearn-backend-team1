@@ -50,7 +50,7 @@ public class DataInitializer implements ApplicationRunner {
 
 
     private void createInitialUsers(JsonNode usersNode) {
-        String requestUrl = apiUrl + "/user";
+        String requestUrl = apiUrl + "/user/register";
         for (JsonNode userNode : usersNode) {
             sendRequest(requestUrl, HttpMethod.POST, userNode);
         }
@@ -58,7 +58,7 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void createInitialCourses(JsonNode coursesNode) {
-        String requestUrl = apiUrl + "/course";
+        String requestUrl = apiUrl + "/course/create";
         for (JsonNode courseNode : coursesNode) {
             sendRequest(requestUrl, HttpMethod.POST, courseNode);
         }
@@ -79,7 +79,7 @@ public class DataInitializer implements ApplicationRunner {
 
             ResponseEntity<JsonNode> response = restTemplate.exchange(url, method, requestEntity, JsonNode.class);
 
-            if (response.getStatusCode().is2xxSuccessful()) {
+            if (response.getStatusCode().is2xxSuccessful())  {
                 logger.info("Request successful: " + response.getBody());
             } else {
                 logger.error(
