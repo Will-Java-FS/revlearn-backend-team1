@@ -1,16 +1,6 @@
 package com.revlearn.team1.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,10 +18,12 @@ public class TransactionModel {
 
     @ManyToOne
     @JoinColumn(name = "to_user_id")
+    @JsonBackReference("user-to-transaction")
     private User toUser;//this should be an institution (unless it is a refund)
 
     @ManyToOne
     @JoinColumn(name = "from_user_id")
+    @JsonBackReference("user-from-transaction")
     private User fromUser;//this should be a student (unless it is a refund)
 
 
@@ -42,6 +34,7 @@ public class TransactionModel {
     //What was purchased
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonBackReference("course-transactions")
     private Course course;
 
 }

@@ -1,16 +1,7 @@
 package com.revlearn.team1.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -79,11 +70,11 @@ public class User implements UserDetails {
     private List<Course> institutionCourses = new ArrayList<>();
 
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference("user-to-transaction")
     private List<TransactionModel> proceeds;
 
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
-    @JsonIgnore
+    @JsonManagedReference("user-from-transaction")
     private List<TransactionModel> purchases;
 
 
