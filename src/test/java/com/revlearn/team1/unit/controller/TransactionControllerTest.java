@@ -32,16 +32,16 @@ class TransactionControllerTest {
     @InjectMocks
     private TransactionController transactionController;
 
-    private User toUser;
-    private User fromUser;
+    private Long toUser;
+    private Long fromUser;
     private float price;
     private String description;
 
     @BeforeEach
     void setUp() {
         // Initialize common test data
-        toUser = new User("toUser123");
-        fromUser = new User("fromUser123");
+        toUser = 1L;
+        fromUser = 2L;
         price = 100.0f;
         description = "Sample Transaction";
     }

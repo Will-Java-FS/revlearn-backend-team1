@@ -18,7 +18,6 @@ See [Spring Boot Database Initialization Documentation](https://docs.spring.io/s
 1. Create an .env file in your backend root directory with this information:
 
 ```
-# Assign values to these three variables with information from your local Postgres DB installation:
 POSTGRES_DB=p2team1
 POSTGRES_USER=p2team1_user
 POSTGRES_PASSWORD=password
@@ -26,12 +25,13 @@ POSTGRES_PASSWORD=password
 SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
 SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/${POSTGRES_DB}
-# Not entirely sure what this does, yet.  Could change.
-SPRING_API_URL=http://localhost:8080
+
+# Only used by sample data initializer
+SPRING_API_URL=http://localhost:8080/api/v1
 
 DOCKER_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
 ```
-2. Assign values to these three variables with information from your local Postgres DB installation:
+2. Modify the top three values with respective information from your local Postgres DB installation.
 * POSTGRES_DB
 * POSTGRES_USER
 * POSTGRES_PASSWORD     
