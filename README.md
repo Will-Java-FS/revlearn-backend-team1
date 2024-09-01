@@ -97,7 +97,7 @@ Push the image to your repository:
 ```
 docker push <myDockerRepoName>/<revlearn>:latest
 ```
-Verify your push succeeded via a web browser visit to physically see your Docker repository's contents, or pull it in the terminal:
+Verify your push succeeded via a web browser visit to your Docker repository, or pull it in the terminal:
 ```
 docker pull <myDockerRepoName>/<revlearn>:latest
 ```
@@ -105,4 +105,30 @@ docker pull <myDockerRepoName>/<revlearn>:latest
 Secure Shell into your AWS EC2 instance.
 ```
 ssh -i ~/.ssh/myPemKeyFile.pem ec2-user@<EC2-IP-Address>
+```
+Skip to _______ if Docker is already installed on EC2.
+#### Install Docker
+```
+sudo yum install docker -y
+```
+Start Docker Service:
+```
+sudo service docker start
+```
+Add 'ec2-user' to 'docker' group:
+```
+sudo usermod -aG docker ec2-user
+```
+Log Out and Log Back in.  This applies the new group settings.
+```
+exit
+```
+SSH back into EC2 instance:
+```
+ssh -i ~/.ssh/myPemKeyFile.pem ec2-user@<EC2-IP-Address>
+```
+Verify Docker is installed:
+```
+docker --version
+docker run hello-world
 ```
