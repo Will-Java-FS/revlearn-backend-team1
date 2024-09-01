@@ -25,7 +25,7 @@ public class TransactionServiceImp implements TransactionService {
     public TransactionResponseDTO createTransaction(TransactionRequestDTO transaction) {
         TransactionModel transactionModel = transactionMapper.fromDTO(transaction);
         TransactionModel savedTransaction = transactionRepo.save(transactionModel);
-        return transactionMapper.toDTO(savedTransaction);
+        return transactionMapper.toResDTO(savedTransaction);
     }
 
     @Override
@@ -33,14 +33,14 @@ public class TransactionServiceImp implements TransactionService {
         TransactionModel retrievedTransaction = transactionRepo.findById(transactionId).orElseThrow(
                 () -> new TransactionNotFoundException(String
                         .format("Could not find transaction by Id in Database.  Transaction ID: %d", transactionId)));
-        return transactionMapper.toDTO(retrievedTransaction);
+        return transactionMapper.toResDTO(retrievedTransaction);
     }
 
     @Override
     public List<TransactionResponseDTO> getTransactions() {
         List<TransactionModel> transactionModels = transactionRepo.findAll();
         return transactionModels.stream()
-                .map(transactionMapper::toDTO)
+                .map(transactionMapper::toResDTO)
                 .collect(Collectors.toList());
     }
 
