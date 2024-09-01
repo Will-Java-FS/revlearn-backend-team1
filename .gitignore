@@ -34,5 +34,4 @@ build/
 .vscode/
 
 ### Environment ###
-/aws.env
 .env
