@@ -31,7 +31,6 @@ public class TransactionMapper {
     }
 
     public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) {
-              TransactionModel transaction = new TransactionModel();
 
         // Fetch the actual User entities from the database
         User toUser = userService.findById(Math.toIntExact(transactionDTO.toUserId()))
@@ -41,8 +40,9 @@ public class TransactionMapper {
                 .orElseThrow(
                         () -> new EntityNotFoundException("User not found with ID: " + transactionDTO.fromUserId()));
 
-        transaction.setToUser(toUser);
-        transaction.setFromUser(fromUser);
+
+        TransactionModel transaction = new TransactionModel();
+
         transaction.setToUser(toUser);
         transaction.setFromUser(fromUser);
         transaction.setPrice(transactionDTO.price());
