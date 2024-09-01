@@ -1,4 +1,4 @@
-# revlearn-backend-team1
+# Revlearn-backend-team1
 Backend Repo for revlearn - team 1
 
 ## Database
@@ -73,21 +73,30 @@ http://localhost:8080/swagger-ui.html
 
 
 ## Production Deployment
-The general steps are:
-1. Build Docker image of application
-2. Push Docker image to Docker Repository
-3. Pull Docker image to EC2 Instance
-4. Initialize Docker container from Docker image with production environment variables
+### Prerequisites
+* A Docker Registry account. [Docker Hub](https://hub.docker.com/) is a popular choice.
+* An AWS EC2 instance running (preferably Amazon Linux 2 or Ubuntu).
+* Docker installed on your EC2 instance.
+* SSH access to your EC2 instance.
+    
 
-### Dockerize application
+### Process Outline
+1. Build Docker Image
+2. Push Docker Image to Docker Registry
+3. Create and Upload Production .env File
+4. Pull Docker Image to EC2 Instance
+5. Run Docker Container
+
+### 1. Build Docker Image
 Navigate to the project's root directory and run the terminal command: 
 ```
 docker build -t revlearn:latest .
 ```
-### Push image to Docker repo
-You need to set up an account on a Docker repository.  [Docker Hub](https://hub.docker.com/) is a popular choice.  Create a personal repository (public is easier), and use its name to tag the Docker image:
+Do not forget the period at the end to denote the current directory.
+### 2. Push Docker Image to Docker Registry
+Create a personal repository on your Docker Registry, and use its name to tag the Docker image:
 ```
-docker tag revlearn:latest <myDockerRepoName>/<revlearn>:latest
+docker tag revlearn:latest <DockerRegistryUsername>/<DockerRegistryRepository>:latest
 ```
 Log into your repository account in terminal:
 ```
@@ -95,40 +104,57 @@ docker login
 ```
 Push the image to your repository:
 ```
-docker push <myDockerRepoName>/<revlearn>:latest
+docker push <DockerRegistryUsername>/<DockerRegistryRepository>:latest
 ```
-Verify your push succeeded via a web browser visit to your Docker repository, or pull it in the terminal:
+Verify your push succeeded via a web browser visit to your Docker registry, or pull it in the terminal:
 ```
-docker pull <myDockerRepoName>/<revlearn>:latest
+docker pull <DockerRegistryUsername>/<DockerRegistryRepository>:latest
 ```
-### Pull to EC2 Instance
-Secure Shell into your AWS EC2 instance.
+### 3. Create and Upload Production .env File
+Create an environment file to be used in production:
 ```
-ssh -i ~/.ssh/myPemKeyFile.pem ec2-user@<EC2-IP-Address>
+# AWS Postgres DB Credentials
+AWS_POSTGRES_DB=<AWS-DB>
+AWS_POSTGRES_USER=<AWS-User>
+AWS_POSTGRES_PASSWORD=<AWS-Password>
+AWS_POSTGRES_URL=<AWS DB Public (or Private if security correctly configured) Url>
+
+# AWS
+SPRING_DATASOURCE_USERNAME=${AWS_POSTGRES_USER}
+SPRING_DATASOURCE_PASSWORD=${AWS_POSTGRES_PASSWORD}
+SPRING_DATASOURCE_URL=jdbc:postgresql://${AWS_POSTGRES_URL}:5432/${AWS_POSTGRES_DB}
+
+# Used by sample data initializer
+SPRING_API_URL=http://localhost:8080/api/v1
+
+# JWTs
+SECRET_KEY=<base64-Key>
 ```
-Skip to _______ if Docker is already installed on EC2.
-#### Install Docker
+Replace the respective angle bracketed placeholders with your production database information and a secret key for the JWTs:
+* AWS_POSTGRES_DB
+* AWS_POSTGRES_USER
+* AWS_POSTGRES_PASSWORD
+* AWS_POSTGRES_URL
+* SECRET_KEY
+
+Next, secure copy the environment file to your EC2 instance with your pem key file:
 ```
-sudo yum install docker -y
+scp - i ~/.ssh/<PemKeyFile>.pem <production-env-file> ec2-user@<EC2-IP-Address>:/home/ec2-user
 ```
-Start Docker Service:
+### 4. Pull to EC2 Instance
+Secure Shell into your AWS EC2 instance with your pem key file.
 ```
-sudo service docker start
+ssh -i ~/.ssh/<PemKeyFile>.pem ec2-user@<EC2-IP-Address>
 ```
-Add 'ec2-user' to 'docker' group:
+Pull the Docker Image:
 ```
-sudo usermod -aG docker ec2-user
+docker pull <DockerRegistryUsername>/<DockerRegistryRepository>:latest
 ```
-Log Out and Log Back in.  This applies the new group settings.
+### 5. Run Docker Container
+Inside the EC2 instance, instantiate the Docker container with the production environment variables:
 ```
-exit
+docker run -d -p 8080:8080 --name RevLearnBackend --env-file <production-env-file> <DockerRegistryUsername>/<DockerRegistryRepository>:latest
 ```
-SSH back into EC2 instance:
-```
-ssh -i ~/.ssh/myPemKeyFile.pem ec2-user@<EC2-IP-Address>
-```
-Verify Docker is installed:
-```
-docker --version
-docker run hello-world
-```
+Verify the application works with test requests.
+
+* Note: If your AWS settings only have port 80 exposed to HTTP traffic, (which is a recommended practice), then you will need a reverse proxy server like [nginx](https://nginx.org/) to map the standard browser requests (port 80) to the Java Spring Boot application (port 8080).
