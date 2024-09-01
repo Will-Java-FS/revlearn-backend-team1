@@ -34,4 +34,5 @@ build/
 .vscode/
 
 ### Environment ###
+*.env
 .env
