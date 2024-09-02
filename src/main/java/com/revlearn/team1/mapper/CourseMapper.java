@@ -1,24 +1,16 @@
 package com.revlearn.team1.mapper;
 
-import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class CourseMapper {
-    UserService userService;
+    private final UserService userService;
 
     //Does not return students or educators.
     //That is a separate method
