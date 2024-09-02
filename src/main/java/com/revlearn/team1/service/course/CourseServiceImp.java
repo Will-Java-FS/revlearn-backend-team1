@@ -5,8 +5,9 @@ import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
-import com.revlearn.team1.exceptions.CourseNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
+import com.revlearn.team1.exceptions.UserNotFoundException;
+import com.revlearn.team1.exceptions.course.*;
 import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
@@ -48,7 +49,7 @@ public class CourseServiceImp implements CourseService {
     public List<User> getAllEducatorsOfCourseId(Long courseId) {
         //TODO: Implement security.  Only course owners (educators and institution) should be able to access this route.
         Course course = courseRepo.findById(courseId)
-                .orElseThrow(()->new CourseNotFoundException("getAllEducatorsByCourseId()",courseId));
+                .orElseThrow(() -> new CourseNotFoundException("getAllEducatorsByCourseId()", courseId));
         return course.getEducators();
     }
 
@@ -102,17 +103,68 @@ public class CourseServiceImp implements CourseService {
 
 
     @Override
+    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO) {
+        //verify course and student exist
+        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
+        //Verify student does not already exist in course
+        if (course.getStudents().stream().anyMatch(s -> s.getId() == courseStudentDTO.studentId())) {
+            throw new StudentAlreadyEnrolledInCourseException(
+                    String.format("Student by ID %d is already enrolled in course by ID %d.", courseStudentDTO.studentId(), course.getId()));
+        }
+        User student = userRepo.findById(Math.toIntExact(courseStudentDTO.studentId())).orElseThrow(
+                () -> new UserNotFoundException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
+
+        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
+        // (Clean this up later when security is implemented.  Use security context to get current user)
+        // TODO: How does Stripe payment system interact with this?
+
+        course.getStudents().add(student);
+        student.getEnrolledCourses().add(course);
+
+        Course savedCourse = courseRepo.save(course);
+        User savedUser = userRepo.save(student);
+
+        return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), (long) savedUser.getId());
+    }
+
+    @Override
+    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO) {
+
+        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
+                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
+
+        User student = course.getStudents().stream().filter(s -> s.getId() == courseStudentDTO.studentId()).findFirst()
+                .orElseThrow(() -> new StudentNotEnrolledInCourseException(
+                        String.format("Student by id %d was not found to be enrolled in course by id %d.", course.getId(), courseStudentDTO.studentId())));
+
+        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
+        // (Clean this up later when security is implemented.  Use security context to get current user)
+        // TODO: How does Stripe payment system interact with this?
+
+        course.getStudents().remove(student);
+        student.getEnrolledCourses().remove(course);
+
+        Course savedCourse = courseRepo.save(course);
+        User savedUser = userRepo.save(student);
+
+        return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), (long) savedUser.getId());
+    }
+
+    @Override
     public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO) {
         //verify course and educator exist
         Course course = courseRepo.findById(courseEducatorDTO.courseId()).orElseThrow(
                 () -> new CourseNotFoundException("CourseService.addEducator()", courseEducatorDTO.courseId()));
+        //Verify educator does not already teach course.
+        if (course.getEducators().stream().anyMatch(e -> e.getId() == courseEducatorDTO.educatorId())) {
+            throw new EducatorAlreadyTeachesCourseException(
+                    String.format("Educator by id %d already teaches course by id %d", courseEducatorDTO.educatorId(), course.getId()));
+        }
         User educator = userRepo.findById(Math.toIntExact(courseEducatorDTO.educatorId())).orElseThrow(
-                //TODO: replace generic runtimeexception with custom exception
-                () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
+                () -> new UserNotFoundException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
         //TODO: verify authenticated user owns course (educator or institution)
-        //TODO: verify educator does not already exist in course. add custom exception.
-
 
         course.getEducators().add(educator);
         educator.getTaughtCourses().add(course);
@@ -128,12 +180,12 @@ public class CourseServiceImp implements CourseService {
         //verify course and educator exist
         Course course = courseRepo.findById(courseEducatorDTO.courseId()).orElseThrow(
                 () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseEducatorDTO.courseId()));
-        User educator = userRepo.findById(Math.toIntExact(courseEducatorDTO.educatorId())).orElseThrow(
-                //TODO: replace generic runtime exception with custom exception
-                () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
+        //Verify educator and course are connected
+        User educator = course.getEducators().stream().filter(e -> e.getId() == courseEducatorDTO.educatorId()).findFirst()
+                .orElseThrow(() -> new EducatorDoesNotTeachCourseException(
+                        String.format("Educator by id %d does not teach course by id %d.", courseEducatorDTO.educatorId(), course.getId())));
 
         //TODO: verify authenticated user owns course (educator or institution)
-        //TODO: verify educator and course are connected, first? add custom exception.
 
         course.getEducators().remove(educator);
         educator.getTaughtCourses().remove(course);
@@ -142,51 +194,5 @@ public class CourseServiceImp implements CourseService {
         User savedEducator = userRepo.save(educator);
 
         return new CourseEducatorResDTO("Successfully removed educator from course.", savedCourse.getId(), (long) savedEducator.getId());
-    }
-
-    @Override
-    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO) {
-        //verify course and student exit
-        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
-                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
-        User student = userRepo.findById(Math.toIntExact(courseStudentDTO.studentId())).orElseThrow(
-                //TODO: replace generic runtime exception with custom exception
-                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
-
-        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
-        // (Clean this up later when security is implemented.  Use security context to get current user)
-        //TODO: verify student does not already exist in course. add custom exception.
-        // TODO: How does Stripe payment system interact with this?
-
-        course.getStudents().add(student);
-        student.getEnrolledCourses().add(course);
-
-        Course savedCourse = courseRepo.save(course);
-        User savedUser = userRepo.save(student);
-
-        return new CourseStudentResDTO("Successfully enrolled student into course.", savedCourse.getId(), (long) savedUser.getId());
-    }
-
-    @Override
-    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO) {
-        //verify course and student exit
-        Course course = courseRepo.findById(courseStudentDTO.courseId()).orElseThrow(
-                () -> new CourseNotFoundException("CourseServiceImp.removeEducator()", courseStudentDTO.courseId()));
-        User student = userRepo.findById(Math.toIntExact(courseStudentDTO.studentId())).orElseThrow(
-                //TODO: replace generic runtime exception with custom exception
-                () -> new RuntimeException(String.format("Could not find user by ID %d", courseStudentDTO.studentId())));
-
-        //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
-        // (Clean this up later when security is implemented.  Use security context to get current user)
-        //TODO: verify student and course are connected, first? add custom exception.
-        // TODO: How does Stripe payment system interact with this?
-
-        course.getStudents().remove(student);
-        student.getEnrolledCourses().remove(course);
-
-        Course savedCourse = courseRepo.save(course);
-        User savedUser = userRepo.save(student);
-
-        return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), (long) savedUser.getId());
     }
 }

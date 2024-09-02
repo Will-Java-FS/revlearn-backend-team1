@@ -6,7 +6,7 @@ import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
-import com.revlearn.team1.exceptions.CourseNotFoundException;
+import com.revlearn.team1.exceptions.course.CourseNotFoundException;
 import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
@@ -32,7 +32,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-//@ExtendWith(MockitoExtension.class)
 public class CourseServiceImpTest {
 
     @Mock
@@ -46,6 +45,7 @@ public class CourseServiceImpTest {
 
     @InjectMocks
     private CourseServiceImp courseService;
+
     private Course course;
     private User student;
     private User educator;
@@ -82,6 +82,52 @@ public class CourseServiceImpTest {
         assertEquals(courseDTOs, result);
         verify(courseRepo).findAll();
         verify(courseMapper, Mockito.times(2)).toDto(any(Course.class));
+    }
+
+    @Test
+    public void testGetAllStudentsOfCourseId_Success() {
+        // Arrange
+        course.getStudents().add(student);
+        when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
+
+        // Act
+        List<User> students = courseService.getAllStudentsOfCourseId(1L);
+
+        // Assert
+        assertEquals(1, students.size());
+        assertEquals(student, students.get(0));
+    }
+
+    @Test
+    public void testGetAllStudentsOfCourseId_CourseNotFound() {
+        // Arrange
+        when(courseRepo.findById(1L)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CourseNotFoundException.class, () -> courseService.getAllStudentsOfCourseId(1L));
+    }
+
+    @Test
+    public void testGetAllEducatorsOfCourseId_Success() {
+        // Arrange
+        course.getEducators().add(educator);
+        when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
+
+        // Act
+        List<User> educators = courseService.getAllEducatorsOfCourseId(1L);
+
+        // Assert
+        assertEquals(1, educators.size());
+        assertEquals(educator, educators.get(0));
+    }
+
+    @Test
+    public void testGetAllEducatorsOfCourseId_CourseNotFound() {
+        // Arrange
+        when(courseRepo.findById(1L)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CourseNotFoundException.class, () -> courseService.getAllEducatorsOfCourseId(1L));
     }
 
     @Test
@@ -161,50 +207,6 @@ public class CourseServiceImpTest {
     }
 
     @Test
-    public void testAddEducatorSuccess() {
-        // Arrange
-        CourseEducatorDTO dto = new CourseEducatorDTO(1L, 2L); // courseId, educatorId
-        Course course = new Course();
-        User educator = new User();
-        when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-        when(userRepo.findById(2)).thenReturn(Optional.of(educator));
-        when(courseRepo.save(course)).thenReturn(course);
-        when(userRepo.save(educator)).thenReturn(educator);
-
-        // Act
-        CourseEducatorResDTO result = courseService.addEducator(dto);
-
-        // Assert
-        assertEquals("Successfully added educator to course.", result.message());
-        verify(courseRepo).findById(1L);
-        verify(userRepo).findById(2);
-        verify(courseRepo).save(course);
-        verify(userRepo).save(educator);
-    }
-
-    @Test
-    public void testRemoveEducatorSuccess() {
-        // Arrange
-        CourseEducatorDTO dto = new CourseEducatorDTO(1L, 2L); // courseId, educatorId
-//        Course course = new Course();
-        User educator = new User();
-        when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-        when(userRepo.findById(2)).thenReturn(Optional.of(educator));
-        when(courseRepo.save(course)).thenReturn(course);
-        when(userRepo.save(educator)).thenReturn(educator);
-
-        // Act
-        CourseEducatorResDTO result = courseService.removeEducator(dto);
-
-        // Assert
-        assertEquals("Successfully removed educator from course.", result.message());
-        verify(courseRepo).findById(1L);
-        verify(userRepo).findById(2);
-        verify(courseRepo).save(course);
-        verify(userRepo).save(educator);
-    }
-
-    @Test
     public void testDeleteByIdSuccess() {
         // Arrange
 //        Course course = new Course();
@@ -261,26 +263,6 @@ public class CourseServiceImpTest {
     }
 
     @Test
-    public void testRemoveEducator_CourseNotFound() {
-        //Arrange
-        CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(1L, 2L);
-        when(courseRepo.findById(courseEducatorDTO.courseId())).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(CourseNotFoundException.class, () -> courseService.removeEducator(courseEducatorDTO));
-    }
-
-    @Test
-    public void testAddEducator_CourseNotFound() {
-        //Arrange
-        CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(1L, 2L);
-        when(courseRepo.findById(courseEducatorDTO.courseId())).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(CourseNotFoundException.class, () -> courseService.addEducator(courseEducatorDTO));
-    }
-
-    @Test
     public void testEnrollStudent_StudentNotFound() {
         // Arrange
         CourseStudentDTO courseStudentDTO = new CourseStudentDTO(1L, 1L);
@@ -298,7 +280,7 @@ public class CourseServiceImpTest {
         student.getEnrolledCourses().add(course);
 
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-        when(userRepo.findById(1)).thenReturn(Optional.of(student));
+//        when(userRepo.findById(1)).thenReturn(Optional.of(student));
         when(courseRepo.save(course)).thenReturn(course);
         when(userRepo.save(student)).thenReturn(student);
 
@@ -335,48 +317,64 @@ public class CourseServiceImpTest {
     }
 
     @Test
-    public void testGetAllStudentsOfCourseId_Success() {
+    public void testAddEducatorSuccess() {
         // Arrange
-        course.getStudents().add(student);
+        CourseEducatorDTO dto = new CourseEducatorDTO(1L, 2L); // courseId, educatorId
+        Course course = new Course();
+        User educator = new User();
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
+        when(userRepo.findById(2)).thenReturn(Optional.of(educator));
+        when(courseRepo.save(course)).thenReturn(course);
+        when(userRepo.save(educator)).thenReturn(educator);
 
         // Act
-        List<User> students = courseService.getAllStudentsOfCourseId(1L);
+        CourseEducatorResDTO result = courseService.addEducator(dto);
 
         // Assert
-        assertEquals(1, students.size());
-        assertEquals(student, students.get(0));
+        assertEquals("Successfully added educator to course.", result.message());
+        verify(courseRepo).findById(1L);
+        verify(userRepo).findById(2);
+        verify(courseRepo).save(course);
+        verify(userRepo).save(educator);
     }
 
     @Test
-    public void testGetAllStudentsOfCourseId_CourseNotFound() {
-        // Arrange
-        when(courseRepo.findById(1L)).thenReturn(Optional.empty());
+    public void testAddEducator_CourseNotFound() {
+        //Arrange
+        CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(1L, 2L);
+        when(courseRepo.findById(courseEducatorDTO.courseId())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(CourseNotFoundException.class, () -> courseService.getAllStudentsOfCourseId(1L));
+        assertThrows(CourseNotFoundException.class, () -> courseService.addEducator(courseEducatorDTO));
     }
 
     @Test
-    public void testGetAllEducatorsOfCourseId_Success() {
+    public void testRemoveEducatorSuccess() {
         // Arrange
+        CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(1L, 2L); // courseId, educatorId
         course.getEducators().add(educator);
+
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
+        when(courseRepo.save(course)).thenReturn(course);
+        when(userRepo.save(educator)).thenReturn(educator);
 
         // Act
-        List<User> educators = courseService.getAllEducatorsOfCourseId(1L);
+        CourseEducatorResDTO result = courseService.removeEducator(courseEducatorDTO);
 
         // Assert
-        assertEquals(1, educators.size());
-        assertEquals(educator, educators.get(0));
+        assertEquals("Successfully removed educator from course.", result.message());
+        verify(courseRepo).findById(1L);
+        verify(courseRepo).save(course);
+        verify(userRepo).save(educator);
     }
 
     @Test
-    public void testGetAllEducatorsOfCourseId_CourseNotFound() {
-        // Arrange
-        when(courseRepo.findById(1L)).thenReturn(Optional.empty());
+    public void testRemoveEducator_CourseNotFound() {
+        //Arrange
+        CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(1L, 2L);
+        when(courseRepo.findById(courseEducatorDTO.courseId())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(CourseNotFoundException.class, () -> courseService.getAllEducatorsOfCourseId(1L));
+        assertThrows(CourseNotFoundException.class, () -> courseService.removeEducator(courseEducatorDTO));
     }
 }
