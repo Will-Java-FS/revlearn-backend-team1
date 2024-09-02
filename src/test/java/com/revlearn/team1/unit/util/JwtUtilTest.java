@@ -1,6 +1,7 @@
-package com.revlearn.team1.util;
+package com.revlearn.team1.unit.util;
 
 import com.revlearn.team1.model.User;
+import com.revlearn.team1.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
-package com.revlearn.team1.dto;
+package com.revlearn.team1.unit.dto;
 
+import com.revlearn.team1.dto.UserDTO;
 import org.junit.Assert;
 import org.junit.Test;
 

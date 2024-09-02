@@ -1,10 +1,11 @@
-package com.revlearn.team1.controller;
+package com.revlearn.team1.unit.controller;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.revlearn.team1.controller.UserController;
 import com.revlearn.team1.service.user.UserServiceImp;
 import com.revlearn.team1.model.User;
 import org.junit.jupiter.api.BeforeEach;
