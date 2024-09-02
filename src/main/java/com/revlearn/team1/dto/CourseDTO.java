@@ -4,17 +4,18 @@ import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.model.User;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 public record CourseDTO(
-        User institution,
+        Long id,
+        Long institutionId,
         LocalDate startDate,
         LocalDate endDate,
-        AttendanceMethod type,
+        AttendanceMethod attendanceMethod,
         String name,
         String description,
-        Set<User> students,
-        Set<User> educators
+        List<Long> studentsIds,
+        List<Long> educatorsIds
 
 ) {
 }

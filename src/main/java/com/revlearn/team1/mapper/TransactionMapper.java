@@ -1,34 +1,54 @@
 package com.revlearn.team1.mapper;
 
-import org.springframework.stereotype.Component;
-
+import com.revlearn.team1.dto.TransactionDTO;
 import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
 import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
 import com.revlearn.team1.model.TransactionModel;
+import com.revlearn.team1.model.User;
+import com.revlearn.team1.service.user.UserService;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
-public class TransactionMapper
-{
+@RequiredArgsConstructor
+public class TransactionMapper {
+
+    private final UserService userService;
+
     // TODO: @Mapper annotation can automatically generate these methods. Implement
     // later if needed
-    public TransactionResponseDTO toDTO(TransactionModel transaction)
-    {
-        return new TransactionResponseDTO(
-                transaction.getTo_user(),
-                transaction.getFrom_user(),
+    public TransactionDTO toDTO(TransactionModel transaction) {
+        return new TransactionDTO(
+                transaction.getToUser() != null ? (long) transaction.getToUser().getId() : null,
+                transaction.getFromUser() != null ? (long) transaction.getFromUser().getId() : null,
                 transaction.getPrice(),
-                transaction.getDescription()
-        );
+                transaction.getDescription());
     }
 
-    public TransactionModel fromDTO(TransactionRequestDTO transactionDTO)
-    {
+    public TransactionResponseDTO toResDTO(TransactionModel transaction) {
+        return new TransactionResponseDTO((long) transaction.getToUser().getId(), (long) transaction.getFromUser().getId(), transaction.getPrice(), transaction.getDescription());
+    }
+
+    public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) {
+
+        // Fetch the actual User entities from the database
+        User toUser = userService.findById(Math.toIntExact(transactionDTO.toUserId()))
+                .orElseThrow(
+                        () -> new EntityNotFoundException("User not found with ID: " + transactionDTO.toUserId()));
+        User fromUser = userService.findById(Math.toIntExact(transactionDTO.fromUserId()))
+                .orElseThrow(
+                        () -> new EntityNotFoundException("User not found with ID: " + transactionDTO.fromUserId()));
+
+
         TransactionModel transaction = new TransactionModel();
-        transaction.setTo_user(transactionDTO.toUser());
-        transaction.setFrom_user(transactionDTO.fromUser());
+
+        transaction.setToUser(toUser);
+        transaction.setFromUser(fromUser);
         transaction.setPrice(transactionDTO.price());
         transaction.setDescription(transactionDTO.description());
 
         return transaction;
     }
 }
+
