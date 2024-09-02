@@ -37,6 +37,22 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
+    public List<User> getAllStudentsOfCourseId(Long courseId) {
+        //TODO: Implement security.  Only course owners (educators and institution) should be able to access this route.
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
+        return course.getStudents();
+    }
+
+    @Override
+    public List<User> getAllEducatorsOfCourseId(Long courseId) {
+        //TODO: Implement security.  Only course owners (educators and institution) should be able to access this route.
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(()->new CourseNotFoundException("getAllEducatorsByCourseId()",courseId));
+        return course.getEducators();
+    }
+
+    @Override
     public CourseDTO getById(Long courseId) {
         Course retrievedCourse = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("CourseService.getById()", courseId));
@@ -46,7 +62,7 @@ public class CourseServiceImp implements CourseService {
     @Override
     public CourseDTO createCourse(CourseDTO courseDTO) {
         //TODO: Secure so that only instructors and institutions can create courses
-        // Maybe we require user information as parameter
+        // Maybe require user information as parameter
         Course course = courseMapper.fromDto(courseDTO);
         Course savedCourse = courseRepo.save(course);
         return courseMapper.toDto(savedCourse);
@@ -55,7 +71,7 @@ public class CourseServiceImp implements CourseService {
     @Override
     public CourseDTO updateCourse(CourseDTO courseDTO) {
         //TODO: Secure so that only course owners (educator(s) or institution) can modify.
-        // Compare provided course information (educator(s), institution) to authenticated user properties.
+        // Compare provided course information (educator(s) id(s), or institutionId) to authenticated user properties.
 
         //Verify course already exists in database
         Course course = courseRepo.findById(courseDTO.id()).orElseThrow(
@@ -94,7 +110,7 @@ public class CourseServiceImp implements CourseService {
                 //TODO: replace generic runtimeexception with custom exception
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
-        //TODO: verify authenticated user owns course
+        //TODO: verify authenticated user owns course (educator or institution)
         //TODO: verify educator does not already exist in course. add custom exception.
 
 
@@ -116,7 +132,7 @@ public class CourseServiceImp implements CourseService {
                 //TODO: replace generic runtime exception with custom exception
                 () -> new RuntimeException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
-        //TODO: verify authenticated user owns course
+        //TODO: verify authenticated user owns course (educator or institution)
         //TODO: verify educator and course are connected, first? add custom exception.
 
         course.getEducators().remove(educator);
@@ -140,6 +156,7 @@ public class CourseServiceImp implements CourseService {
         //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
         // (Clean this up later when security is implemented.  Use security context to get current user)
         //TODO: verify student does not already exist in course. add custom exception.
+        // TODO: How does Stripe payment system interact with this?
 
         course.getStudents().add(student);
         student.getEnrolledCourses().add(course);
@@ -162,6 +179,7 @@ public class CourseServiceImp implements CourseService {
         //TODO: verify authenticated user is provided student or proper authority like course educator or course institution
         // (Clean this up later when security is implemented.  Use security context to get current user)
         //TODO: verify student and course are connected, first? add custom exception.
+        // TODO: How does Stripe payment system interact with this?
 
         course.getStudents().remove(student);
         student.getEnrolledCourses().remove(course);
@@ -170,19 +188,5 @@ public class CourseServiceImp implements CourseService {
         User savedUser = userRepo.save(student);
 
         return new CourseStudentResDTO("Successfully removed student from course.", savedCourse.getId(), (long) savedUser.getId());
-    }
-
-    @Override
-    public List<User> getAllStudentsOfCourseId(Long courseId) {
-        Course course = courseRepo.findById(courseId)
-                .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
-        return course.getStudents();
-    }
-
-    @Override
-    public List<User> getAllEducatorsOfCourseId(Long courseId) {
-        Course course = courseRepo.findById(courseId)
-                .orElseThrow(()->new CourseNotFoundException("getAllEducatorsByCourseId()",courseId));
-        return course.getEducators();
     }
 }
