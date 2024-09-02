@@ -1,6 +1,6 @@
 package com.revlearn.team1.controller;
 
-import com.revlearn.team1.dto.UserDTO;
+import com.revlearn.team1.dto.user.UserDTO;
 import com.revlearn.team1.dto.user.DeleteUserResponse;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserServiceImp;
