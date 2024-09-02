@@ -1,7 +1,12 @@
 package com.revlearn.team1.mapper;
 
+import com.revlearn.team1.dto.CourseDTO;
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.Course;
+import com.revlearn.team1.model.User;
+import com.revlearn.team1.service.user.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,42 +16,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class CourseMapper {
+    UserService userService;
 
-    @Autowired
-    private UserService userService;
-
-    // Converts from Course entity to CourseDTO
+    //Does not return students or educators.
+    //That is a separate method
     public CourseDTO toDto(Course course) {
-        List<Long> educatorIds = course.getEducators().stream()
-                .map((educator) -> (long) educator.getId())
-                .collect(Collectors.toList());
-
-        List<Long> studentIds = course.getStudents().stream()
-                .map((student) -> (long) student.getId())
-                .collect(Collectors.toList());
-
-        return new CourseDTO(
-                course.getId(),
-                course.getInstitution() != null ? (long) course.getInstitution().getId() : null,
+        return new CourseDTO(course.getId(),
+                course.getInstitution().getId(),
                 course.getStartDate(),
                 course.getEndDate(),
                 course.getAttendanceMethod(),
                 course.getName(),
-                course.getDescription(),
-                studentIds,
-                educatorIds
+                course.getDescription()
         );
     }
 
-    // Converts from CourseDTO to Course entity
     public Course fromDto(CourseDTO courseDTO) {
         Course course = new Course();
         course.setId(courseDTO.id());
-        course.setName(courseDTO.name());
         course.setStartDate(courseDTO.startDate());
         course.setEndDate(courseDTO.endDate());
         course.setAttendanceMethod(courseDTO.attendanceMethod());
+        course.setName(courseDTO.name());
         course.setDescription(courseDTO.description());
 
         // Fetch institution user from userService
@@ -57,6 +50,7 @@ public class CourseMapper {
             course.setInstitution(institution);
         }
 
+        //There are no students or educators included because that should be handled elsewhere
 //        // Set students and educators
 //        if (courseDTO.students() != null) {
 //            course.getStudents().addAll(courseDTO.students());
@@ -89,11 +83,11 @@ public class CourseMapper {
 //                course.setStudents(students);
 
         return course;
-
     }
 
     public void updateCourseFromDto(Course course, CourseDTO courseDTO) {
         //Only meant for educators or institutions to use
+        //Does not affect student list or educators list.  Those are handled separately.
 
         if (courseDTO.startDate() != null) course.setStartDate(courseDTO.startDate());
         if (courseDTO.endDate() != null) course.setEndDate(courseDTO.endDate());

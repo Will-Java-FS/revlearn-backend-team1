@@ -8,6 +8,13 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.revlearn.team1.enums.AttendanceMethod;
+import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -59,7 +66,6 @@ public class Course {
     private CourseContent courseContent;
 
     @Column(nullable = false)
-
     private LocalDate startDate;
 
     @Column(nullable = false)
