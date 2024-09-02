@@ -73,5 +73,34 @@ public class UserServiceImp implements UserService, UserDetailsService {
 //    public User save(User user) {
 //        return userRepository.save(user);
 //    }
+
+
+// TODO: Implement these three functions
+//
+//    @Override
+//    public List<CourseDTO> getAllEnrolledCourses(Long studentId) {
+//        // TODO: Secure so only specified student or admin-like account ("counselor"?)
+//        // can retrieve data.
+//        // Will probably use Security context to obtain student id instead of path
+//        // variable
+//        User student = userRepo.findById(Math.toIntExact(studentId)).orElseThrow(() -> new RuntimeException("Could not find user."));
+//        return student.getEnrolledCourses().stream().map(courseMapper::toDto).toList();
+//    }
+//
+//    @Override
+//    public List<CourseDTO> getAllTaughtCourses(Long educatorId) {
+//        // TODO: Secure so only specified educator can retrieve data.
+//        // Will probably use Security context to obtain educator id instead of path
+//        // variable
+//        User educator = userRepo.findById(Math.toIntExact(educatorId)).orElseThrow(() -> new RuntimeException("Could not find user."));
+//        return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
+//    }
+//
+//    @Override
+//    public List<CourseDTO> getAllOfferedCourses(Long institutionId) {
+//        User institution = userRepo.findById(Math.toIntExact(institutionId)).orElseThrow(() -> new RuntimeException("Could not find user."));
+//        return institution.getInstitutionCourses().stream()
+//                .map(courseMapper::toDto).toList();
+//    }
 }
 

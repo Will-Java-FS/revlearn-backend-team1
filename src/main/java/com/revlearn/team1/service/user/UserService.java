@@ -13,4 +13,13 @@ public interface UserService {
     void deleteById(int id);
 
     List<User> getAllUsers();
+
+
+    //TODO: Implement function(s) to return courses of User
+//
+//    public List<CourseDTO> getAllEnrolledCourses(Long studentId);
+//
+//    public List<CourseDTO> getAllTaughtCourses(Long educatorId);
+//
+//    public List<CourseDTO> getAllOfferedCourses(Long institutionId);
 }

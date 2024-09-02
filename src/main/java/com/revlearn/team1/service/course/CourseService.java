@@ -32,10 +32,4 @@ public interface CourseService {
 
     public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
 
-    //TODO: Move these functions to User service
-//    public List<CourseDTO> getAllByEducatorId(Long educatorId);
-//
-//    public List<CourseDTO> getAllByInstitutionId(Long institutionId);
-//
-//    public List<CourseDTO> getAllByStudentId(Long studentId);
 }

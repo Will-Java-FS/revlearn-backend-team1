@@ -185,33 +185,4 @@ public class CourseServiceImp implements CourseService {
                 .orElseThrow(()->new CourseNotFoundException("getAllEducatorsByCourseId()",courseId));
         return course.getEducators();
     }
-
-
-// TODO: Move these three functions to User Service
-//
-//    @Override
-//    public List<CourseDTO> getAllByStudentId(Long studentId) {
-//        // TODO: Secure so only specified student or admin-like account ("counselor"?)
-//        // can retrieve data.
-//        // Will probably use Security context to obtain student id instead of path
-//        // variable
-//        User student = userRepo.findById(Math.toIntExact(studentId)).orElseThrow(() -> new RuntimeException("Could not find user."));
-//        return student.getEnrolledCourses().stream().map(courseMapper::toDto).toList();
-//    }
-//
-//    @Override
-//    public List<CourseDTO> getAllByEducatorId(Long educatorId) {
-//        // TODO: Secure so only specified educator can retrieve data.
-//        // Will probably use Security context to obtain educator id instead of path
-//        // variable
-//        User educator = userRepo.findById(Math.toIntExact(educatorId)).orElseThrow(() -> new RuntimeException("Could not find user."));
-//        return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
-//    }
-//
-//    @Override
-//    public List<CourseDTO> getAllByInstitutionId(Long institutionId) {
-//        User institution = userRepo.findById(Math.toIntExact(institutionId)).orElseThrow(() -> new RuntimeException("Could not find user."));
-//        return institution.getInstitutionCourses().stream()
-//                .map(courseMapper::toDto).toList();
-//    }
 }

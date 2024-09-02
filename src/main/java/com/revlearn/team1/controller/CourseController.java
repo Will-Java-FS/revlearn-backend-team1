@@ -77,22 +77,4 @@ public class CourseController {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
     }
-
-    //TODO: Hand off the responsibility of these three functions to User controller
-//    @GetMapping("/student/{id}")
-//    public List<CourseDTO> getCoursesOfStudent(@PathVariable Long id) {
-//        return courseService.getAllByStudentId(id);
-//    }
-//
-//    @GetMapping("/educator/{id}")
-//    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
-//        return courseService.getAllByEducatorId(id);
-//    }
-//
-//    // Does not need security because an institution's course list should be
-//    // publicly available
-//    @GetMapping("/institution/{id}")
-//    public List<CourseDTO> getCoursesOfInstitution(@PathVariable Long id) {
-//        return courseService.getAllByInstitutionId(id);
-//    }
 }
