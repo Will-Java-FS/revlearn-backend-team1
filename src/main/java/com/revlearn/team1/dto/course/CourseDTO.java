@@ -1,4 +1,4 @@
-package com.revlearn.team1.dto;
+package com.revlearn.team1.dto.course;
 
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.model.User;

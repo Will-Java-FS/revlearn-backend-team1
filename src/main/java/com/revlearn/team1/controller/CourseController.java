@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revlearn.team1.dto.CourseDTO;
-import com.revlearn.team1.dto.request.CourseEducatorDTO;
-import com.revlearn.team1.dto.request.CourseStudentDTO;
-import com.revlearn.team1.dto.response.CourseEducatorResDTO;
-import com.revlearn.team1.dto.response.CourseStudentResDTO;
-import com.revlearn.team1.model.User;
+import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseStudentDTO;
+import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.service.CourseServiceImp;
 
 import lombok.RequiredArgsConstructor;

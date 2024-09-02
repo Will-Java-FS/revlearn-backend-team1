@@ -1,9 +1,9 @@
 package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.controller.CourseController;
-import com.revlearn.team1.dto.CourseDTO;
-import com.revlearn.team1.dto.request.CourseEducatorDTO;
-import com.revlearn.team1.dto.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.service.CourseServiceImp;
 import org.junit.jupiter.api.Test;

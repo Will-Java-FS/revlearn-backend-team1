@@ -1,6 +1,6 @@
 package com.revlearn.team1.mapper;
 
-import com.revlearn.team1.dto.CourseDTO;
+import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserService;

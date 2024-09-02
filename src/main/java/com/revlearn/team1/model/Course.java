@@ -41,10 +41,7 @@ public class Course {
     private List<User> students = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "institution_id"
-            //TODO: uncomment this once User model is implemented
-            // nullable = false
-    )
+    @JoinColumn(name = "institution_id", nullable = false)
     @JsonIgnore
     private User institution;
 
