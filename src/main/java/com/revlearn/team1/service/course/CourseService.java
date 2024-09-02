@@ -1,4 +1,4 @@
-package com.revlearn.team1.service;
+package com.revlearn.team1.service.course;
 
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
@@ -11,6 +11,10 @@ import java.util.List;
 
 public interface CourseService {
     public List<CourseDTO> getAll();
+
+    List<User> getAllStudentsOfCourseId(Long courseId);
+
+    List<User> getAllEducatorsOfCourseId(Long courseId);
 
     public CourseDTO getById(Long courseId);
 
@@ -27,10 +31,6 @@ public interface CourseService {
     public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO);
 
     public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
-
-    List<User> getAllStudentsByCourseId(Long courseId);
-
-    List<User> getAllEducatorsByCourseId(Long courseId);
 
     //TODO: Move these functions to User service
 //    public List<CourseDTO> getAllByEducatorId(Long educatorId);

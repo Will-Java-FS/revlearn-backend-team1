@@ -6,7 +6,7 @@ import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.CourseServiceImp;
+import com.revlearn.team1.service.course.CourseServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,21 +23,21 @@ public class CourseController {
         return courseService.getAll();
     }
 
+    @GetMapping("/{courseId}/allStudents")
+    public List<User> getAllStudentsOfCourseId(@PathVariable Long courseId) {
+        return courseService.getAllStudentsOfCourseId(courseId);
+    }
+
+    @GetMapping("/{courseId}/allEducators")
+    public List<User> getAllEducatorsOfCourseId(@PathVariable Long courseId) {
+        return courseService.getAllEducatorsOfCourseId(courseId);
+    }
+
     @GetMapping("/{id}")
     public CourseDTO getCourseById(@PathVariable Long id) {
         return courseService.getById(id);
     }
 
-
-    @GetMapping("/{courseId}/allStudents")
-    public List<User> getAllStudentsByCourseId(@PathVariable Long courseId) {
-        return courseService.getAllStudentsByCourseId(courseId);
-    }
-
-    @GetMapping("/{courseId}/allEducators")
-    public List<User> getAllEducatorsByCourseId(@PathVariable Long courseId) {
-        return courseService.getAllEducatorsByCourseId(courseId);
-    }
 
     @PostMapping("/create")//TODO: Secure so that only instructors and institutions can create courses
     public CourseDTO postCourse(@RequestBody CourseDTO courseDTO) {
@@ -51,7 +51,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/delete/{id}")
-//TODO: Secure so that only course owners (instructors and institutions) can delete courses
+    //TODO: Secure so that only course owners (instructors and institutions) can delete courses
     public String deleteCourse(@PathVariable Long id) {
         return courseService.deleteById(id);
     }

@@ -8,13 +8,6 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.revlearn.team1.enums.AttendanceMethod;
-import jakarta.persistence.*;
-import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -85,9 +78,8 @@ public class Course {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-
     //Most courses will only have one program, but some might be part of more
-    //ie Math 75 is for physics degrees and computer science degrees
+    //ie Math 75 is required for Physics degrees and Computer Science degrees
     @ManyToMany
     private List<Program> programs;
 }

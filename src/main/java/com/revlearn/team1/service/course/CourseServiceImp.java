@@ -1,4 +1,4 @@
-package com.revlearn.team1.service;
+package com.revlearn.team1.service.course;
 
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
@@ -173,14 +173,14 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public List<User> getAllStudentsByCourseId(Long courseId) {
+    public List<User> getAllStudentsOfCourseId(Long courseId) {
         Course course = courseRepo.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
         return course.getStudents();
     }
 
     @Override
-    public List<User> getAllEducatorsByCourseId(Long courseId) {
+    public List<User> getAllEducatorsOfCourseId(Long courseId) {
         Course course = courseRepo.findById(courseId)
                 .orElseThrow(()->new CourseNotFoundException("getAllEducatorsByCourseId()",courseId));
         return course.getEducators();

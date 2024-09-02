@@ -9,7 +9,7 @@ import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.CourseServiceImp;
+import com.revlearn.team1.service.course.CourseServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -170,7 +170,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testGetAllStudentsByCourseId() throws Exception {
+    public void testGetAllStudentsOfCourseId() throws Exception {
         // Arrange
         Long courseId = 1L;
         List<User> students = Arrays.asList(
@@ -178,7 +178,7 @@ public class CourseControllerTest {
                 new User("student1")
         );
 
-        when(courseService.getAllStudentsByCourseId(courseId)).thenReturn(students);
+        when(courseService.getAllStudentsOfCourseId(courseId)).thenReturn(students);
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/course/1/allStudents")
@@ -188,7 +188,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void testGetAllEducatorsByCourseId() throws Exception {
+    public void testGetAllEducatorsOfCourseId() throws Exception {
         // Arrange
         Long courseId = 1L;
         List<User> educators = Arrays.asList(
@@ -196,7 +196,7 @@ public class CourseControllerTest {
                 new User("educator1")
         );
 
-        when(courseService.getAllEducatorsByCourseId(courseId)).thenReturn(educators);
+        when(courseService.getAllEducatorsOfCourseId(courseId)).thenReturn(educators);
 
         // Act & Assert
         mockMvc.perform(get("/api/v1/course/1/allEducators")

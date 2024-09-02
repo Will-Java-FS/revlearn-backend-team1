@@ -12,7 +12,7 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
-import com.revlearn.team1.service.CourseServiceImp;
+import com.revlearn.team1.service.course.CourseServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -335,13 +335,13 @@ public class CourseServiceImpTest {
     }
 
     @Test
-    public void testGetAllStudentsByCourseId_Success() {
+    public void testGetAllStudentsOfCourseId_Success() {
         // Arrange
         course.getStudents().add(student);
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
 
         // Act
-        List<User> students = courseService.getAllStudentsByCourseId(1L);
+        List<User> students = courseService.getAllStudentsOfCourseId(1L);
 
         // Assert
         assertEquals(1, students.size());
@@ -349,22 +349,22 @@ public class CourseServiceImpTest {
     }
 
     @Test
-    public void testGetAllStudentsByCourseId_CourseNotFound() {
+    public void testGetAllStudentsOfCourseId_CourseNotFound() {
         // Arrange
         when(courseRepo.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(CourseNotFoundException.class, () -> courseService.getAllStudentsByCourseId(1L));
+        assertThrows(CourseNotFoundException.class, () -> courseService.getAllStudentsOfCourseId(1L));
     }
 
     @Test
-    public void testGetAllEducatorsByCourseId_Success() {
+    public void testGetAllEducatorsOfCourseId_Success() {
         // Arrange
         course.getEducators().add(educator);
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
 
         // Act
-        List<User> educators = courseService.getAllEducatorsByCourseId(1L);
+        List<User> educators = courseService.getAllEducatorsOfCourseId(1L);
 
         // Assert
         assertEquals(1, educators.size());
@@ -372,11 +372,11 @@ public class CourseServiceImpTest {
     }
 
     @Test
-    public void testGetAllEducatorsByCourseId_CourseNotFound() {
+    public void testGetAllEducatorsOfCourseId_CourseNotFound() {
         // Arrange
         when(courseRepo.findById(1L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(CourseNotFoundException.class, () -> courseService.getAllEducatorsByCourseId(1L));
+        assertThrows(CourseNotFoundException.class, () -> courseService.getAllEducatorsOfCourseId(1L));
     }
 }

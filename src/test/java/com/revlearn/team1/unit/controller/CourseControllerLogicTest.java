@@ -5,7 +5,7 @@ import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
-import com.revlearn.team1.service.CourseServiceImp;
+import com.revlearn.team1.service.course.CourseServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
