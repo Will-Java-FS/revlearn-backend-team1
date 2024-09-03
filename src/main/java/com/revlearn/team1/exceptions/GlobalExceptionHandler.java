@@ -56,4 +56,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEducatorDoesNotTeachCourseException(EducatorDoesNotTeachCourseException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ModuleNotFoundException.class)
+    public ResponseEntity<String> handleModuleNotFoundException(ModuleNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
