@@ -1,5 +1,7 @@
 package com.revlearn.team1.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,16 +29,19 @@ public class TransactionModel {
     @ManyToOne
     @JoinColumn(name = "course_id") // This should match the column name in the Course entity
     @Nullable
+    @JsonBackReference("course-transactions")
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "to_user_id") // Rename the column to avoid conflict
     @Nullable
+    @JsonBackReference("user-to-transaction")
     private User toUser;
 
     @ManyToOne
     @JoinColumn(name = "from_user_id") // Rename the column to avoid conflict
     @Nullable
+    @JsonBackReference("user-from-transaction")
     private User fromUser;
 }
 
