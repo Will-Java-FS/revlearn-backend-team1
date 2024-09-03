@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,10 +25,11 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Import(ModuleController.class)
 @WebMvcTest(ModuleController.class)
 public class ModuleControllerTest {
 
@@ -90,7 +92,7 @@ public class ModuleControllerTest {
 
     @Test
     void deleteModule_ShouldReturnSuccessMessage() throws Exception {
-        doNothing().when(moduleService).deleteModule(1L);
+        when(moduleService.deleteModule(1L)).thenReturn("Module deleted successfully");
 
         mockMvc.perform(delete("/api/v1/module/1")
                         .contentType(MediaType.APPLICATION_JSON))
