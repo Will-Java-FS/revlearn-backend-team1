@@ -60,6 +60,7 @@ public class ModuleServiceImp implements ModuleService {
         //Verify module exists
         CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
+        //delete
         try {
             moduleRepo.delete(courseModule);
             return "Module deleted";
