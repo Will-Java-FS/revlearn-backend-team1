@@ -1,5 +1,6 @@
 package com.revlearn.team1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,17 +20,22 @@ public class CourseModule {
 
     private String title;
 
+    private Long orderIndex;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ModulePage> modulePages = new ArrayList<>();
 
     @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Exam> exams = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
+    @JsonIgnore
     private Course course;
 
     @CreationTimestamp

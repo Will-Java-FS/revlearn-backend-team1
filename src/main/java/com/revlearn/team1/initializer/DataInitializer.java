@@ -53,6 +53,7 @@ public class DataInitializer implements ApplicationRunner {
         createInitialUsers(rootNode.path("users"));
         createInitialCourses(rootNode.path("courses"));
         createInitialTransactions(rootNode.path("transactions"));
+        createInitialModules(rootNode.path("modules"));
     }
 
 
@@ -75,6 +76,13 @@ public class DataInitializer implements ApplicationRunner {
         String requestUrl = apiUrl + "/transaction";
         for (JsonNode transactionNode : transactionsNode) {
             sendRequest(requestUrl, HttpMethod.POST, transactionNode);
+        }
+    }
+
+    private void createInitialModules(JsonNode modulesNode) {
+        String requestUrl = apiUrl + "/module";
+        for (JsonNode moduleNode : modulesNode) {
+            sendRequest(requestUrl, HttpMethod.POST, moduleNode);
         }
     }
 
