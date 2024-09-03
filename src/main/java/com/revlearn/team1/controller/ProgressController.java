@@ -28,7 +28,13 @@ public class ProgressController {
      */
     //Return student's progress of all enrolled courses
     //Want this to be returning percentages
-    @GetMapping("progress/{student_id}")
+    @GetMapping("/progress")
+    public ResponseEntity<List<Progress>> getAllProgress(){
+        List<Progress> progress = progressService.getAllProgress();
+        return ResponseEntity.status(200).body(progress);
+    }
+
+    @GetMapping("/progress/{student_id}")
     public ResponseEntity<List<Progress>> getStudentProgress(@PathVariable Long student_id){
         List<Progress> studentProgress = progressService.getProgressByStudent(student_id);
         if(studentProgress.isEmpty()){

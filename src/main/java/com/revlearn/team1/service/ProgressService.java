@@ -20,6 +20,9 @@ public class ProgressService {
         this.progressRepo = progressRepo;
     }
 
+    public List<Progress> getAllProgress(){
+        return progressRepo.findAll();
+    }
     /*Things we want to do:
     Students:
     - Get overall progress
