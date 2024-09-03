@@ -37,12 +37,14 @@ public class Course {
     @Column(nullable = false)
     private AttendanceMethod attendanceMethod;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_content_id", nullable = true, referencedColumnName = "id")
-    private CourseContent courseContent;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<CourseModule> courseModules = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<DiscussionPost> discussionPosts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<DiscussionBoard> discussionBoards = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
