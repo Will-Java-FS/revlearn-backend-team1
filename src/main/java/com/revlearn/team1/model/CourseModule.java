@@ -36,8 +36,6 @@ public class CourseModule {
     @JsonIgnore
     private Course course;
 
-    private Long orderIndex;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
