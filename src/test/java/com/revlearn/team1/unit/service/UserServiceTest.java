@@ -1,4 +1,4 @@
-package com.revlearn.team1.service;
+package com.revlearn.team1.unit.service;
 
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;

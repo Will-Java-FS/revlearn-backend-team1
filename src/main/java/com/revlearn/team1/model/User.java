@@ -76,7 +76,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
     @JsonManagedReference("user-from-transaction")
     private List<TransactionModel> purchases;
-
+    @OneToMany(mappedBy = "institution")
+    private List<Program> programs;
 
     public User() {
         this.username = "default-user";
@@ -111,5 +112,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
-
 }

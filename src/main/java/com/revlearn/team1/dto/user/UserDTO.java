@@ -1,4 +1,4 @@
-package com.revlearn.team1.dto;
+package com.revlearn.team1.dto.user;
 
 public class UserDTO {
 

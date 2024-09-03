@@ -1,6 +1,6 @@
 package com.revlearn.team1.controller;
 
-import com.revlearn.team1.dto.UserDTO;
+import com.revlearn.team1.dto.user.UserDTO;
 import com.revlearn.team1.dto.user.DeleteUserResponse;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserServiceImp;
@@ -84,4 +84,23 @@ public class UserController {
         DeleteUserResponse response = new DeleteUserResponse(user, "User deleted successfully");
         return ResponseEntity.ok(response);
     }
+
+    //TODO: Implement these three functions as User routes instead of Course routes
+    // ie Return respective courses of Users
+//    @GetMapping("/student/{id}")
+//    public List<CourseDTO> getCoursesOfStudent(@PathVariable Long id) {
+//        return courseService.getAllByStudentId(id);
+//    }
+//
+//    @GetMapping("/educator/{id}")
+//    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
+//        return courseService.getAllByEducatorId(id);
+//    }
+//
+//    // Does not need security because an institution's course list should be
+//    // publicly available
+//    @GetMapping("/institution/{id}")
+//    public List<CourseDTO> getCoursesOfInstitution(@PathVariable Long id) {
+//        return courseService.getAllByInstitutionId(id);
+//    }
 }

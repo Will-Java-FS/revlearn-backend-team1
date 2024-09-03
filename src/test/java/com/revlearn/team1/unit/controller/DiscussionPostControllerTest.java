@@ -1,4 +1,4 @@
-package com.revlearn.team1;
+package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.controller.DiscussionPostController;
 import com.revlearn.team1.dto.DiscussionPostDTO;

@@ -21,6 +21,29 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false)
+    private LocalDate startDate;
+
+    @Column(nullable = false)
+    private LocalDate endDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AttendanceMethod attendanceMethod;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_content_id", nullable = true, referencedColumnName = "id")
+    private CourseContent courseContent;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<DiscussionPost> discussionPosts = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
             name = "course_educators",
@@ -41,45 +64,22 @@ public class Course {
     private List<User> students = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "institution_id"
-            //TODO: uncomment this once User model is implemented
-            // nullable = false
-    )
+    @JoinColumn(name = "institution_id", nullable = false)
     @JsonIgnore
     private User institution;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<DiscussionPost> discussionPosts = new ArrayList<>();
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_content_id", nullable = true, referencedColumnName = "id")
-    private CourseContent courseContent;
-
-    @Column(nullable = false)
-
-    private LocalDate startDate;
-
-    @Column(nullable = false)
-    private LocalDate endDate;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AttendanceMethod attendanceMethod;
 
     @OneToMany(mappedBy = "course")
     @JsonManagedReference("course-transactions")
     private List<TransactionModel> transactions;
+
+    //Most courses will only have one program, but some might be part of more
+    //ie Math 75 is required for Physics degrees and Computer Science degrees
+    @ManyToMany
+    private List<Program> programs;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }

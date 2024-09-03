@@ -99,9 +99,7 @@
       "institutionId": 1,
       "startDate": "2024-09-01",
       "endDate": "2024-12-15",
-      "attendanceMethod": "HYBRID",
-      "educatorsIds": [2],
-      "studentsIds": [ 3,  4]
+      "attendanceMethod": "HYBRID"
     },
     {
       "name": "Data Structures",
@@ -109,9 +107,7 @@
       "institutionId": 1,
       "startDate": "2024-10-01",
       "endDate": "2024-11-30",
-      "attendanceMethod": "ONLINE",
-      "educatorsIds": [5],
-      "studentsIds": [3, 6, 7]
+      "attendanceMethod": "ONLINE"
     }
   ],
   "transactions": [
