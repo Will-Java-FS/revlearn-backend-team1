@@ -1,6 +1,7 @@
 package com.revlearn.team1.mapper;
 
-import com.revlearn.team1.dto.discussionBoard.DiscussionBoardDTO;
+import com.revlearn.team1.dto.discussionBoard.DiscussionBoardRequestDTO;
+import com.revlearn.team1.dto.discussionBoard.DiscussionBoardResponseDTO;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.DiscussionBoard;
 import org.springframework.stereotype.Component;
@@ -8,23 +9,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class DiscussionBoardMapper {
 
-    public DiscussionBoardDTO toDto(DiscussionBoard disBoard){
+    public DiscussionBoardResponseDTO toDto(DiscussionBoard disBoard){
 
-        return new DiscussionBoardDTO(
+        return new DiscussionBoardResponseDTO(
                 disBoard.getDiscussionBoardId(),
                 disBoard.getCourse().getId(),
                 disBoard.getTitle()
         );
     }
 
-    public DiscussionBoard fromDto(DiscussionBoardDTO disBoardDto){
+    public DiscussionBoard fromDto(DiscussionBoardRequestDTO disBoardRequestDto){
         DiscussionBoard disBoard = new DiscussionBoard();
         Course course = new Course();
-        course.setId(disBoardDto.courseId());
+        course.setId(disBoardRequestDto.courseId());
 
-        disBoard.setDiscussionBoardId(disBoardDto.discussionBoardId());
+        disBoard.setDiscussionBoardId(disBoardRequestDto.discussionBoardId());
         disBoard.setCourse(course);
-        disBoard.setTitle(disBoardDto.discussionBoardTitle());
+        disBoard.setTitle(disBoardRequestDto.discussionBoardTitle());
         return disBoard;
     }
 }
