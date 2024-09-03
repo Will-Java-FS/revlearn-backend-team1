@@ -1,6 +1,7 @@
 package com.revlearn.team1.service.course;
 
 import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.ModuleDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
@@ -9,6 +10,7 @@ import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.exceptions.UserNotFoundException;
 import com.revlearn.team1.exceptions.course.*;
 import com.revlearn.team1.mapper.CourseMapper;
+import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
@@ -25,6 +27,7 @@ public class CourseServiceImp implements CourseService {
     private final CourseRepo courseRepo;
     private final CourseMapper courseMapper;
     private final UserRepository userRepo;
+    private final ModuleMapper moduleMapper;
 
     @Override
     public List<CourseDTO> getAll() {
@@ -194,5 +197,14 @@ public class CourseServiceImp implements CourseService {
         User savedEducator = userRepo.save(educator);
 
         return new CourseEducatorResDTO("Successfully removed educator from course.", savedCourse.getId(), (long) savedEducator.getId());
+    }
+
+    @Override
+    public List<ModuleDTO> getModulesByCourseId(Long courseId) {
+        //TODO: Secure so only course affiliated users can access (enrolled students, assigned educators, & institution)
+        //TODO: Consider relocation to CourseService class
+        Course course = courseRepo.findById(courseId).orElseThrow(
+                () -> new CourseNotFoundException("Course not found", courseId));
+        return course.getCourseModules().stream().map(moduleMapper::toDto).toList();
     }
 }

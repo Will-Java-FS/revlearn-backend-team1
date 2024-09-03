@@ -4,6 +4,7 @@ public record ModuleDTO(
         Long id,
         String title,
         String description,
-        Long orderIndex
+        Long orderIndex,
+        Long courseId
 ) {
 }

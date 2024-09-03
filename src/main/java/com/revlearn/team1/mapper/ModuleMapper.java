@@ -1,9 +1,16 @@
 package com.revlearn.team1.mapper;
 
 import com.revlearn.team1.dto.course.ModuleDTO;
+import com.revlearn.team1.exceptions.course.CourseNotFoundException;
 import com.revlearn.team1.model.CourseModule;
+import com.revlearn.team1.repository.CourseRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
+@RequiredArgsConstructor
 public class ModuleMapper {
+    public final CourseRepo courseRepo;
 
     /**
      * Maps a CourseModule entity to a ModuleDTO.
@@ -11,7 +18,7 @@ public class ModuleMapper {
      * @param courseModule the CourseModule entity
      * @return the corresponding ModuleDTO
      */
-    public static ModuleDTO toDto(CourseModule courseModule) {
+    public ModuleDTO toDto(CourseModule courseModule) {
         if (courseModule == null) {
             return null; // Handle null case if needed
         }
@@ -20,7 +27,8 @@ public class ModuleMapper {
                 courseModule.getId(),
                 courseModule.getTitle(),
                 courseModule.getDescription(),
-                courseModule.getOrderIndex()
+                courseModule.getOrderIndex(),
+                courseModule.getCourse().getId()
         );
     }
 
@@ -30,7 +38,7 @@ public class ModuleMapper {
      * @param moduleDTO the ModuleDTO
      * @return the corresponding CourseModule entity
      */
-    public static CourseModule toEntity(ModuleDTO moduleDTO) {
+    public CourseModule toEntity(ModuleDTO moduleDTO) {
         if (moduleDTO == null) {
             return null; // Handle null case if needed
         }
@@ -40,6 +48,8 @@ public class ModuleMapper {
         courseModule.setTitle(moduleDTO.title());
         courseModule.setDescription(moduleDTO.description());
         courseModule.setOrderIndex(moduleDTO.orderIndex());
+        courseModule.setCourse(courseRepo.findById(moduleDTO.courseId())
+                .orElseThrow(() -> new CourseNotFoundException("Module mapper: toEntity", moduleDTO.courseId())));
 
         return courseModule;
     }
@@ -51,7 +61,7 @@ public class ModuleMapper {
      * @param courseModule the original CourseModule entity to be updated
      * @param moduleDTO    the ModuleDTO containing updated information
      */
-    public static void updateEntityFromDto(CourseModule courseModule, ModuleDTO moduleDTO) {
+    public void updateEntityFromDto(CourseModule courseModule, ModuleDTO moduleDTO) {
         if (courseModule == null || moduleDTO == null) {
             //TODO: Test this exception.  Add to GlobalExceptionHandler if needed.
             throw new IllegalArgumentException("CourseModule and ModuleDTO must not be null");
@@ -60,5 +70,9 @@ public class ModuleMapper {
         courseModule.setTitle(moduleDTO.title());
         courseModule.setDescription(moduleDTO.description());
         courseModule.setOrderIndex(moduleDTO.orderIndex());
+
+        //should not be necessary as course module is retrieved from database and *should* already have a course
+//        courseModule.setCourse(courseRepo.findById(moduleDTO.courseId())
+//                .orElseThrow(() -> new CourseNotFoundException("Module mapper: update entity from dto.", moduleDTO.courseId())));
     }
 }

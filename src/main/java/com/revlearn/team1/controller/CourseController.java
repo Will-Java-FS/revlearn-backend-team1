@@ -79,4 +79,10 @@ public class CourseController {
         return courseService.removeEducator(courseEducatorDTO);
     }
 
+    @GetMapping("/{courseId}/modules")
+    public List<ModuleDTO> getModulesByCourseId(@PathVariable Long courseId) {
+        //TODO: Secure so only course affiliated users can access (students, educators, & institution)
+        //TODO: Consider relocation to CourseController class
+        return courseService.getModulesByCourseId(courseId);
+    }
 }

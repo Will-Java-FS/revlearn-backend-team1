@@ -20,6 +20,8 @@ public class CourseModule {
 
     private String title;
 
+    private Long orderIndex;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
