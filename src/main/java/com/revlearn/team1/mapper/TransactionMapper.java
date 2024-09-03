@@ -1,23 +1,25 @@
 package com.revlearn.team1.mapper;
 
-import org.springframework.stereotype.Component;
-
+import com.revlearn.team1.dto.TransactionDTO;
 import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
 import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
 import com.revlearn.team1.model.TransactionModel;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserService;
-
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class TransactionMapper
+public class TransactionMapper 
 {
+
     private final UserService userService;
+
     // TODO: @Mapper annotation can automatically generate these methods. Implement
     // later if needed
     public TransactionResponseDTO toDTO(String url, String message)
@@ -28,7 +30,8 @@ public class TransactionMapper
         );
     }
 
-    public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) {
+    public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) 
+    {
         return new TransactionModel(
                 transactionDTO.transactionItem().getId(),
                 transactionDTO.transactionItem().getUserId(),
