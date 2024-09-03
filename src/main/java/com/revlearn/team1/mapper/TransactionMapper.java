@@ -3,6 +3,7 @@ package com.revlearn.team1.mapper;
 import com.revlearn.team1.dto.TransactionDTO;
 import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
 import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
+import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.TransactionModel;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserService;
@@ -33,15 +34,14 @@ public class TransactionMapper
     public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) 
     {
         return new TransactionModel(
-                transactionDTO.transactionItem().getId(),
-                transactionDTO.transactionItem().getUserId(),
-                transactionDTO.transactionItem().getCourseId(),
-                transactionDTO.transactionItem().getName(),
-                transactionDTO.transactionItem().getPrice(),
-                transactionDTO.transactionItem().getQuantity(),
-                transactionDTO.transactionItem().getCourse(),
-                transactionDTO.transactionItem().getFromUser(),
-                transactionDTO.transactionItem().getToUser()
+                0L, // transaction ID
+                transactionDTO.name(),
+                transactionDTO.description(),
+                transactionDTO.price(),
+                transactionDTO.quantity(),
+                new Course(),
+                new User(),
+                new User()
         );
     }
 }

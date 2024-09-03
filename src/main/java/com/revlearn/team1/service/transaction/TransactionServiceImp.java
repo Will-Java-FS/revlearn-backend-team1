@@ -24,7 +24,7 @@ public class TransactionServiceImp implements TransactionService {
     TransactionRepo transactionRepo; // For future use with Kafka
 
     @Autowired
-    TransactionMapper transactionMapper;
+    TransactionMapper transactionMapper; // For future use with Kafka
 
     @Value("${STRIPE_API_KEY}")
     private String stripeApiKey;
@@ -34,42 +34,43 @@ public class TransactionServiceImp implements TransactionService {
 
     @Override
     public TransactionResponseDTO checkout(TransactionRequestDTO request) throws StripeException {
-        TransactionModel item = transactionMapper.fromDTO(request);
-
         // Set the Stripe API key
         Stripe.apiKey = stripeApiKey;
 
-        // Create a Product in Stripe (optional, can be reused or stored in DB)
-        var productParams = ProductCreateParams.builder()
-                .setName(item.getName())
+        // Define product data directly within PriceData
+        var productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                .setName(request.name()) // Set the product name or description
+                .setDescription(request.description()) // Set the product description
                 .build();
-        var product = Product.create(productParams);
 
-        // Create a Price for the product in Stripe
-        var priceParams = PriceCreateParams.builder()
-                .setProduct(product.getId())
-                .setUnitAmount(item.getPrice()) // Price in cents (e.g., $10.00 = 1000 cents)
+        // Define PriceData with the product information
+        var priceData = SessionCreateParams.LineItem.PriceData.builder()
                 .setCurrency("usd")
+                .setUnitAmount(request.price()) // Price in cents (e.g., $10.00 = 1000 cents)
+                .setProductData(productData) // Use the defined product data
                 .build();
-        var price = Price.create(priceParams);
 
-        // Create a checkout session
+        // Define LineItem with PriceData
+        var lineItem = SessionCreateParams.LineItem.builder()
+                .setPriceData(priceData) // Use PriceData directly
+                .setQuantity(request.quantity()) // Quantity of items
+                .build();
+
+        // Define SessionCreateParams
         var sessionParams = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT) // Payment mode
-                .addLineItem(
-                        SessionCreateParams.LineItem.builder()
-                                .setPrice(price.getId()) // Use the price created above
-                                .setQuantity(item.getQuantity()) // Quantity of items
-                                .build()
-                )
+                .addLineItem(lineItem) // Add LineItem
                 .setSuccessUrl(clientUrl + "/checkout-success") // Redirect on successful payment
                 .setCancelUrl(clientUrl + "/checkout-cancel") // Redirect if payment is canceled
                 .build();
 
-        // TODO: Kafka implementation here to persist the transaction data to our database
-
-        // Create and return the session URL
+        // Create and return the checkout session URL
         Session session = Session.create(sessionParams);
+
+        // TODO: Kafka implementation here to persist the transaction data to our database
+        //kafkaTemplate.send("payment-session-created", session.getId(), session);
+
+        // Return the transaction response DTO
         return new TransactionResponseDTO(session.getUrl(), "Payment Processed!");
     }
 

@@ -41,6 +41,7 @@ class TransactionControllerTest {
     private User fromUser;
     private long price;
     private String description;
+    private String name;
 
     @BeforeEach
     void setUp() {
@@ -49,6 +50,7 @@ class TransactionControllerTest {
         fromUser = new User("fromUser123");
         price = 10000L;
         description = "Sample Transaction";
+        name = "Sample Course";
     }
 
     @Test
@@ -58,8 +60,7 @@ class TransactionControllerTest {
         TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO("url", "message");
 
         // Create request DTO
-        TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(1,
-                new TransactionModel(1L, 2L, 2, "Course", price, 1L, new Course(), fromUser, toUser));
+        TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(1L, name, description, price, 1L);
 
         // Mock the service method
         when(transactionService.checkout(any(TransactionRequestDTO.class))).thenReturn(transactionResponseDTO);

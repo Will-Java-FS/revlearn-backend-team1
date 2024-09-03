@@ -17,12 +17,8 @@ public class TransactionModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id; // for our own record of transaction ids
 
-    private long userId; // for our own storage reasons
-
-    @Column(name = "course_reference_id") // Renaming the column to avoid conflict
-    private int courseId; // references the course_id -- THIS IS THE IMPORTANT ID TO STRIPE
-
     private String name; // course name
+    private String description; // course description
     private long price; // price of the course
     private long quantity; // should always be 1 but stripe expects this in request
 

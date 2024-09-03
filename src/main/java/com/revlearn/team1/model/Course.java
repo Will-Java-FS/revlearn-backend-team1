@@ -43,6 +43,9 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<DiscussionPost> discussionPosts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<DiscussionBoard> discussionBoards = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
             name = "course_educators",

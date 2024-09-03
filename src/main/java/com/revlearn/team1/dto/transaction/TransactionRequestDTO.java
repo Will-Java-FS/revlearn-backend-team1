@@ -6,5 +6,8 @@ import java.util.List;
 
 public record TransactionRequestDTO(
         long id, // user id
-        TransactionModel transactionItem
+        String name,
+        String description,
+        long price,
+        long quantity
 ) { }
