@@ -82,6 +82,32 @@ http://localhost:8080/swagger-ui.html
 
 ![Swagger Expanded Route](./docs/images/SwaggerExpandedRoute.png)
 
+## Stripe Inforamation
+Later in the .env file there are two variables regarding Stripe. The first one is super easy to get, just create an Account with Stripe and copy your hidden API key to that enviro variable. The other one is just the base url of the frontend. I provided one that is usually the case, but if you guys have it running on a different port then you need to update the enviro variable accordingly.
+
+When doing a payment on stripe it is essential to use 4242 4242 4242 4242 for the card info as this is a dumby card for testing and succeeding in a payment.
+The current routes for a successful payment and a cancel payment are as follows:
+baseurl/checkout-success
+baseurl/checkout-cancel
+
+The Swagger docs will give you some example request and response bodies that the API is expecting but for convience here are some examples:
+Request:
+POST: localhost:8080/api/v1/transaction/checkout
+{
+    "id": 12345,
+    "name": "Java Course",
+    "description": "Java Full Stack Course",
+    "price": 29900,
+    "quantity": 1
+}
+
+
+Response:
+200 OK
+{
+    "message": "Payment Processed!",
+    "url": "url To Stripe Hosted checkout page for the given product"
+}
 ---
 
 ## Production Deployment
@@ -141,6 +167,10 @@ SPRING_API_URL=http://localhost:8080/api/v1
 
 # JWTs
 SECRET_KEY=<base64-Key>
+
+# Stripe
+STRIPE_API_KEY=yourStripePrivateAPIKey
+CLIENT_URL=http://localhost:5173
 ```
 Replace the respective angle bracketed placeholders with your production database information and a secret key for the JWTs:
 * AWS_POSTGRES_DB
