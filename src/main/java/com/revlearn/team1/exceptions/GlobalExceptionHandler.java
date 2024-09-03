@@ -1,5 +1,6 @@
 package com.revlearn.team1.exceptions;
 
+import com.revlearn.team1.exceptions.course.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,5 +30,30 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TransactionNotFoundException.class)
     public ResponseEntity<String> handleTransactionNotFoundException(TransactionNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(StudentAlreadyEnrolledInCourseException.class)
+    public ResponseEntity<String> handleStudentAlreadyEnrolledInCourseException(StudentAlreadyEnrolledInCourseException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(StudentNotEnrolledInCourseException.class)
+    public ResponseEntity<String> handleStudentNotEnrolledInCourseException(StudentNotEnrolledInCourseException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EducatorAlreadyTeachesCourseException.class)
+    public ResponseEntity<String> handleEducatorAlreadyTeachesCourseException(EducatorAlreadyTeachesCourseException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EducatorDoesNotTeachCourseException.class)
+    public ResponseEntity<String> handleEducatorDoesNotTeachCourseException(EducatorDoesNotTeachCourseException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

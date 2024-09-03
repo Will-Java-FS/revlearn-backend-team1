@@ -1,4 +1,4 @@
-package com.revlearn.team1.exceptions;
+package com.revlearn.team1.exceptions.course;
 
 public class CourseNotFoundException extends RuntimeException {
     public CourseNotFoundException(String methodName, Long courseId) {

@@ -1,32 +1,17 @@
 package com.revlearn.team1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.revlearn.team1.enums.AttendanceMethod;
+import jakarta.persistence.*;
+import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.revlearn.team1.enums.AttendanceMethod;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.UniqueConstraint;
-import lombok.Data;
 
 @Entity
 @Data
@@ -35,6 +20,29 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(nullable = false)
+    private LocalDate startDate;
+
+    @Column(nullable = false)
+    private LocalDate endDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AttendanceMethod attendanceMethod;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_content_id", nullable = true, referencedColumnName = "id")
+    private CourseContent courseContent;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private List<DiscussionPost> discussionPosts = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -56,43 +64,22 @@ public class Course {
     private List<User> students = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "institution_id"
-            //TODO: uncomment this once User model is implemented
-            // nullable = false
-    )
+    @JoinColumn(name = "institution_id", nullable = false)
     @JsonIgnore
     private User institution;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<DiscussionPost> discussionPosts = new ArrayList<>();
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "course_content_id", nullable = true, referencedColumnName = "id")
-    private CourseContent courseContent;
-
-    @Column(nullable = false)
-    private LocalDate startDate;
-
-    @Column(nullable = false)
-    private LocalDate endDate;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AttendanceMethod attendanceMethod;
-
     @OneToMany(mappedBy = "course")
+    @JsonManagedReference("course-transactions")
     private List<TransactionModel> transactions;
+
+    //Most courses will only have one program, but some might be part of more
+    //ie Math 75 is required for Physics degrees and Computer Science degrees
+    @ManyToMany
+    private List<Program> programs;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
 }
