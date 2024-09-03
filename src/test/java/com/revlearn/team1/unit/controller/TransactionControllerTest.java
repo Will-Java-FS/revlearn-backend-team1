@@ -2,8 +2,13 @@ package com.revlearn.team1.unit.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.revlearn.team1.model.Course;
+import com.revlearn.team1.model.TransactionModel;
+import com.stripe.exception.StripeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +39,7 @@ class TransactionControllerTest {
 
     private User toUser;
     private User fromUser;
-    private float price;
+    private long price;
     private String description;
 
     @BeforeEach
@@ -42,52 +47,37 @@ class TransactionControllerTest {
         // Initialize common test data
         toUser = new User("toUser123");
         fromUser = new User("fromUser123");
-        price = 100.0f;
+        price = 10000L;
         description = "Sample Transaction";
     }
 
     @Test
-    void createTransactionTest() {
-        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, price,
-                description);
-        TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(1L, 2L, price, description);
+    void checkoutTest() throws StripeException
+    {
+        // Create expected response DTO
+        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO("url", "message");
 
-        when(transactionService.createTransaction(any(TransactionRequestDTO.class))).thenReturn(transactionResponseDTO);
+        // Create request DTO
+        TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(1,
+                new TransactionModel(1L, 2L, 2, "Course", price, 1L, new Course(), fromUser, toUser));
 
-        ResponseEntity<TransactionResponseDTO> response = transactionController
-                .createTransaction(transactionRequestDTO);
+        // Mock the service method
+        when(transactionService.checkout(any(TransactionRequestDTO.class))).thenReturn(transactionResponseDTO);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(transactionResponseDTO, response.getBody());
-        verify(transactionService, times(1)).createTransaction(transactionRequestDTO);
-    }
+        // Call the controller method
+        ResponseEntity<Map<String, String>> response = transactionController.checkout(transactionRequestDTO);
 
-    @Test
-    void findTransactionByIdTest() {
-        int id = 1;
-        TransactionResponseDTO transactionResponseDTO = new TransactionResponseDTO(toUser, fromUser, price,
-                description);
-
-        when(transactionService.getTransactionById(id)).thenReturn(transactionResponseDTO);
-
-        ResponseEntity<TransactionResponseDTO> response = transactionController.findTransactionById(id);
-
+        // Verify response status
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(transactionResponseDTO, response.getBody());
-        verify(transactionService, times(1)).getTransactionById(id);
-    }
 
-    @Test
-    void getTransactionsTest() {
-        List<TransactionResponseDTO> transactions = new ArrayList<>();
-        transactions.add(new TransactionResponseDTO(toUser, fromUser, price, description));
+        // Verify the response body matches the expected values
+        Map<String, String> expectedResponse = Map.of(
+                "url", transactionResponseDTO.url(),
+                "message", transactionResponseDTO.message()
+        );
+        assertEquals(expectedResponse, response.getBody());
 
-        when(transactionService.getTransactions()).thenReturn(transactions);
-
-        ResponseEntity<List<TransactionResponseDTO>> response = transactionController.getTransactions();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(transactions, response.getBody());
-        verify(transactionService, times(1)).getTransactions();
+        // Verify service method call
+        verify(transactionService, times(1)).checkout(transactionRequestDTO);
     }
 }
