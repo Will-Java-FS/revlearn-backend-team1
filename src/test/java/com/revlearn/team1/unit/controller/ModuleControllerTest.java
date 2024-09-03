@@ -1,7 +1,7 @@
 package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.controller.ModuleController;
-import com.revlearn.team1.dto.course.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.service.module.ModuleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

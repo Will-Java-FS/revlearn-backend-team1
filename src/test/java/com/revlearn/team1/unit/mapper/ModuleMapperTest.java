@@ -1,6 +1,6 @@
 package com.revlearn.team1.unit.mapper;
 
-import com.revlearn.team1.dto.course.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.exceptions.course.CourseNotFoundException;
 import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.model.Course;

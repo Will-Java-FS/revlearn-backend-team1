@@ -1,6 +1,6 @@
 package com.revlearn.team1.service.module;
 
-import com.revlearn.team1.dto.course.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.mapper.ModuleMapper;

@@ -1,6 +1,6 @@
 package com.revlearn.team1.service.module;
 
-import com.revlearn.team1.dto.course.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 
 public interface ModuleService {
 
