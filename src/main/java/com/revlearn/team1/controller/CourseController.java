@@ -1,6 +1,7 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.ModuleDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
@@ -77,4 +78,5 @@ public class CourseController {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
     }
+
 }
