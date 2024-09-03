@@ -1,7 +1,10 @@
 package com.revlearn.team1.dto.transaction;
+
+import com.revlearn.team1.model.TransactionModel;
+
+import java.util.List;
+
 public record TransactionRequestDTO(
-        Long toUserId,
-        Long fromUserId,
-        float price,
-        String description) {
-}
+        long id, // user id
+        TransactionModel transactionItem
+) { }

@@ -10,6 +10,9 @@ import com.revlearn.team1.service.user.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class TransactionMapper
@@ -17,29 +20,25 @@ public class TransactionMapper
     private final UserService userService;
     // TODO: @Mapper annotation can automatically generate these methods. Implement
     // later if needed
-    public TransactionResponseDTO toDTO(TransactionModel transaction)
+    public TransactionResponseDTO toDTO(String url, String message)
     {
         return new TransactionResponseDTO(
-                transaction.getToUser(),
-                        transaction.getFromUser(),
-                transaction.getPrice(),
-                transaction.getDescription()
+                url,
+                message
         );
     }
 
     public TransactionModel fromDTO(TransactionRequestDTO transactionDTO) {
-        // Retrieve User entities using the UserService
-        User toUser = userService.findById(transactionDTO.toUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + transactionDTO.toUserId()));
-        User fromUser = userService.findById(transactionDTO.fromUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + transactionDTO.fromUserId()));
-
-        TransactionModel transaction = new TransactionModel();
-        transaction.setToUser(toUser);
-        transaction.setFromUser(fromUser);
-        transaction.setPrice(transactionDTO.price());
-        transaction.setDescription(transactionDTO.description());
-
-        return transaction;
+        return new TransactionModel(
+                transactionDTO.transactionItem().getId(),
+                transactionDTO.transactionItem().getUserId(),
+                transactionDTO.transactionItem().getCourseId(),
+                transactionDTO.transactionItem().getName(),
+                transactionDTO.transactionItem().getPrice(),
+                transactionDTO.transactionItem().getQuantity(),
+                transactionDTO.transactionItem().getCourse(),
+                transactionDTO.transactionItem().getFromUser(),
+                transactionDTO.transactionItem().getToUser()
+        );
     }
 }

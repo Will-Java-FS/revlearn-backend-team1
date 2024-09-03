@@ -1,5 +1,6 @@
 package com.revlearn.team1.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,22 +13,30 @@ import lombok.*;
 public class TransactionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id; // for our own record of transaction ids
+
+    private long userId; // for our own storage reasons
+
+    @Column(name = "course_reference_id") // Renaming the column to avoid conflict
+    private int courseId; // references the course_id -- THIS IS THE IMPORTANT ID TO STRIPE
+
+    private String name; // course name
+    private long price; // price of the course
+    private long quantity; // should always be 1 but stripe expects this in request
 
     @ManyToOne
-    @JoinColumn(name = "to_user_id")
-    private User toUser;//this should be an institution (unless it is a refund)
-
-    @ManyToOne
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;//this should be a student (unless it is a refund)
-
-    private float price;
-    private String description;
-
-    //What was purchased
-    @ManyToOne
-    @JoinColumn(name = "course_id")
+    @JoinColumn(name = "course_id") // This should match the column name in the Course entity
+    @Nullable
     private Course course;
 
+    @ManyToOne
+    @JoinColumn(name = "to_user_id") // Rename the column to avoid conflict
+    @Nullable
+    private User toUser;
+
+    @ManyToOne
+    @JoinColumn(name = "from_user_id") // Rename the column to avoid conflict
+    @Nullable
+    private User fromUser;
 }
+
