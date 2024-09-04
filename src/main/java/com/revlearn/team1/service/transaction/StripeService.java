@@ -35,49 +35,55 @@ public class StripeService {
     @Value("${CLIENT_URL}")
     private String clientUrl;
 
-    public TransactionResponseDTO checkout(TransactionRequestDTO request) throws StripeException {
-        // Set the Stripe API key
-        Stripe.apiKey = stripeApiKey;
+    public TransactionResponseDTO checkout(TransactionRequestDTO request)
+    {
+        try {
+            // Set the Stripe API key
+            Stripe.apiKey = stripeApiKey;
 
-        // Define product data directly within PriceData
-        var productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                .setName(request.name()) // Set the product name or description
-                .setDescription(request.description()) // Set the product description
-                .build();
+            // Define product data directly within PriceData
+            var productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                    .setName(request.name()) // Set the product name or description
+                    .setDescription(request.description()) // Set the product description
+                    .build();
 
-        // Define PriceData with the product information
-        var priceData = SessionCreateParams.LineItem.PriceData.builder()
-                .setCurrency("usd")
-                .setUnitAmount(request.price()) // Price in cents (e.g., $10.00 = 1000 cents)
-                .setProductData(productData) // Use the defined product data
-                .build();
+            // Define PriceData with the product information
+            var priceData = SessionCreateParams.LineItem.PriceData.builder()
+                    .setCurrency("usd")
+                    .setUnitAmount(request.price()) // Price in cents (e.g., $10.00 = 1000 cents)
+                    .setProductData(productData) // Use the defined product data
+                    .build();
 
-        // Define LineItem with PriceData
-        var lineItem = SessionCreateParams.LineItem.builder()
-                .setPriceData(priceData) // Use PriceData directly
-                .setQuantity(request.quantity()) // Quantity of items
-                .build();
+            // Define LineItem with PriceData
+            var lineItem = SessionCreateParams.LineItem.builder()
+                    .setPriceData(priceData) // Use PriceData directly
+                    .setQuantity(request.quantity()) // Quantity of items
+                    .build();
 
-        // Define SessionCreateParams
-        var sessionParams = SessionCreateParams.builder()
-                .setMode(SessionCreateParams.Mode.PAYMENT) // Payment mode
-                .addLineItem(lineItem) // Add LineItem
-                .setSuccessUrl(clientUrl + "/checkout-success") // Redirect on successful payment
-                .setCancelUrl(clientUrl + "/checkout-cancel") // Redirect if payment is canceled
-                .build();
+            // Define SessionCreateParams
+            var sessionParams = SessionCreateParams.builder()
+                    .setMode(SessionCreateParams.Mode.PAYMENT) // Payment mode
+                    .addLineItem(lineItem) // Add LineItem
+                    .setSuccessUrl(clientUrl + "/checkout-success") // Redirect on successful payment
+                    .setCancelUrl(clientUrl + "/checkout-cancel") // Redirect if payment is canceled
+                    .build();
 
-        // Create and return the checkout session URL
-        Session session = Session.create(sessionParams);
+            // Create and return the checkout session URL
+            Session session = Session.create(sessionParams);
 
-        // Message to send to Kafka
-        Message<TransactionModel> message = MessageBuilder
-                .withPayload(transactionMapper.fromDTO(request)) // Convert the request DTO to a model
-                .setHeader(KafkaHeaders.TOPIC, "transactions")
-                .build();
+            // Message to send to Kafka
+            Message<TransactionModel> message = MessageBuilder
+                    .withPayload(transactionMapper.fromDTO(request)) // Convert the request DTO to a model
+                    .setHeader(KafkaHeaders.TOPIC, "transactions")
+                    .build();
 
-        kafkaTemplate.send(message); // Send the message to Kafka to persist the transaction to the database
+            kafkaTemplate.send(message); // Send the message to Kafka to persist the transaction to the database
 
-        // Return the transaction response DTO
-        return new TransactionResponseDTO(session.getUrl(), "Payment Processed!");
+            // Return the transaction response DTO
+            return new TransactionResponseDTO(session.getUrl(), "Payment Processed!");
+        } catch (StripeException e) {
+            // Handle StripeException and return an error response
+            return new TransactionResponseDTO(null, "Payment Failed: " + e.getMessage());
+        }
     }
 }
