@@ -1,13 +1,13 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.course.CourseDTO;
-import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.course.CourseServiceImp;
+import com.revlearn.team1.service.course.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/api/v1/course")
 @RequiredArgsConstructor
 public class CourseController {
-    private final CourseServiceImp courseService;
+    private final CourseService courseService;
 
     @GetMapping("/all")
     public List<CourseDTO> getAllCourses() {
