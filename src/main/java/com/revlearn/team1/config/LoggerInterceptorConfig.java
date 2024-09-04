@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.lang.NonNull;
 
 @Configuration
 public class LoggerInterceptorConfig implements WebMvcConfigurer
@@ -13,7 +14,7 @@ public class LoggerInterceptorConfig implements WebMvcConfigurer
     LoggerInterceptor loggerInterceptor;
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry)
+    public void addInterceptors(@NonNull InterceptorRegistry registry)
     {
         // Makes it so that the loggerInterceptor is used for all requests (URI's)
         registry.addInterceptor(loggerInterceptor);
