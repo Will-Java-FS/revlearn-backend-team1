@@ -1,13 +1,10 @@
 package com.revlearn.team1.unit.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.TransactionModel;
+import com.revlearn.team1.service.transaction.StripeService;
 import com.stripe.exception.StripeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,13 +23,12 @@ import com.revlearn.team1.controller.TransactionController;
 import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
 import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.transaction.TransactionService;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionControllerTest {
 
     @Mock
-    private TransactionService transactionService;
+    private StripeService stripeService;
 
     @InjectMocks
     private TransactionController transactionController;
@@ -63,7 +59,7 @@ class TransactionControllerTest {
         TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO(1L, name, description, price, 1L);
 
         // Mock the service method
-        when(transactionService.checkout(any(TransactionRequestDTO.class))).thenReturn(transactionResponseDTO);
+        when(stripeService.checkout(any(TransactionRequestDTO.class))).thenReturn(transactionResponseDTO);
 
         // Call the controller method
         ResponseEntity<Map<String, String>> response = transactionController.checkout(transactionRequestDTO);
@@ -79,6 +75,6 @@ class TransactionControllerTest {
         assertEquals(expectedResponse, response.getBody());
 
         // Verify service method call
-        verify(transactionService, times(1)).checkout(transactionRequestDTO);
+        verify(stripeService, times(1)).checkout(transactionRequestDTO);
     }
 }
