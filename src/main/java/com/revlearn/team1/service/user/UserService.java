@@ -1,25 +1,27 @@
 package com.revlearn.team1.service.user;
 
+import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    Optional<User> findById(int id);
+    User createUser(User user);
 
-//    User save(User user);
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+    Optional<User> findById(int id);
 
     void deleteById(int id);
 
     List<User> getAllUsers();
 
+    List<CourseDTO> getEnrolledCourses(Long studentId);
 
-    //TODO: Implement function(s) to return courses of User
-//
-//    public List<CourseDTO> getAllEnrolledCourses(Long studentId);
-//
-//    public List<CourseDTO> getAllTaughtCourses(Long educatorId);
-//
-//    public List<CourseDTO> getAllOfferedCourses(Long institutionId);
+    List<CourseDTO> getTaughtCourses(Long educatorId);
+
+    List<CourseDTO> getInstitutionCourses(Long institutionId);
 }

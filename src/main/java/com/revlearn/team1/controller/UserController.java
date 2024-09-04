@@ -1,5 +1,6 @@
 package com.revlearn.team1.controller;
 
+import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.user.UserDTO;
 import com.revlearn.team1.dto.user.DeleteUserResponse;
 import com.revlearn.team1.model.User;
@@ -85,22 +86,18 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    //TODO: Implement these three functions as User routes instead of Course routes
-    // ie Return respective courses of Users
-//    @GetMapping("/student/{id}")
-//    public List<CourseDTO> getCoursesOfStudent(@PathVariable Long id) {
-//        return courseService.getAllByStudentId(id);
-//    }
-//
-//    @GetMapping("/educator/{id}")
-//    public List<CourseDTO> getCoursesOfEducator(@PathVariable Long id) {
-//        return courseService.getAllByEducatorId(id);
-//    }
-//
-//    // Does not need security because an institution's course list should be
-//    // publicly available
-//    @GetMapping("/institution/{id}")
-//    public List<CourseDTO> getCoursesOfInstitution(@PathVariable Long id) {
-//        return courseService.getAllByInstitutionId(id);
-//    }
+    @GetMapping("/{id}/enrolledCourses")
+    public List<CourseDTO> getEnrolledCourses(@PathVariable Long id) {
+        return userService.getEnrolledCourses(id);
+    }
+
+    @GetMapping("/{id}/taughtCourses")
+    public List<CourseDTO> getTaughtCourses(@PathVariable Long id) {
+        return userService.getTaughtCourses(id);
+    }
+
+    @GetMapping("/{id}/institutionCourses")
+    public List<CourseDTO> getInstitutionCourses(@PathVariable Long id) {
+        return userService.getInstitutionCourses(id);
+    }
 }

@@ -3,6 +3,7 @@ package com.revlearn.team1.mapper;
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
+import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CourseMapper {
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     //Does not return students or educators.
     //That is a separate method
@@ -36,7 +37,7 @@ public class CourseMapper {
 
         // Fetch institution user from userService
         if (courseDTO.institutionId() != null) {
-            User institution = userService.findById(Math.toIntExact(courseDTO.institutionId()))
+            User institution = userRepository.findById(Math.toIntExact(courseDTO.institutionId()))
                     .orElseThrow(
                             () -> new IllegalArgumentException("User not found with ID: " + courseDTO.institutionId()));
             course.setInstitution(institution);
