@@ -5,9 +5,12 @@ import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.model.CourseModule;
+import com.revlearn.team1.model.ModulePage;
 import com.revlearn.team1.repository.ModuleRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,5 +70,15 @@ public class ModuleServiceImp implements ModuleService {
         } catch (Exception e) {
             throw new ServiceLayerDataAccessException("Failed to delete module", e);
         }
+    }
+
+    @Override
+    public List<ModulePage> getModulePages(Long moduleId) {
+        //TODO: Secure so only course affiliated users can access (enrolled students, assigned educators, & institution)
+        //Verify module exists
+        CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
+                () -> new ModuleNotFoundException(moduleId));
+        //TODO: convert to DTOs
+        return courseModule.getModulePages();
     }
 }
