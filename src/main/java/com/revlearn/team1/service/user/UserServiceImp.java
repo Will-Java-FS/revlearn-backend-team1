@@ -1,5 +1,8 @@
 package com.revlearn.team1.service.user;
 
+import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.exceptions.UserNotFoundException;
+import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +21,10 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private CourseMapper courseMapper;
 
     @Override
     public List<User> getAllUsers() {
@@ -53,7 +57,6 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return userRepository.save(user);
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Invalid username."));
@@ -69,38 +72,37 @@ public class UserServiceImp implements UserService, UserDetailsService {
         userRepository.deleteById(id);
     }
 
-//    @Override
-//    public User save(User user) {
-//        return userRepository.save(user);
-//    }
+    @Override
+    public List<CourseDTO> getEnrolledCourses(Long studentId) {
+        // TODO: Secure so only specified student or admin-like account ("counselor"?) can retrieve data.
+        // Will probably use Security context to obtain student id instead of path variable
 
+        User student = userRepository.findById(Math.toIntExact(studentId))
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("Could not find user by id %d.", studentId)));
+        return student.getEnrolledCourses().stream().map(courseMapper::toDto).toList();
+    }
 
-// TODO: Implement these three functions
-//
-//    @Override
-//    public List<CourseDTO> getAllEnrolledCourses(Long studentId) {
-//        // TODO: Secure so only specified student or admin-like account ("counselor"?)
-//        // can retrieve data.
-//        // Will probably use Security context to obtain student id instead of path
-//        // variable
-//        User student = userRepo.findById(Math.toIntExact(studentId)).orElseThrow(() -> new RuntimeException("Could not find user."));
-//        return student.getEnrolledCourses().stream().map(courseMapper::toDto).toList();
-//    }
-//
-//    @Override
-//    public List<CourseDTO> getAllTaughtCourses(Long educatorId) {
-//        // TODO: Secure so only specified educator can retrieve data.
-//        // Will probably use Security context to obtain educator id instead of path
-//        // variable
-//        User educator = userRepo.findById(Math.toIntExact(educatorId)).orElseThrow(() -> new RuntimeException("Could not find user."));
-//        return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
-//    }
-//
-//    @Override
-//    public List<CourseDTO> getAllOfferedCourses(Long institutionId) {
-//        User institution = userRepo.findById(Math.toIntExact(institutionId)).orElseThrow(() -> new RuntimeException("Could not find user."));
-//        return institution.getInstitutionCourses().stream()
-//                .map(courseMapper::toDto).toList();
-//    }
+    @Override
+    public List<CourseDTO> getTaughtCourses(Long educatorId) {
+        // TODO: Secure so only specified educator can retrieve data.
+        // Will probably use Security context to obtain educator id instead of path variable
+
+        User educator = userRepository.findById(Math.toIntExact(educatorId))
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("Could not find user by id %d.", educatorId)));
+        return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
+    }
+
+    @Override
+    public List<CourseDTO> getInstitutionCourses(Long institutionId) {
+        // Does not need security because an institution's course list should be publicly available
+
+        User institution = userRepository.findById(Math.toIntExact(institutionId))
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("Could not find user by id %d.", institutionId)));
+        return institution.getInstitutionCourses().stream()
+                .map(courseMapper::toDto).toList();
+    }
+
 }
-

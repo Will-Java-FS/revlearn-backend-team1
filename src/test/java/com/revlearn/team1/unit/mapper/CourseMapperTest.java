@@ -5,6 +5,7 @@ import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
+import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.*;
 class CourseMapperTest {
 
     @Mock
-    private UserService userService;
+    private UserRepository userRepository;
 
     @InjectMocks
     private CourseMapper courseMapper;
@@ -75,7 +76,7 @@ class CourseMapperTest {
                 "Test Description"
         );
 
-        when(userService.findById(1)).thenReturn(Optional.of(institution));
+        when(userRepository.findById(1)).thenReturn(Optional.of(institution));
 
         // Act
         Course course = courseMapper.fromDto(courseDTO);
@@ -88,7 +89,7 @@ class CourseMapperTest {
         assertEquals("Test Course", course.getName());
         assertEquals("Test Description", course.getDescription());
 
-        verify(userService, times(1)).findById(1);
+        verify(userRepository, times(1)).findById(1);
     }
 
     @Test
@@ -104,7 +105,7 @@ class CourseMapperTest {
                 "Test Description"
         );
 
-        when(userService.findById(999)).thenReturn(Optional.empty());
+        when(userRepository.findById(999)).thenReturn(Optional.empty());
 
         // Act & Assert
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -113,7 +114,7 @@ class CourseMapperTest {
 
         assertEquals("User not found with ID: 999", exception.getMessage());
 
-        verify(userService, times(1)).findById(999);
+        verify(userRepository, times(1)).findById(999);
     }
 
     @Test
