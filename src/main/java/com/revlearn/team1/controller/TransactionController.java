@@ -2,7 +2,7 @@ package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
 import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
-import com.revlearn.team1.service.transaction.TransactionService;
+import com.revlearn.team1.service.transaction.StripeService;
 import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,11 +20,11 @@ import java.util.Map;
 public class TransactionController {
 
     @Autowired
-    private TransactionService transactionService;
+    private StripeService stripeService;
 
     @PostMapping("/checkout")
     public ResponseEntity<Map<String, String>> checkout(@RequestBody TransactionRequestDTO transactionRequest) throws StripeException {
-        TransactionResponseDTO transactionResponse = transactionService.checkout(transactionRequest);
+        TransactionResponseDTO transactionResponse = stripeService.checkout(transactionRequest);
 
         return new ResponseEntity<>(new HashMap<>() {{
             put("url", transactionResponse.url());

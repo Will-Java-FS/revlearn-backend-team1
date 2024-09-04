@@ -6,20 +6,24 @@ import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.TransactionModel;
 import com.revlearn.team1.model.User;
+import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.user.UserService;
+import com.revlearn.team1.service.user.UserServiceImp;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class TransactionMapper 
 {
-
-    private final UserService userService;
+    @Autowired
+    private final UserServiceImp userService;
 
     // TODO: @Mapper annotation can automatically generate these methods. Implement
     // later if needed
@@ -41,7 +45,7 @@ public class TransactionMapper
                 transactionDTO.quantity(),
                 new Course(),
                 new User(),
-                new User()
+                userService.findById((int) transactionDTO.id()).orElse(new User())
         );
     }
 }
