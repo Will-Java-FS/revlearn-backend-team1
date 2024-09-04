@@ -15,43 +15,13 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // TODO handle csrf properly
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfig corsConfig) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(requests -> requests
                         .anyRequest().permitAll());
         return http.build();
-    }
-
-    @Bean
-    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration());
-        return source;
-    }
-
-    @Bean
-    public CorsConfiguration corsConfiguration() {
-
-        // TODO add any necessary EC2 URLs to this list
-        List<String> allowedOrigins = List.of(
-                "http://localhost:5173",
-                "http://localhost:8080",
-                "http://www.revlearn.com",
-                "https://www.revlearn.com",
-                "http://api.revlearn.com", //This is just to query a development build from the production swagger ui
-                "https://api.revlearn.com",//This is just to query a development build from the production swagger ui
-                "http://revlearn.com",
-                "https://revlearn.com");
-
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(allowedOrigins);
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        corsConfiguration.setAllowedHeaders(List.of("*"));
-        corsConfiguration.setAllowCredentials(true);
-        return corsConfiguration;
     }
 
     @Bean
