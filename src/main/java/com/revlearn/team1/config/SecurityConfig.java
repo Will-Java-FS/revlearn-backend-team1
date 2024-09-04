@@ -35,11 +35,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfiguration corsConfiguration() {
 
-        // TODO add EC2 url to this list
+        // TODO add any necessary EC2 URLs to this list
         List<String> allowedOrigins = List.of(
                 "http://localhost:5173",
                 "http://localhost:8080",
-                "http://www.revlearn.com");
+                "http://www.revlearn.com",
+                "https://www.revlearn.com",
+                "http://api.revlearn.com", //This is just to query a development build from the production swagger ui
+                "https://api.revlearn.com",//This is just to query a development build from the production swagger ui
+                "http://revlearn.com",
+                "https://revlearn.com");
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(allowedOrigins);
