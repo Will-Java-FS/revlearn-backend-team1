@@ -36,13 +36,13 @@ public class SecurityConfig {
     public CorsConfiguration corsConfiguration() {
 
         // TODO add EC2 url to this list
-        List<String> allowedUrls = List.of(
+        List<String> allowedOrigins = List.of(
                 "http://localhost:5173",
                 "http://localhost:8080",
                 "http://www.revlearn.com");
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(allowedUrls);
+        corsConfiguration.setAllowedOrigins(allowedOrigins);
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
