@@ -1,12 +1,13 @@
 package com.revlearn.team1.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
-import com.revlearn.team1.service.user.UserService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor

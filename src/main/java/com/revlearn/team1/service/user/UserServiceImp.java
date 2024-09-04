@@ -31,6 +31,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return userRepository.findAll();
     }
 
+    @Override
     public boolean checkExisting(String username) {
         return userRepository.findByUsername(username).isPresent();
     }
@@ -42,6 +43,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
         }
     }
 
+    @Override
     public User createUser(User user) {
         if (checkExisting(user.getUsername())) {
             throw new RuntimeException("Username Existing. Please try other username.");

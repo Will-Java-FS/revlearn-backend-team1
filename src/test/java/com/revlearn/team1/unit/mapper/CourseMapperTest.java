@@ -6,7 +6,6 @@ import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
-import com.revlearn.team1.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
