@@ -12,4 +12,6 @@ public interface DiscussionBoardService {
     DiscussionBoardResponseDTO createDiscussionBoard(DiscussionBoardRequestDTO disBoardDto);
 
     String deleteDiscussionBoard(Long discussionBoardId);
+
+    DiscussionBoardResponseDTO updateDiscussionBoard(Long discussionBoardId, DiscussionBoardRequestDTO discussionBoardRequestDto);
 }

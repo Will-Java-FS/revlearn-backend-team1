@@ -37,10 +37,10 @@ public class DiscussionBoardController {
         return new ResponseEntity<>(deletedDisBoard, HttpStatus.OK);
     }
 
-//    @PutMapping("/id")
-//    public ResponseEntity<DiscussionBoardResponseDTO> updateDiscussionBoard(@PathVariable Long discussionBoardId, @RequestBody DiscussionBoardRequestDTO disBoardReqDto){
-//        DiscussionBoardResponseDTO updatedDiscussionBoard = disBoardServImp.updateDiscussionBoard(discussionBoardId,disBoardReqDto);
-//        return new ResponseEntity<>(updatedDiscussionBoard, HttpStatus.OK);
-//    }
+    @PutMapping("/{discussionBoardId}")
+    public ResponseEntity<DiscussionBoardResponseDTO> updateDiscussionBoard(@PathVariable Long discussionBoardId, @RequestBody DiscussionBoardRequestDTO disBoardReqDto){
+        DiscussionBoardResponseDTO updatedDiscussionBoard = disBoardServImp.updateDiscussionBoard(discussionBoardId,disBoardReqDto);
+        return new ResponseEntity<>(updatedDiscussionBoard, HttpStatus.OK);
+    }
 
 }

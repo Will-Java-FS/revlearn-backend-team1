@@ -37,4 +37,16 @@ public class DiscussionBoardServiceImp implements DiscussionBoardService{
         disBoardRepo.deleteById(discussionBoardId);
         return String.format("Discussion Board with id: %d deleted", discussionBoardId);
     }
+
+    public DiscussionBoardResponseDTO updateDiscussionBoard(Long discussionBoardId, DiscussionBoardRequestDTO discussionBoardRequestDto){
+        DiscussionBoard discussionBoard = disBoardRepo.findById(discussionBoardId)
+                .orElseThrow(
+                        () -> new DiscussionBoardNotFoundException("Discussion Post with ID " + discussionBoardId + " not found.")
+                );
+
+        discussionBoard.setDescription(discussionBoardRequestDto.discussionBoardDescription());
+        discussionBoard.setTitle(discussionBoardRequestDto.discussionBoardTitle());
+
+        return disBoardMapper.toDto(disBoardRepo.save(discussionBoard));
+    }
 }
