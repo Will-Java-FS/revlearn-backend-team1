@@ -1,7 +1,6 @@
 package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.model.User;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
