@@ -1,13 +1,13 @@
 package com.revlearn.team1.service;
 
-import com.revlearn.team1.model.ExamResult;
-import com.revlearn.team1.model.User;
-import com.revlearn.team1.repository.ExamResultRepo;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.revlearn.team1.model.ExamResult;
+import com.revlearn.team1.repository.ExamResultRepo;
 
 @Service
 public class ExamResultService {
