@@ -47,4 +47,8 @@ public class DiscussionPost {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name="discussion_board_id")
+    private DiscussionBoard discussionBoard;
 }

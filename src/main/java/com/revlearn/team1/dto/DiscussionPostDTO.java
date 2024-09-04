@@ -6,9 +6,10 @@ import com.revlearn.team1.model.User;
 import java.time.LocalDateTime;
 
 public record DiscussionPostDTO(
+        Long discussionBoardId,
         Long discussionId,
-        Course course,
-        User user,
+        Long courseId,
+        Integer userId,
         String content,
         LocalDateTime createdAt,
         LocalDateTime updatedAt

@@ -1,27 +1,40 @@
 package com.revlearn.team1.mapper;
 
-import com.revlearn.team1.dto.discussionBoard.DiscussionBoardFullDTO;
-import com.revlearn.team1.dto.discussionBoard.DiscussionBoardLightDTO;
+import com.revlearn.team1.dto.discussionBoard.DiscussionBoardRequestDTO;
+import com.revlearn.team1.dto.discussionBoard.DiscussionBoardResponseDTO;
+import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.DiscussionBoard;
 import org.springframework.stereotype.Component;
+
+import com.revlearn.team1.mapper.DiscussionPostMapper;
 
 @Component
 public class DiscussionBoardMapper {
 
-    public DiscussionBoardLightDTO toDto(DiscussionBoard disBoard){
+    public DiscussionBoardResponseDTO toDto(DiscussionBoard discussionBoard){
 
-        return new DiscussionBoardLightDTO(
-                disBoard.getDiscussionBoardId(),
-                disBoard.getCourse().getId(),
-                disBoard.getTitle()
+        DiscussionPostMapper discussionPostMapper = new DiscussionPostMapper();
+
+        return new DiscussionBoardResponseDTO(
+                discussionBoard.getDiscussionBoardId(),
+                discussionBoard.getCourse().getId(),
+                discussionBoard.getUserId(),
+                discussionBoard.getTitle(),
+                discussionBoard.getDescription(),
+                discussionBoard.getDiscussionPosts().stream().map(discussionPostMapper::toDto).toList()
         );
     }
 
-    public DiscussionBoard fromDto(DiscussionBoardFullDTO disBoardDto){
+    public DiscussionBoard fromDto(DiscussionBoardRequestDTO discussionBoardRequestDTO){
         DiscussionBoard disBoard = new DiscussionBoard();
-        disBoard.setDiscussionBoardId(disBoardDto.discussionBoardId());
-        disBoard.setCourse(disBoardDto.course());
-        disBoard.setTitle(disBoardDto.title());
+        Course course = new Course();
+        course.setId(discussionBoardRequestDTO.courseId());
+
+        disBoard.setDiscussionBoardId(discussionBoardRequestDTO.discussionBoardId());
+        disBoard.setCourse(course);
+        disBoard.setUserId(discussionBoardRequestDTO.userId());
+        disBoard.setTitle(discussionBoardRequestDTO.discussionBoardTitle());
+        disBoard.setDescription(discussionBoardRequestDTO.discussionBoardDescription());
         return disBoard;
     }
 }
