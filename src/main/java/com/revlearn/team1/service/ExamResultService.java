@@ -33,4 +33,14 @@ public class ExamResultService {
         }
         return null;
     }
+
+    public List<ExamResult> findByExamId(long examId)
+    {
+        Optional<List<ExamResult>> examResultOptional = Optional.ofNullable(examResultRepo.findByExamId(examId));
+        if(examResultOptional.isPresent())
+        {
+            return examResultOptional.get();
+        }
+        return null;
+    }
 }

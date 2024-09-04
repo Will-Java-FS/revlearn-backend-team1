@@ -30,4 +30,10 @@ public class ExamResultController {
     public List<ExamResult> findByUserId(@PathVariable int userId) {
         return examResultService.findByUserId(userId);
     }
+
+    @GetMapping("/exam/{examId}")
+    public List<ExamResult> findByExamId(@PathVariable long examId)
+    {
+        return examResultService.findByExamId(examId);
+    }
 }
