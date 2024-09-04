@@ -26,18 +26,22 @@ SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
 SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/${POSTGRES_DB}
 
-# Only used by sample data initializer
+# Used by sample data initializer
 SPRING_API_URL=http://localhost:8080/api/v1
 
 DOCKER_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB}
+
+# Stripe
+STRIPE_API_KEY=yourStripePrivateAPIKey
+CLIENT_URL=http://localhost:5173
 ```
 2. Modify the top three values with respective information from your local Postgres DB installation.
 * POSTGRES_DB
 * POSTGRES_USER
 * POSTGRES_PASSWORD     
-3. You can now run this backend application either:
-* in an IDE like IntelliJ
-* as a Docker stack
+3. You can now run this backend application in either:
+* an IDE like IntelliJ
+* a Docker stack
 
 ### IntelliJ IDE Build
 
@@ -62,9 +66,12 @@ If you need to directly access the containerized PostgreSQL DB (like through pga
 
 ---
 ## API Documentation
-API documentation is automatically generated and maintained by [Swagger](https://swagger.io/solutions/api-documentation/).
+API documentation is automatically generated and maintained by [Swagger](https://swagger.io/solutions/api-documentation/).  Visit a respective Swagger UI link below to view this project's API documentation.
 
-If our production application is live, you should be able to simply go to this [link](http://ec2-54-227-225-116.compute-1.amazonaws.com/swagger-ui/index.html) to see our Swagger UI.  If it is not live, you will have to run the application locally in a development environment, and use the development link:
+### Production Link
+[Swagger UI](http://api.revaturelearn.com/swagger-ui/index.html)
+### Development Link
+Run the Spring Boot application locally, and open the below URL in a browser to view the Swagger UI.
 ```
 http://localhost:8080/swagger-ui.html
 ```
@@ -76,12 +83,54 @@ http://localhost:8080/swagger-ui.html
 
 2. Each section is a collection of routes, and each route is exactly what you append to the application's base URL:
 * Development: http://localhost:8080/
-* Production: TBD
+* Production: http://api.revaturelearn.com/
 3. Expand any route to view example JSON formats for requests and
    responses.
 
 ![Swagger Expanded Route](./docs/images/SwaggerExpandedRoute.png)
 
+## Stripe Information
+Later in the .env file there are two variables regarding Stripe. The first one is super easy to get, just create an Account with Stripe and copy your hidden API key to that enviro variable. The other one is just the base url of the frontend. I provided one that is usually the case, but if you guys have it running on a different port then you need to update the enviro variable accordingly.
+
+When doing a payment on stripe it is essential to use 
+```
+4242 4242 4242 4242
+```
+for the card info as this is a sample card for testing and succeeding in a payment.
+The current routes for a successful payment and a cancel payment are as follows:
+```
+<baseurl>/checkout-success
+```
+```
+<baseurl>/checkout-cancel
+```
+
+The Swagger docs will give you some example request and response bodies that the API is expecting but for convenience here are some examples:
+
+### Request
+
+POST: localhost:8080/api/v1/transaction/checkout
+
+```
+{
+    "id": 12345,
+    "name": "Java Course",
+    "description": "Java Full Stack Course",
+    "price": 29900,
+    "quantity": 1
+}
+```
+
+
+### Response
+200 OK
+
+```
+{
+    "message": "Payment Processed!",
+    "url": "url To Stripe Hosted checkout page for the given product"
+}
+```
 ---
 
 ## Production Deployment
@@ -141,6 +190,10 @@ SPRING_API_URL=http://localhost:8080/api/v1
 
 # JWTs
 SECRET_KEY=<base64-Key>
+
+# Stripe
+STRIPE_API_KEY=yourStripePrivateAPIKey
+CLIENT_URL=http://localhost:5173
 ```
 Replace the respective angle bracketed placeholders with your production database information and a secret key for the JWTs:
 * AWS_POSTGRES_DB

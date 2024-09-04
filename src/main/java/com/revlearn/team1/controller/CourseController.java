@@ -1,6 +1,7 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
@@ -76,5 +77,12 @@ public class CourseController {
     public CourseEducatorResDTO removeEducator(@RequestBody CourseEducatorDTO courseEducatorDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security logic in service layer.
         return courseService.removeEducator(courseEducatorDTO);
+    }
+
+    @GetMapping("/{courseId}/modules")
+    public List<ModuleDTO> getModulesByCourseId(@PathVariable Long courseId) {
+        //TODO: Secure so only course affiliated users can access (students, educators, & institution)
+        //TODO: Consider relocation to CourseController class
+        return courseService.getModulesByCourseId(courseId);
     }
 }

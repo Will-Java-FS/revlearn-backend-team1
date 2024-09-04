@@ -1,6 +1,7 @@
 package com.revlearn.team1.service.course;
 
 import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
@@ -10,26 +11,29 @@ import com.revlearn.team1.model.User;
 import java.util.List;
 
 public interface CourseService {
-    public List<CourseDTO> getAll();
+    List<CourseDTO> getAll();
 
     List<User> getAllStudentsOfCourseId(Long courseId);
 
     List<User> getAllEducatorsOfCourseId(Long courseId);
 
-    public CourseDTO getById(Long courseId);
+    CourseDTO getById(Long courseId);
 
-    public CourseDTO createCourse(CourseDTO courseDTO);
+    CourseDTO createCourse(CourseDTO courseDTO);
 
-    public CourseDTO updateCourse(CourseDTO courseDTO);
+    CourseDTO updateCourse(CourseDTO courseDTO);
 
-    public String deleteById(Long id);
+    String deleteById(Long id);
 
-    public CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO);
+    CourseEducatorResDTO addEducator(CourseEducatorDTO courseEducatorDTO);
 
-    public CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO);
+    CourseEducatorResDTO removeEducator(CourseEducatorDTO courseEducatorDTO);
 
-    public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO);
+    CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO);
 
-    public CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
+    CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
+
+    List<ModuleDTO> getModulesByCourseId(Long courseId);
+
 
 }
