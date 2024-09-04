@@ -26,9 +26,8 @@ public class ExamResultController {
         return examResultService.findAllExamResult();
     }
 
-    @GetMapping("/{id}")
-    public List<ExamResult> findByUserId(@PathVariable int userId)
-    {
+    @GetMapping("/user/{userId}")
+    public List<ExamResult> findByUserId(@PathVariable int userId) {
         return examResultService.findByUserId(userId);
     }
 }
