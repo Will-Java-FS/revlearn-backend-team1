@@ -28,7 +28,11 @@ public class CourseMapper {
 
     public Course fromDto(CourseDTO courseDTO) {
         Course course = new Course();
-        course.setId(courseDTO.id());
+
+        //TODO consider different DTO structures
+        //Should not set ID because it is auto-generated
+//        course.setId(courseDTO.id());
+
         course.setStartDate(courseDTO.startDate());
         course.setEndDate(courseDTO.endDate());
         course.setAttendanceMethod(courseDTO.attendanceMethod());

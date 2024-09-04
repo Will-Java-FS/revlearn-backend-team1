@@ -1,6 +1,7 @@
 package com.revlearn.team1.controller;
 
-import com.revlearn.team1.dto.course.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.model.ModulePage;
 import com.revlearn.team1.service.module.ModuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,4 +37,11 @@ public class ModuleController {
         //TODO: Secure so only course owners (instructors and institutions) can delete modules
         return moduleService.deleteModule(moduleId);
     }
+
+    @GetMapping("/{moduleId}/pages")
+    public List<ModulePage> getModulePages(@PathVariable Long moduleId) {
+        return moduleService.getModulePages(moduleId);
+    }
+
+
 }

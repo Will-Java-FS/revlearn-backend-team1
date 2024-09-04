@@ -82,7 +82,6 @@ class CourseMapperTest {
         Course course = courseMapper.fromDto(courseDTO);
 
         // Assert
-        assertEquals(1L, course.getId());
         assertEquals(institution, course.getInstitution());
         assertEquals(LocalDate.of(2023, 1, 1), course.getStartDate());
         assertEquals(LocalDate.of(2023, 12, 31), course.getEndDate());

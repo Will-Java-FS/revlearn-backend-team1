@@ -1,4 +1,4 @@
-package com.revlearn.team1.dto.course;
+package com.revlearn.team1.dto.module;
 
 public record ModuleDTO(
         Long id,
