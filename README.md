@@ -39,9 +39,9 @@ CLIENT_URL=http://localhost:5173
 * POSTGRES_DB
 * POSTGRES_USER
 * POSTGRES_PASSWORD     
-3. You can now run this backend application either:
-* in an IDE like IntelliJ
-* as a Docker stack
+3. You can now run this backend application in either:
+* an IDE like IntelliJ
+* a Docker stack
 
 ### IntelliJ IDE Build
 
@@ -66,9 +66,12 @@ If you need to directly access the containerized PostgreSQL DB (like through pga
 
 ---
 ## API Documentation
-API documentation is automatically generated and maintained by [Swagger](https://swagger.io/solutions/api-documentation/).
+API documentation is automatically generated and maintained by [Swagger](https://swagger.io/solutions/api-documentation/).  Visit a respective Swagger UI link below to view this project's API documentation.
 
-If our production application is live, you should be able to simply go to this [link](http://ec2-54-227-225-116.compute-1.amazonaws.com/swagger-ui/index.html) to see our Swagger UI.  If it is not live, you will have to run the application locally in a development environment, and use the development link:
+### Production Link
+[Swagger UI](http://api.revaturelearn.com/swagger-ui/index.html)
+### Development Link
+Run the Spring Boot application locally, and open the below URL in a browser to view the Swagger UI.
 ```
 http://localhost:8080/swagger-ui.html
 ```
@@ -80,7 +83,7 @@ http://localhost:8080/swagger-ui.html
 
 2. Each section is a collection of routes, and each route is exactly what you append to the application's base URL:
 * Development: http://localhost:8080/
-* Production: TBD
+* Production: http://api.revaturelearn.com/
 3. Expand any route to view example JSON formats for requests and
    responses.
 
