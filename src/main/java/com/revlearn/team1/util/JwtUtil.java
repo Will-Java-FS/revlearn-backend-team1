@@ -52,6 +52,7 @@ public class JwtUtil {
                 .claim("firstName", user.getFirstName())
                 .claim("lastName", user.getLastName())
                 .claim("email", user.getEmail())
+                .claim("userId", user.getId())
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
