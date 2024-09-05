@@ -1,14 +1,12 @@
 package com.revlearn.team1.unit.controller;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revlearn.team1.controller.UserController;
 import com.revlearn.team1.enums.Roles;
-import com.revlearn.team1.service.user.UserServiceImp;
 import com.revlearn.team1.model.User;
+import com.revlearn.team1.service.user.UserServiceImp;
+import com.revlearn.team1.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,11 +18,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import com.revlearn.team1.util.JwtUtil;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserControllerTest {
 
@@ -115,9 +115,8 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(token));
+                .andExpect(content().json("{\"JWT\":\"" + token + "\"}"));
     }
-
 
 
     private User createUser(String username) {
