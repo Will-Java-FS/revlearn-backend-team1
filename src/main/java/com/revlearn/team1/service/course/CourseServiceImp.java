@@ -17,6 +17,7 @@ import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class CourseServiceImp implements CourseService {
     private final CourseMapper courseMapper;
     private final UserRepository userRepo;
     private final ModuleMapper moduleMapper;
+//    private final SecurityContextHolder securityContextHolder;
 
     @Override
     public List<CourseDTO> getAll() {
@@ -43,6 +45,7 @@ public class CourseServiceImp implements CourseService {
     @Override
     public List<User> getAllStudentsOfCourseId(Long courseId) {
         //TODO: Implement security.  Only course owners (educators and institution) should be able to access this route.
+//        System.out.println("authorities: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
         Course course = courseRepo.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
         return course.getStudents();
