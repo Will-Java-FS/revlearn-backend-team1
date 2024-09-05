@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class StripeService {
 
     @Autowired
-    TransactionMapper transactionMapper; // For future use with Kafka
+    TransactionMapper transactionMapper;
 
     @Autowired
     KafkaTemplate<String, Session> kafkaTemplate;
@@ -31,6 +31,9 @@ public class StripeService {
     @Value("${CLIENT_URL}")
     private String clientUrl;
 
+    private static final int MAX_FAILED_ATTEMPTS = 100; // number of messages that can be "stored" without a kafka connection before we stop trying
+    private int failedAttempts = 0;
+
     public TransactionResponseDTO checkout(TransactionRequestDTO request) {
         try {
             // Set the Stripe API key
@@ -38,45 +41,59 @@ public class StripeService {
 
             // Define product data directly within PriceData
             var productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                    .setName(request.name()) // Set the product name or description
-                    .setDescription(request.description()) // Set the product description
+                    .setName(request.name())
+                    .setDescription(request.description())
                     .build();
 
             // Define PriceData with the product information
             var priceData = SessionCreateParams.LineItem.PriceData.builder()
                     .setCurrency("usd")
-                    .setUnitAmount(request.price()) // Price in cents (e.g., $10.00 = 1000 cents)
-                    .setProductData(productData) // Use the defined product data
+                    .setUnitAmount(request.price())
+                    .setProductData(productData)
                     .build();
 
             // Define LineItem with PriceData
             var lineItem = SessionCreateParams.LineItem.builder()
-                    .setPriceData(priceData) // Use PriceData directly
-                    .setQuantity(request.quantity()) // Quantity of items
+                    .setPriceData(priceData)
+                    .setQuantity(request.quantity())
                     .build();
 
             // Define SessionCreateParams
             var sessionParams = SessionCreateParams.builder()
-                    .setMode(SessionCreateParams.Mode.PAYMENT) // Payment mode
-                    .addLineItem(lineItem) // Add LineItem
-                    .setSuccessUrl(clientUrl + "/checkout-success") // Redirect on successful payment
-                    .setCancelUrl(clientUrl + "/checkout-cancel") // Redirect if payment is canceled
+                    .setMode(SessionCreateParams.Mode.PAYMENT)
+                    .addLineItem(lineItem)
+                    .setSuccessUrl(clientUrl + "/checkout-success")
+                    .setCancelUrl(clientUrl + "/checkout-cancel")
                     .build();
 
             // Create and return the checkout session URL
             Session session = Session.create(sessionParams);
 
-            // Message to send to Kafka
-            Message<TransactionModel> message = MessageBuilder
-                    .withPayload(transactionMapper.fromDTO(request)) // Convert the request DTO to a model
-                    .setHeader(KafkaHeaders.TOPIC, "transactions")
-                    .build();
+            // Check if the number of failed attempts is below the limit
+            if (failedAttempts < MAX_FAILED_ATTEMPTS)
+            {
+                try
+                {
+                    // Message to send to Kafka
+                    Message<TransactionModel> message = MessageBuilder
+                            .withPayload(transactionMapper.fromDTO(request))
+                            .setHeader(KafkaHeaders.TOPIC, "transactions")
+                            .build();
 
-            kafkaTemplate.send(message); // Send the message to Kafka to persist the transaction to the database
+                    kafkaTemplate.send(message); // Send the message to Kafka
+                    failedAttempts = 0; // Reset the counter on success
+                }
+                catch (Exception e)
+                {
+                    failedAttempts++; // Increment the counter on failure
+                }
+            }
 
             // Return the transaction response DTO
             return new TransactionResponseDTO(session.getUrl(), "Payment Processed!");
-        } catch (StripeException e) {
+        }
+        catch (StripeException e)
+        {
             // Handle StripeException and return an error response
             return new TransactionResponseDTO(null, "Payment Failed: " + e.getMessage());
         }
