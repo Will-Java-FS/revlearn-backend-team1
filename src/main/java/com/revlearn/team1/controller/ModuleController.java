@@ -48,6 +48,4 @@ public class ModuleController {
     public List<Exam> getExams(@PathVariable Long moduleId) {
         return moduleService.getExams(moduleId);
     }
-
-
 }
