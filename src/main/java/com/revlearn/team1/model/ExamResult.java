@@ -25,7 +25,9 @@ public class ExamResult {
     private LocalDateTime examDate;
 
 
-    private long examId;
+    @ManyToOne
+    @JoinColumn(name = "exam_id", nullable = false)
+    private Exam exam;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

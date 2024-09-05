@@ -79,7 +79,7 @@ class CourseControllerIntegrationTest {
     @Test
     void getAllCourses_ShouldReturnCoursesList() throws Exception {
         // Act
-        ResultActions response = mockMvc.perform(get("/api/v1/course/all")
+        ResultActions response = mockMvc.perform(get("/api/v1/course")
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert
@@ -116,7 +116,7 @@ class CourseControllerIntegrationTest {
         CourseDTO courseDTO = new CourseDTO(6L, 1, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description");
 
         // Act
-        ResultActions response = mockMvc.perform(post("/api/v1/course/create")
+        ResultActions response = mockMvc.perform(post("/api/v1/course")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(courseDTO)));
 
@@ -136,7 +136,7 @@ class CourseControllerIntegrationTest {
         CourseDTO courseDTO = new CourseDTO(course.getId(), course.getInstitution().getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription());
 
         // Act
-        ResultActions response = mockMvc.perform(put("/api/v1/course/update")
+        ResultActions response = mockMvc.perform(put("/api/v1/course")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(courseDTO)));
 
@@ -152,7 +152,7 @@ class CourseControllerIntegrationTest {
     @Test
     void deleteCourse_ShouldDeleteCourse_WhenCourseExists() throws Exception {
         // Act
-        ResultActions response = mockMvc.perform(delete("/api/v1/course/delete/{id}", course.getId())
+        ResultActions response = mockMvc.perform(delete("/api/v1/course/{id}", course.getId())
                 .contentType(MediaType.APPLICATION_JSON));
 
         // Assert

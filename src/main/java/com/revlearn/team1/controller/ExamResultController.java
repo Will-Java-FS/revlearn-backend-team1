@@ -1,10 +1,8 @@
 package com.revlearn.team1.controller;
 
-import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.ExamResult;
 import com.revlearn.team1.service.ExamResultService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,5 +27,11 @@ public class ExamResultController {
     @GetMapping("/user/{userId}")
     public List<ExamResult> findByUserId(@PathVariable int userId) {
         return examResultService.findByUserId(userId);
+    }
+
+    @GetMapping("/exam/{examId}")
+    public List<ExamResult> findByExamId(@PathVariable long examId)
+    {
+        return examResultService.findByExamId(examId);
     }
 }

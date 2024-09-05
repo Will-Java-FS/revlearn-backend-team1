@@ -1,6 +1,9 @@
 package com.revlearn.team1.service.transaction;
 
+import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
 import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
+import com.revlearn.team1.mapper.TransactionMapper;
+import com.revlearn.team1.model.TransactionModel;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -13,15 +16,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
-import com.revlearn.team1.mapper.TransactionMapper;
-import com.revlearn.team1.model.TransactionModel;
-import com.revlearn.team1.repository.TransactionRepo;
-
 @Service
 public class StripeService {
-    @Autowired
-    TransactionRepo transactionRepo; // For future use with Kafka
 
     @Autowired
     TransactionMapper transactionMapper; // For future use with Kafka
@@ -35,8 +31,7 @@ public class StripeService {
     @Value("${CLIENT_URL}")
     private String clientUrl;
 
-    public TransactionResponseDTO checkout(TransactionRequestDTO request)
-    {
+    public TransactionResponseDTO checkout(TransactionRequestDTO request) {
         try {
             // Set the Stripe API key
             Stripe.apiKey = stripeApiKey;

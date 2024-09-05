@@ -1,7 +1,7 @@
 package com.revlearn.team1.unit.controller;
 
+import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.User;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -46,8 +46,8 @@ public class ExamResultControllerTest {
 
     @Test
     public void testFindAllExamResult() throws Exception {
-        ExamResult e1 = setResult("t1");
-        ExamResult e2 = setResult("t2");
+        ExamResult e1 = setResultById("t1", Math.toIntExact((long) 1));
+        ExamResult e2 = setResultById("t1", Math.toIntExact((long) 2));
         List<ExamResult> examResults = List.of(e1, e2);
 
         when(examResultService.findAllExamResult()).thenReturn(examResults);
@@ -59,8 +59,8 @@ public class ExamResultControllerTest {
 
     @Test
     public void testFindByUserId() throws Exception {
-        ExamResult e1 = setResult("t1");
-        ExamResult e2 = setResult("t1");
+        ExamResult e1 = setResultById("t1", Math.toIntExact((long) 1));
+        ExamResult e2 = setResultById("t1", Math.toIntExact((long) 2));
         List<ExamResult> examResults = List.of(e1, e2);
 
         when(examResultService.findByUserId(0)).thenReturn(examResults);
@@ -70,16 +70,36 @@ public class ExamResultControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(examResults)));
     }
 
-    public ExamResult setResult(String t)
+    @Test
+    public void testFindByExamId() throws Exception {
+        ExamResult e1 = setResultById("t1", Math.toIntExact((long) 1));
+        ExamResult e2 = setResultById("t2", Math.toIntExact((long) 1));
+        List<ExamResult> examResults = List.of(e1, e2);
+
+        when(examResultService.findByExamId(1)).thenReturn(examResults);
+
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/examresult/exam/1"));
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(examResults)));
+    }
+
+
+    public ExamResult setResultById(String t, int id)
     {
         ExamResult examResult = new ExamResult();
-        examResult.setExamId(1L);
+        examResult.setExam(createExam(id));
         examResult.setGrade(11.0);
         examResult.setUser(createUser(t));
         examResult.setExamDate(LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18));
         return examResult;
     }
 
+    private Exam createExam(long id)
+    {
+        Exam exam = new Exam();
+        exam.setId(id);
+        return exam;
+    }
     private User createUser(String username) {
         User user = new User();
         user.setUsername(username);

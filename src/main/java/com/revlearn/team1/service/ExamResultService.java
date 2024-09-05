@@ -1,13 +1,13 @@
 package com.revlearn.team1.service;
 
-import com.revlearn.team1.model.ExamResult;
-import com.revlearn.team1.model.User;
-import com.revlearn.team1.repository.ExamResultRepo;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.revlearn.team1.model.ExamResult;
+import com.revlearn.team1.repository.ExamResultRepo;
 
 @Service
 public class ExamResultService {
@@ -27,6 +27,16 @@ public class ExamResultService {
     public List<ExamResult> findByUserId(int userId)
     {
         Optional<List<ExamResult>> examResultOptional = Optional.ofNullable(examResultRepo.findByUserId(userId));
+        if(examResultOptional.isPresent())
+        {
+            return examResultOptional.get();
+        }
+        return null;
+    }
+
+    public List<ExamResult> findByExamId(long examId)
+    {
+        Optional<List<ExamResult>> examResultOptional = Optional.ofNullable(examResultRepo.findByExamId(examId));
         if(examResultOptional.isPresent())
         {
             return examResultOptional.get();

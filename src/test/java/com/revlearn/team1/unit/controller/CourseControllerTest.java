@@ -63,7 +63,7 @@ public class CourseControllerTest {
         when(courseService.getAll()).thenReturn(courses);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/course/all").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(2));
+        mockMvc.perform(get("/api/v1/course").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(2));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class CourseControllerTest {
         when(courseService.createCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         // Act & Assert
-        mockMvc.perform(post("/api/v1/course/create").contentType(MediaType.APPLICATION_JSON).content("{         \"startDate\": 1,\n" + "        \"endDate\":2,\n" + "        \"attendanceMethod\":\"HYBRID\",\n" + "        \"name\":\"Econ\",\n" + "        \"description\":\"Money and stuff\" }")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(courseDTO.id()));
+        mockMvc.perform(post("/api/v1/course").contentType(MediaType.APPLICATION_JSON).content("{         \"startDate\": 1,\n" + "        \"endDate\":2,\n" + "        \"attendanceMethod\":\"HYBRID\",\n" + "        \"name\":\"Econ\",\n" + "        \"description\":\"Money and stuff\" }")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(courseDTO.id()));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class CourseControllerTest {
         when(courseService.updateCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         // Act & Assert
-        mockMvc.perform(put("/api/v1/course/update")
+        mockMvc.perform(put("/api/v1/course")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"startDate\": 1,\n"
                                 + "        \"endDate\":2,\n"
@@ -111,7 +111,7 @@ public class CourseControllerTest {
         when(courseService.addEducator(any(CourseEducatorDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        mockMvc.perform(patch("/api/v1/course/educatorAdd").contentType(MediaType.APPLICATION_JSON).content("{ \"courseId\":1, \"educatorId\":2 }")).andExpect(status().isOk()).andExpect(jsonPath("$.message").value("Success"));
+        mockMvc.perform(patch("/api/v1/course/educator/add").contentType(MediaType.APPLICATION_JSON).content("{ \"courseId\":1, \"educatorId\":2 }")).andExpect(status().isOk()).andExpect(jsonPath("$.message").value("Success"));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class CourseControllerTest {
         when(courseService.removeEducator(any(CourseEducatorDTO.class))).thenReturn(responseDTO);
 
         // Act & Assert
-        mockMvc.perform(patch("/api/v1/course/educatorRemove")
+        mockMvc.perform(patch("/api/v1/course/educator/remove")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{ \"courseId\":1, \"educatorId\":2 }"))
                 .andExpect(status().isOk())
@@ -134,7 +134,7 @@ public class CourseControllerTest {
         when(courseService.deleteById(1L)).thenReturn("Successfully deleted course 1.");
 
         // Act & Assert
-        mockMvc.perform(delete("/api/v1/course/delete/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string("Successfully deleted course 1."));
+        mockMvc.perform(delete("/api/v1/course/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string("Successfully deleted course 1."));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class CourseControllerTest {
         when(courseService.enrollStudent(courseStudentDTO)).thenReturn(courseStudentResDTO);
 
         // Act & Assert
-        mockMvc.perform(patch("/api/v1/course/studentEnroll")
+        mockMvc.perform(patch("/api/v1/course/student/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(courseStudentDTO)))
                 .andExpect(status().isOk())
@@ -162,7 +162,7 @@ public class CourseControllerTest {
         when(courseService.withdrawStudent(courseStudentDTO)).thenReturn(courseStudentResDTO);
 
         // Act & Assert
-        mockMvc.perform(patch("/api/v1/course/studentWithdraw")
+        mockMvc.perform(patch("/api/v1/course/student/remove")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(courseStudentDTO)))
                 .andExpect(status().isOk())
@@ -181,7 +181,7 @@ public class CourseControllerTest {
         when(courseService.getAllStudentsOfCourseId(courseId)).thenReturn(students);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/course/1/allStudents")
+        mockMvc.perform(get("/api/v1/course/1/students")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(students)));
@@ -199,7 +199,7 @@ public class CourseControllerTest {
         when(courseService.getAllEducatorsOfCourseId(courseId)).thenReturn(educators);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/course/1/allEducators")
+        mockMvc.perform(get("/api/v1/course/1/educators")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(educators)));

@@ -24,4 +24,6 @@ public interface UserService {
     List<CourseDTO> getTaughtCourses(Long educatorId);
 
     List<CourseDTO> getInstitutionCourses(Long institutionId);
+
+    boolean checkExisting(String username);
 }

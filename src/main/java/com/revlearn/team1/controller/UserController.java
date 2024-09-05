@@ -4,7 +4,7 @@ import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.user.UserDTO;
 import com.revlearn.team1.dto.user.DeleteUserResponse;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.user.UserServiceImp;
+import com.revlearn.team1.service.user.UserService;
 import com.revlearn.team1.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,10 +26,9 @@ public class UserController {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     @Autowired
-    public UserServiceImp userService;
+    public UserService userService;
 
-    @Autowired
-    public UserController(UserServiceImp userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;

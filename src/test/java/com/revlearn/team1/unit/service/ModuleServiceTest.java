@@ -1,5 +1,21 @@
 package com.revlearn.team1.unit.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import org.mockito.MockitoAnnotations;
+
 import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
@@ -9,20 +25,6 @@ import com.revlearn.team1.model.CourseModule;
 import com.revlearn.team1.repository.ModuleRepo;
 import com.revlearn.team1.service.module.ModuleService;
 import com.revlearn.team1.service.module.ModuleServiceImp;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 
 class ModuleServiceTest {
 
@@ -80,7 +82,12 @@ class ModuleServiceTest {
         given(moduleRepo.findById(1L)).willReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ModuleNotFoundException.class, () -> moduleService.getModuleById(1L));
+        ModuleNotFoundException thrownException = assertThrows(
+                ModuleNotFoundException.class,
+                () -> moduleService.getModuleById(1L),
+                "Expected getModuleById() to throw ModuleNotFoundException, but it didn't");
+
+        assertEquals("Module by id 1 not found.", thrownException.getMessage());
     }
 
     @Test
@@ -106,7 +113,12 @@ class ModuleServiceTest {
         given(moduleRepo.save(any(CourseModule.class))).willThrow(new RuntimeException());
 
         // Act & Assert
-        assertThrows(ServiceLayerDataAccessException.class, () -> moduleService.createModule(moduleDTO));
+        ServiceLayerDataAccessException thrownException = assertThrows(
+                ServiceLayerDataAccessException.class,
+                () -> moduleService.createModule(moduleDTO),
+                "Expected createModule() to throw ServiceLayerDataAccessException, but it didn't");
+
+        assertEquals("Failed to create module", thrownException.getMessage());
     }
 
     @Test
@@ -131,7 +143,12 @@ class ModuleServiceTest {
         given(moduleRepo.findById(1L)).willReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ModuleNotFoundException.class, () -> moduleService.updateModule(1L, moduleDTO));
+        ModuleNotFoundException thrownException = assertThrows(
+                ModuleNotFoundException.class,
+                () -> moduleService.updateModule(1L, moduleDTO),
+                "Expected updateModule() to throw ModuleNotFoundException, but it didn't");
+
+        assertEquals("Module by id 1 not found.", thrownException.getMessage());
     }
 
     @Test
@@ -142,7 +159,12 @@ class ModuleServiceTest {
         given(moduleRepo.save(courseModule)).willThrow(new RuntimeException());
 
         // Act & Assert
-        assertThrows(ServiceLayerDataAccessException.class, () -> moduleService.updateModule(1L, moduleDTO));
+        ServiceLayerDataAccessException thrownException = assertThrows(
+                ServiceLayerDataAccessException.class,
+                () -> moduleService.updateModule(1L, moduleDTO),
+                "Expected updateModule() to throw ServiceLayerDataAccessException, but it didn't");
+
+        assertEquals("Failed to update module", thrownException.getMessage());
     }
 
     @Test
@@ -164,7 +186,12 @@ class ModuleServiceTest {
         given(moduleRepo.findById(1L)).willReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ModuleNotFoundException.class, () -> moduleService.deleteModule(1L));
+        ModuleNotFoundException thrownException = assertThrows(
+                ModuleNotFoundException.class,
+                () -> moduleService.deleteModule(1L),
+                "Expected deleteModule() to throw ModuleNotFoundException, but it didn't");
+
+        assertEquals("Module by id 1 not found.", thrownException.getMessage());
     }
 
     @Test
@@ -174,6 +201,11 @@ class ModuleServiceTest {
         doThrow(new RuntimeException()).when(moduleRepo).delete(courseModule);
 
         // Act & Assert
-        assertThrows(ServiceLayerDataAccessException.class, () -> moduleService.deleteModule(1L));
+        ServiceLayerDataAccessException thrownException = assertThrows(
+                ServiceLayerDataAccessException.class,
+                () -> moduleService.deleteModule(1L),
+                "Expected deleteModule() to throw ServiceLayerDataAccessException, but it didn't");
+
+        assertEquals("Failed to delete module", thrownException.getMessage());
     }
 }

@@ -3,9 +3,6 @@ package com.revlearn.team1.unit.controller;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.revlearn.team1.service.transaction.StripeService;
-import com.stripe.exception.StripeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +19,8 @@ import org.springframework.http.ResponseEntity;
 import com.revlearn.team1.controller.TransactionController;
 import com.revlearn.team1.dto.transaction.TransactionRequestDTO;
 import com.revlearn.team1.dto.transaction.TransactionResponseDTO;
-import com.revlearn.team1.model.User;
+import com.revlearn.team1.service.transaction.StripeService;
+import com.stripe.exception.StripeException;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionControllerTest {
@@ -33,8 +31,6 @@ class TransactionControllerTest {
     @InjectMocks
     private TransactionController transactionController;
 
-    private User toUser;
-    private User fromUser;
     private long price;
     private String description;
     private String name;
@@ -42,8 +38,6 @@ class TransactionControllerTest {
     @BeforeEach
     void setUp() {
         // Initialize common test data
-        toUser = new User("toUser123");
-        fromUser = new User("fromUser123");
         price = 10000L;
         description = "Sample Transaction";
         name = "Sample Course";
