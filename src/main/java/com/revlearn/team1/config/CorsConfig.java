@@ -18,9 +18,11 @@ public class CorsConfig {
 
     @Bean
     public CorsConfiguration corsConfiguration() {
-        // TODO handle csrf properly
 
         // TODO add any necessary EC2 URLs to this list
+
+        //TODO add regex
+        // https?:\/\/(localhost:(5173|8080)|(?:www\.)?revaturelearn\.com|api\.revaturelearn\.com)
         List<String> allowedOrigins = List.of(
                 "http://localhost:5173",
                 "http://localhost:8080",
