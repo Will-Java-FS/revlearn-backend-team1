@@ -60,6 +60,7 @@ class CourseControllerIntegrationTest {
         course.setStartDate(LocalDate.now());
         course.setEndDate(LocalDate.now().plusMonths(2));
         course.setAttendanceMethod(AttendanceMethod.ONLINE);
+        course.setPrice(99.99F);
 
 //        User institution = new User();
 //        institution.setId(1);
