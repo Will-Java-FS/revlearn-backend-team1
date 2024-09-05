@@ -3,6 +3,7 @@ package com.revlearn.team1.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
@@ -67,7 +68,7 @@ class CourseControllerIntegrationTest {
         institution.setFirstName("Sample");
         institution.setLastName("Institution");
         institution.setPassword("samplePassword");
-        institution.setRole("INSTITUTION");
+        institution.setRole(Roles.STUDENT);
         institution.setUsername("sample");
 
         userRepo.save(institution);
