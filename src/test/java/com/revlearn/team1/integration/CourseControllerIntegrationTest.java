@@ -60,18 +60,19 @@ class CourseControllerIntegrationTest {
         course.setStartDate(LocalDate.now());
         course.setEndDate(LocalDate.now().plusMonths(2));
         course.setAttendanceMethod(AttendanceMethod.ONLINE);
+        course.setPrice(99.99F);
 
-        User institution = new User();
-        institution.setId(1);
-        institution.setEmail("sample@example.com");
-        institution.setFirstName("Sample");
-        institution.setLastName("Institution");
-        institution.setPassword("samplePassword");
-        institution.setRole("INSTITUTION");
-        institution.setUsername("sample");
-
-        userRepo.save(institution);
-        course.setInstitution(institution);
+//        User institution = new User();
+//        institution.setId(1);
+//        institution.setEmail("sample@example.com");
+//        institution.setFirstName("Sample");
+//        institution.setLastName("Institution");
+//        institution.setPassword("samplePassword");
+//        institution.setRole("INSTITUTION");
+//        institution.setUsername("sample");
+//
+//        userRepo.save(institution);
+//        course.setInstitution(institution);
 
         courseRepo.save(course);
     }
@@ -113,7 +114,7 @@ class CourseControllerIntegrationTest {
     @Test
     void postCourse_ShouldCreateNewCourse() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(6L, 1, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description");
+        CourseDTO courseDTO = new CourseDTO(6L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
 
         // Act
         ResultActions response = mockMvc.perform(post("/api/v1/course")
@@ -133,7 +134,7 @@ class CourseControllerIntegrationTest {
     void updateCourse_ShouldUpdateExistingCourse() throws Exception {
         // Arrange
         course.setName("Updated Course Name");
-        CourseDTO courseDTO = new CourseDTO(course.getId(), course.getInstitution().getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription());
+        CourseDTO courseDTO = new CourseDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
 
         // Act
         ResultActions response = mockMvc.perform(put("/api/v1/course")

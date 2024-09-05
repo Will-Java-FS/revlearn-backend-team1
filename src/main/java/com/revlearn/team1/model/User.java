@@ -2,6 +2,7 @@ package com.revlearn.team1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.revlearn.team1.enums.Roles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -40,8 +42,9 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false)
     private String email;
 
+    //add note to enums that "institution" is really an admin role
     @Column(name = "role", nullable = false)
-    private String role;
+    private Roles role;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -65,10 +68,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Course> enrolledCourses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "institution")
-    @JsonIgnore
-    private List<Course> institutionCourses = new ArrayList<>();
-
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
     @JsonManagedReference("user-to-transaction")
     private List<TransactionModel> proceeds;
@@ -86,7 +85,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(() -> role);
+        return Set.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @JsonIgnore

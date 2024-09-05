@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revlearn.team1.controller.UserController;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.service.user.UserServiceImp;
 import com.revlearn.team1.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,17 +102,20 @@ public class UserControllerTest {
 
     @Test
     public void testRegisterUser() throws Exception {
-        User user = createUser("username3");
+        String username = "username3";
+        User user = createUser(username);
         String userJson = objectMapper.writeValueAsString(user);
+        String token = "sample-jwt-token";
 
         when(userService.checkExisting(user.getUsername())).thenReturn(false);
         when(userService.createUser(user)).thenReturn(user);
+        when(jwtUtil.generateToken(user)).thenReturn(token);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(userJson));
+                .andExpect(content().string(token));
     }
 
 
@@ -123,7 +127,7 @@ public class UserControllerTest {
         user.setEmail("email");
         user.setFirstName("firstName");
         user.setLastName("lastName");
-        user.setRole("Student"); // Default role
+        user.setRole(Roles.STUDENT); // Default role
         user.setCreatedAt(LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18));
         user.setUpdatedAt(LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18));
         return user;

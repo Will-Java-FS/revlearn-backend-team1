@@ -37,7 +37,7 @@ public class CourseControllerLogicTest {
     @Test
     public void testGetAllCourses() {
         // Arrange
-        List<CourseDTO> courses = Arrays.asList(new CourseDTO(1L, 25, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods"), new CourseDTO(2L, 33, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods"));
+        List<CourseDTO> courses = Arrays.asList(new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 24.33F), new CourseDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 66.54F));
         when(courseService.getAll()).thenReturn(courses);
 
         // Act
@@ -51,7 +51,7 @@ public class CourseControllerLogicTest {
     @Test
     public void testGetCourseById() {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods");  // Initialize with actual data
+        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 43.53F);  // Initialize with actual data
         when(courseService.getById(1L)).thenReturn(courseDTO);
 
         // Act
@@ -65,7 +65,7 @@ public class CourseControllerLogicTest {
     @Test
     public void testPostCourse() {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods");
+        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 22.33F);
         when(courseService.createCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         // Act
@@ -79,7 +79,7 @@ public class CourseControllerLogicTest {
     @Test
     public void testUpdateCourse() {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods");
+        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
         when(courseService.updateCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         // Act

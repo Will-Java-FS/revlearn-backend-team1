@@ -1,6 +1,7 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.ModulePage;
 import com.revlearn.team1.service.module.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +51,8 @@ public class ModuleController {
         return moduleService.getModulePages(moduleId);
     }
 
-    //TODO:  Add endpoints to get all exams of a module
-    //TODO:  Add endpoints to add and remove pages to/from a module
-    //TODO: Add endpoints to add and remove exams to/from a module
+    @GetMapping("/{moduleId}/exams")
+    public List<Exam> getExams(@PathVariable Long moduleId) {
+        return moduleService.getExams(moduleId);
+    }
 }

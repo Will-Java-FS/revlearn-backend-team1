@@ -1,6 +1,7 @@
 package com.revlearn.team1.service.user;
 
 import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.UserNotFoundException;
 import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.User;
@@ -36,8 +37,8 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return userRepository.findByUsername(username).isPresent();
     }
 
-    private void checkRole(String role) {
-        Set<String> roles = Set.of("Student", "Educator", "Institution");
+    public void checkRole(Roles role) {
+        Set<Roles> roles = Set.of(Roles.STUDENT, Roles.EDUCATOR, Roles.INSTITUTION, Roles.ADMIN);
         if (!roles.contains(role)) {
             throw new RuntimeException("Invalid Role!");
         }
@@ -49,8 +50,8 @@ public class UserServiceImp implements UserService, UserDetailsService {
             throw new RuntimeException("Username Existing. Please try other username.");
         }
 
-        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
-            user.setRole("Student");
+        if (user.getRole() == null) {
+            user.setRole(Roles.STUDENT);
         } else {
             checkRole(user.getRole());
         }
@@ -96,15 +97,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
     }
 
-    @Override
-    public List<CourseDTO> getInstitutionCourses(Long institutionId) {
-        // Does not need security because an institution's course list should be publicly available
-
-        User institution = userRepository.findById(Math.toIntExact(institutionId))
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format("Could not find user by id %d.", institutionId)));
-        return institution.getInstitutionCourses().stream()
-                .map(courseMapper::toDto).toList();
-    }
+//    @Override
+//    public List<CourseDTO> getInstitutionCourses(Long institutionId) {
+//        // Does not need security because an institution's course list should be publicly available
+//
+//        User institution = userRepository.findById(Math.toIntExact(institutionId))
+//                .orElseThrow(() -> new UserNotFoundException(
+//                        String.format("Could not find user by id %d.", institutionId)));
+//        return institution.getInstitutionCourses().stream()
+//                .map(courseMapper::toDto).toList();
+//    }
 
 }
