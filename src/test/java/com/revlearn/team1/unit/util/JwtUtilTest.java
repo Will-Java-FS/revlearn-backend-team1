@@ -1,5 +1,6 @@
 package com.revlearn.team1.unit.util;
 
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -29,7 +30,7 @@ public class JwtUtilTest {
         testUser = new User();
         testUser.setUsername("testUser");
         testUser.setPassword("testPassword");
-        testUser.setRole("Student");
+        testUser.setRole(Roles.STUDENT);
 
         // Use reflection to set the secretKey field in JwtUtil
         Field secretKeyField = JwtUtil.class.getDeclaredField("secretKey");
@@ -38,6 +39,7 @@ public class JwtUtilTest {
 
         // Generate a token for the test user
         token = jwtUtil.generateToken(testUser);
+        token = jwtUtil.generateToken(testUser.getUsername(), String.valueOf(testUser.getRole()));
     }
 
     @Test
@@ -50,6 +52,8 @@ public class JwtUtilTest {
         Claims result = jwtUtil.decodeJWT(token);
         assertEquals(String.valueOf(testUser.getId()), result.getSubject());
         assertEquals("Student", result.get("role"));
+        assertEquals("testUser", result.getSubject());
+        assertEquals(String.valueOf(Roles.STUDENT), result.get("role"));
     }
 
     @Test
@@ -61,7 +65,7 @@ public class JwtUtilTest {
     @Test
     public void testExtractRole() throws Exception {
         String result = jwtUtil.extractRole(token);
-        assertEquals("Student", result);
+        assertEquals(String.valueOf(Roles.STUDENT), result);
     }
 
     @Test

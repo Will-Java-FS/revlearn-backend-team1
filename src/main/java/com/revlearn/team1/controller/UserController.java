@@ -59,7 +59,8 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists.");
             }
             User u = userService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(u);
+            String token = jwtUtil.generateToken(u);
+            return ResponseEntity.status(HttpStatus.CREATED).body(token);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"An error occurred while registering the user: " + e.getMessage());
         }
