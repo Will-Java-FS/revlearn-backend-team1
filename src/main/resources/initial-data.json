@@ -96,18 +96,18 @@
     {
       "name": "Java Programming",
       "description": "An advanced course on Java programming.",
-      "institutionId": 1,
       "startDate": "2024-09-01",
       "endDate": "2024-12-15",
-      "attendanceMethod": "HYBRID"
+      "attendanceMethod": "HYBRID",
+      "price": 150.00
     },
     {
       "name": "Data Structures",
       "description": "A comprehensive course on data structures.",
-      "institutionId": 1,
       "startDate": "2024-10-01",
       "endDate": "2024-11-30",
-      "attendanceMethod": "ONLINE"
+      "attendanceMethod": "ONLINE",
+      "price": 175.00
     }
   ],
   "transactions": [

@@ -61,4 +61,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleModuleNotFoundException(ModuleNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(ExamNotFoundException.class)
+    public ResponseEntity<String> handleExamNotFoundException(ExamNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
