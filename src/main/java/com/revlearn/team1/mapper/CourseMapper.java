@@ -1,13 +1,11 @@
 package com.revlearn.team1.mapper;
 
-import org.springframework.stereotype.Component;
-
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -18,12 +16,12 @@ public class CourseMapper {
     //That is a separate method
     public CourseDTO toDto(Course course) {
         return new CourseDTO(course.getId(),
-                course.getInstitution().getId(),
                 course.getStartDate(),
                 course.getEndDate(),
                 course.getAttendanceMethod(),
                 course.getName(),
-                course.getDescription()
+                course.getDescription(),
+                course.getPrice()
         );
     }
 
@@ -39,46 +37,9 @@ public class CourseMapper {
         course.setAttendanceMethod(courseDTO.attendanceMethod());
         course.setName(courseDTO.name());
         course.setDescription(courseDTO.description());
+        course.setPrice(courseDTO.price());
 
-        // Fetch institution user from userService
-        if (courseDTO.institutionId() != null) {
-            User institution = userRepository.findById(Math.toIntExact(courseDTO.institutionId()))
-                    .orElseThrow(
-                            () -> new IllegalArgumentException("User not found with ID: " + courseDTO.institutionId()));
-            course.setInstitution(institution);
-        }
-
-        //There are no students or educators included because that should be handled elsewhere
-//        // Set students and educators
-//        if (courseDTO.students() != null) {
-//            course.getStudents().addAll(courseDTO.students());
-//        } else {
-//            course.setStudents(new ArrayList<>()); // Optional, ensures an empty set
-//            // Fetch educator users from userService
-//            Set<User> educators = new HashSet<>();
-//            if (courseDTO.educatorIds() != null) {
-//                for (Long educatorId : courseDTO.educatorIds()) {
-//                    User educator = userService.findById(educatorId)
-//                            .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + educatorId));
-//                    educators.add(educator);
-//                }
-//            }
-//            course.setEducators(educators);
-//
-//            if (courseDTO.educators() != null) {
-//                course.getEducators().addAll(courseDTO.educators());
-//            } else {
-//                course.setEducators(new ArrayList<>()); // Optional, ensures an empty set
-//                // Fetch student users from userService
-//                Set<User> students = new HashSet<>();
-//                if (courseDTO.studentIds() != null) {
-//                    for (Long studentId : courseDTO.studentIds()) {
-//                        User student = userService.findById(studentId)
-//                                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + studentId));
-//                        students.add(student);
-//                    }
-//                }
-//                course.setStudents(students);
+        // Does not set students or educators
 
         return course;
     }
@@ -92,6 +53,6 @@ public class CourseMapper {
         if (courseDTO.name() != null) course.setName(courseDTO.name());
         if (courseDTO.description() != null) course.setDescription(courseDTO.description());
         if (courseDTO.attendanceMethod() != null) course.setAttendanceMethod(courseDTO.attendanceMethod());
-
+        if (courseDTO.price() != null) course.setPrice(courseDTO.price());
     }
 }

@@ -42,6 +42,7 @@ public class User implements UserDetails {
     @Column(name = "email", nullable = false)
     private String email;
 
+    //add note to enums that "institution" is really an admin role
     @Column(name = "role", nullable = false)
     private Roles role;
 
@@ -66,10 +67,6 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "students")
     @JsonIgnore
     private List<Course> enrolledCourses = new ArrayList<>();
-
-    @OneToMany(mappedBy = "institution")
-    @JsonIgnore
-    private List<Course> institutionCourses = new ArrayList<>();
 
     @OneToMany(mappedBy = "toUser", cascade = CascadeType.ALL)
     @JsonManagedReference("user-to-transaction")

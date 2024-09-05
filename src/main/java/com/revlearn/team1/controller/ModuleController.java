@@ -1,6 +1,7 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.ModulePage;
 import com.revlearn.team1.service.module.ModuleService;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,8 @@ public class ModuleController {
         return moduleService.getModulePages(moduleId);
     }
 
-
+    @GetMapping("/{moduleId}/exams")
+    public List<Exam> getExams(@PathVariable Long moduleId) {
+        return moduleService.getExams(moduleId);
+    }
 }

@@ -97,15 +97,15 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return educator.getTaughtCourses().stream().map(courseMapper::toDto).toList();
     }
 
-    @Override
-    public List<CourseDTO> getInstitutionCourses(Long institutionId) {
-        // Does not need security because an institution's course list should be publicly available
-
-        User institution = userRepository.findById(Math.toIntExact(institutionId))
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format("Could not find user by id %d.", institutionId)));
-        return institution.getInstitutionCourses().stream()
-                .map(courseMapper::toDto).toList();
-    }
+//    @Override
+//    public List<CourseDTO> getInstitutionCourses(Long institutionId) {
+//        // Does not need security because an institution's course list should be publicly available
+//
+//        User institution = userRepository.findById(Math.toIntExact(institutionId))
+//                .orElseThrow(() -> new UserNotFoundException(
+//                        String.format("Could not find user by id %d.", institutionId)));
+//        return institution.getInstitutionCourses().stream()
+//                .map(courseMapper::toDto).toList();
+//    }
 
 }
