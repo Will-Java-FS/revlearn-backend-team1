@@ -14,10 +14,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class JwtUtilTest {
 
+    private final String secretKey = "P0YfGdONKAXq8bHFO6IoIHZOhkPiNEeOi1dvnf+Ot9M=";
     @InjectMocks
     private JwtUtil jwtUtil;
-
-    private final String secretKey = "P0YfGdONKAXq8bHFO6IoIHZOhkPiNEeOi1dvnf+Ot9M=";
     private User testUser;
     private String token;
 
@@ -38,7 +37,7 @@ public class JwtUtilTest {
         secretKeyField.set(jwtUtil, secretKey);
 
         // Generate a token for the test user
-        token = jwtUtil.generateToken(testUser.getUsername(), testUser.getRole());
+        token = jwtUtil.generateToken(testUser);
     }
 
     @Test
@@ -49,7 +48,7 @@ public class JwtUtilTest {
     @Test
     public void testDecodeJWT() throws Exception {
         Claims result = jwtUtil.decodeJWT(token);
-        assertEquals("testUser", result.getSubject());
+        assertEquals(String.valueOf(testUser.getId()), result.getSubject());
         assertEquals("Student", result.get("role"));
     }
 

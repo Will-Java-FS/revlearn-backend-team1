@@ -45,7 +45,7 @@ public class CourseServiceImp implements CourseService {
     @Override
     public List<User> getAllStudentsOfCourseId(Long courseId) {
         //TODO: Implement security.  Only course owners (educators and institution) should be able to access this route.
-        System.out.println("authorities: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+//        System.out.println("authorities: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
         Course course = courseRepo.findById(courseId)
                 .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
         return course.getStudents();
