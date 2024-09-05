@@ -51,11 +51,12 @@ public class Progress {
 
     }
 
-            /*
-            public boolean getCompleted() {
-                return completed;
-            }
+    public boolean getCompleted() {
+        return completed;
+    }
 
+    /*
+    Not sure if I need to use this
 Don't have user entity yet
     @PrePersist
     @PreUpdate
