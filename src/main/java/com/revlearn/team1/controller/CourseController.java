@@ -93,7 +93,7 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}/modules")
-    @Operation(summary = "Get all modules of a Course", description = "Will require authenticated student, educator, or institution.", tags = { "course" })
+    @Operation(summary = "Get All Modules of Course", description = "Will require authenticated student, educator, or institution.", tags = { "course" })
     public List<ModuleDTO> getModulesByCourseId(@PathVariable Long courseId) {
         //TODO: Secure so only course affiliated users can access (students, educators, & institution)
         return courseService.getModulesByCourseId(courseId);
