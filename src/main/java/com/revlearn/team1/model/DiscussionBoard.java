@@ -27,15 +27,14 @@ public class DiscussionBoard {
     @JoinColumn(name="course_id")
     private Course course;
 
-//    @ManyToOne
-//    @JoinColumn(name="user_id")
-//    private User user;
-
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 
     @Column(name="title")
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @CreationTimestamp

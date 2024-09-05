@@ -37,7 +37,7 @@ public class DiscussionPost {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @CreationTimestamp

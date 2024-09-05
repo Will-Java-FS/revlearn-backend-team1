@@ -13,33 +13,33 @@ import java.util.List;
 @RequestMapping("/api/v1/discussion_board")
 public class DiscussionBoardController {
 
-    private final DiscussionBoardServiceImp disBoardServImp;
+    private final DiscussionBoardServiceImp discussionBoardService;
 
-    public DiscussionBoardController(DiscussionBoardServiceImp disBoardServImp){
-        this.disBoardServImp = disBoardServImp;
+    public DiscussionBoardController(DiscussionBoardServiceImp discussionBoardService){
+        this.discussionBoardService = discussionBoardService;
     }
 
-    @GetMapping("/{course_id}")
-    public ResponseEntity<List<DiscussionBoardResponseDTO>> getAllDiscussionBoardByCourseId(@PathVariable Long course_id){
-        List<DiscussionBoardResponseDTO> listDisBoardDto = disBoardServImp.getAllDiscussionBoardByCourseId(course_id);
-        return new ResponseEntity<>(listDisBoardDto, HttpStatus.OK);
+    @GetMapping("/{courseId}")
+    public ResponseEntity<List<DiscussionBoardResponseDTO>> getAllDiscussionBoardByCourseId(@PathVariable Long courseId){
+        List<DiscussionBoardResponseDTO> listDiscussionBoardDto = discussionBoardService.getAllDiscussionBoardByCourseId(courseId);
+        return new ResponseEntity<>(listDiscussionBoardDto, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<DiscussionBoardResponseDTO> createDiscussionBoard(@RequestBody DiscussionBoardRequestDTO disBoardReqDto){
-        DiscussionBoardResponseDTO savedDisBoardDto = disBoardServImp.createDiscussionBoard(disBoardReqDto);
-        return new ResponseEntity<>(savedDisBoardDto, HttpStatus.CREATED);
+    public ResponseEntity<DiscussionBoardResponseDTO> createDiscussionBoard(@RequestBody DiscussionBoardRequestDTO discussionBoardRequestDTO){
+        DiscussionBoardResponseDTO savedDiscussionBoardDto = discussionBoardService.createDiscussionBoard(discussionBoardRequestDTO);
+        return new ResponseEntity<>(savedDiscussionBoardDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{discussionBoardId}")
     public ResponseEntity<String> deleteDiscussionBoard(@PathVariable Long discussionBoardId){
-        String deletedDisBoard = disBoardServImp.deleteDiscussionBoard(discussionBoardId);
-        return new ResponseEntity<>(deletedDisBoard, HttpStatus.OK);
+        String deletedDiscussionBoard = discussionBoardService.deleteDiscussionBoard(discussionBoardId);
+        return new ResponseEntity<>(deletedDiscussionBoard, HttpStatus.OK);
     }
 
     @PutMapping("/{discussionBoardId}")
-    public ResponseEntity<DiscussionBoardResponseDTO> updateDiscussionBoard(@PathVariable Long discussionBoardId, @RequestBody DiscussionBoardRequestDTO disBoardReqDto){
-        DiscussionBoardResponseDTO updatedDiscussionBoard = disBoardServImp.updateDiscussionBoard(discussionBoardId,disBoardReqDto);
+    public ResponseEntity<DiscussionBoardResponseDTO> updateDiscussionBoard(@PathVariable Long discussionBoardId, @RequestBody DiscussionBoardRequestDTO discussionBoardRequestDTO){
+        DiscussionBoardResponseDTO updatedDiscussionBoard = discussionBoardService.updateDiscussionBoard(discussionBoardId,discussionBoardRequestDTO);
         return new ResponseEntity<>(updatedDiscussionBoard, HttpStatus.OK);
     }
 

@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface DiscussionBoardService {
 
-    List<DiscussionBoardResponseDTO> getAllDiscussionBoardByCourseId(Long course_id);
+    List<DiscussionBoardResponseDTO> getAllDiscussionBoardByCourseId(Long courseId);
 
-    DiscussionBoardResponseDTO createDiscussionBoard(DiscussionBoardRequestDTO disBoardDto);
+    DiscussionBoardResponseDTO createDiscussionBoard(DiscussionBoardRequestDTO discussionBoardRequestDTO);
 
     String deleteDiscussionBoard(Long discussionBoardId);
 
-    DiscussionBoardResponseDTO updateDiscussionBoard(Long discussionBoardId, DiscussionBoardRequestDTO discussionBoardRequestDto);
+    DiscussionBoardResponseDTO updateDiscussionBoard(Long discussionBoardId, DiscussionBoardRequestDTO discussionBoardRequestDTO);
 }

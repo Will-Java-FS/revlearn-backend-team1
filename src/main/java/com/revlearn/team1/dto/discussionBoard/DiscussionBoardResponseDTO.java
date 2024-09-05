@@ -8,7 +8,7 @@ import java.util.List;
 public record DiscussionBoardResponseDTO(
     Long discussionBoardId,
     Long courseId,
-    Long userId,
+    Integer userId,
     String discussionBoardTitle,
     String discussionBoardDescription,
     List<DiscussionPostDTO> discussionPosts
