@@ -95,8 +95,8 @@ public class UserController {
         return userService.getTaughtCourses(id);
     }
 
-    @GetMapping("/{id}/institutionCourses")
-    public List<CourseDTO> getInstitutionCourses(@PathVariable Long id) {
-        return userService.getInstitutionCourses(id);
-    }
+//    @GetMapping("/{id}/institutionCourses")
+//    public List<CourseDTO> getInstitutionCourses(@PathVariable Long id) {
+//        return userService.getInstitutionCourses(id);
+//    }
 }

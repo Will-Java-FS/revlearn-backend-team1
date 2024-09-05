@@ -39,7 +39,6 @@ class CourseMapperTest {
 
         Course course = new Course();
         course.setId(1L);
-        course.setInstitution(institution);
         course.setStartDate(LocalDate.of(2023, 1, 1));
         course.setEndDate(LocalDate.of(2023, 12, 31));
         course.setAttendanceMethod(AttendanceMethod.ONLINE);
@@ -51,7 +50,6 @@ class CourseMapperTest {
 
         // Assert
         assertEquals(1L, courseDTO.id());
-        assertEquals(1, courseDTO.institutionId());
         assertEquals(LocalDate.of(2023, 1, 1), courseDTO.startDate());
         assertEquals(LocalDate.of(2023, 12, 31), courseDTO.endDate());
         assertEquals(AttendanceMethod.ONLINE, courseDTO.attendanceMethod());
@@ -67,12 +65,12 @@ class CourseMapperTest {
 
         CourseDTO courseDTO = new CourseDTO(
                 1L,
-                1,
                 LocalDate.of(2023, 1, 1),
                 LocalDate.of(2023, 12, 31),
                 AttendanceMethod.ONLINE,
                 "Test Course",
-                "Test Description"
+                "Test Description",
+                0.0F
         );
 
         when(userRepository.findById(1)).thenReturn(Optional.of(institution));
@@ -81,40 +79,38 @@ class CourseMapperTest {
         Course course = courseMapper.fromDto(courseDTO);
 
         // Assert
-        assertEquals(institution, course.getInstitution());
         assertEquals(LocalDate.of(2023, 1, 1), course.getStartDate());
         assertEquals(LocalDate.of(2023, 12, 31), course.getEndDate());
         assertEquals(AttendanceMethod.ONLINE, course.getAttendanceMethod());
         assertEquals("Test Course", course.getName());
         assertEquals("Test Description", course.getDescription());
-
-        verify(userRepository, times(1)).findById(1);
+        assertEquals(0.0F, course.getPrice());
     }
 
-    @Test
-    void testFromDto_UserNotFound() {
-        // Arrange
-        CourseDTO courseDTO = new CourseDTO(
-                1L,
-                999, // Assume this ID doesn't exist
-                LocalDate.of(2023, 1, 1),
-                LocalDate.of(2023, 12, 31),
-                AttendanceMethod.ONLINE,
-                "Test Course",
-                "Test Description"
-        );
-
-        when(userRepository.findById(999)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            courseMapper.fromDto(courseDTO);
-        });
-
-        assertEquals("User not found with ID: 999", exception.getMessage());
-
-        verify(userRepository, times(1)).findById(999);
-    }
+//    @Test
+//    void testFromDto_UserNotFound() {
+//        // Arrange
+//        CourseDTO courseDTO = new CourseDTO(
+//                1L,
+//                LocalDate.of(2023, 1, 1),
+//                LocalDate.of(2023, 12, 31),
+//                AttendanceMethod.ONLINE,
+//                "Test Course",
+//                "Test Description",
+//                0.0F
+//        );
+//
+//        when(userRepository.findById(999)).thenReturn(Optional.empty());
+//
+//        // Act & Assert
+//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+//            courseMapper.fromDto(courseDTO);
+//        });
+//
+//        assertEquals("User not found with ID: 999", exception.getMessage());
+//
+//        verify(userRepository, times(1)).findById(999);
+//    }
 
     @Test
     void testUpdateCourseFromDto() {
@@ -128,12 +124,12 @@ class CourseMapperTest {
 
         CourseDTO courseDTO = new CourseDTO(
                 1L,
-                1,
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 12, 31),
                 AttendanceMethod.IN_PERSON,
                 "New Name",
-                "New Description"
+                "New Description",
+                0.0F
         );
 
         // Act

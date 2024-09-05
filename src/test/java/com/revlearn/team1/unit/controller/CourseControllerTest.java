@@ -59,7 +59,7 @@ public class CourseControllerTest {
     @Test
     public void testGetAllCourses() throws Exception {
         // Arrange
-        List<CourseDTO> courses = Arrays.asList(new CourseDTO(1L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods"), new CourseDTO(2L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods"));
+        List<CourseDTO> courses = Arrays.asList(new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 239.34F), new CourseDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 239.34F)); // Initialize with actual data
         when(courseService.getAll()).thenReturn(courses);
 
         // Act & Assert
@@ -69,7 +69,7 @@ public class CourseControllerTest {
     @Test
     public void testGetCourseById() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods"); // Initialize with actual data
+        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 95.43F); // Initialize with actual data
         when(courseService.getById(1L)).thenReturn(courseDTO);
 
         // Act & Assert
@@ -79,7 +79,7 @@ public class CourseControllerTest {
     @Test
     public void testPostCourse() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods"); // Initialize with actual data
+        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 59.23F); // Initialize with actual data
         when(courseService.createCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         // Act & Assert
@@ -89,7 +89,7 @@ public class CourseControllerTest {
     @Test
     public void testUpdateCourse() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, null, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods"); // Initialize with actual data
+        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 44.32F); // Initialize with actual data
         when(courseService.updateCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         // Act & Assert
