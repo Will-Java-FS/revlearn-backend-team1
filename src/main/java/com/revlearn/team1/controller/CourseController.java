@@ -21,19 +21,19 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping
-    @Operation(summary = "Get All Courses", description = "This will probably never be used because courses should be categorized and retrieved by institution.", tags = { "course" })
+    @Operation(summary = "Get All Courses", description = "Returns all courses.", tags = { "course" })
     public List<CourseDTO> getAllCourses() {
         return courseService.getAll();
     }
 
     @GetMapping("/{courseId}/students")
-    @Operation(summary = "Get All Students of Course", description = "Will require authorized educator or institution account to view.", tags = { "course" })
+    @Operation(summary = "Get All Students of Course", description = "Requires enrolled student, assigned educator or institution (admin) account to view.", tags = { "course" })
     public List<User> getAllStudentsOfCourseId(@PathVariable Long courseId) {
         return courseService.getAllStudentsOfCourseId(courseId);
     }
 
     @GetMapping("/{courseId}/educators")
-    @Operation(summary = "Get All Educators of Course", description = "Will require authorized educator or institution account to view.", tags = { "course" })
+    @Operation(summary = "Get All Educators of Course", description = "Requires enrolled student, assigned educator or institution (admin) account to view.", tags = { "course" })
     public List<User> getAllEducatorsOfCourseId(@PathVariable Long courseId) {
         return courseService.getAllEducatorsOfCourseId(courseId);
     }
@@ -46,21 +46,21 @@ public class CourseController {
 
 
     @PostMapping
-    @Operation(summary = "Create a Course", description = "Will require request to be made by an authenticated educator or institution.", tags = { "course" })
+    @Operation(summary = "Create a Course", description = "Requires educator or institution (admin) account to succeed.", tags = { "course" })
     public CourseDTO postCourse(@RequestBody CourseDTO courseDTO) {
         //TODO: Secure so that only instructors and institutions can create courses
         return courseService.createCourse(courseDTO);
     }
 
     @PutMapping
-    @Operation(summary = "Update a Course", description = "Will require authorized educator or institution.", tags = { "course" })
+    @Operation(summary = "Update a Course", description = "Requires assigned educator or institution (admin) account to succeed.", tags = { "course" })
     public CourseDTO updateCourse(@RequestBody CourseDTO courseDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security in service layer.
         return courseService.updateCourse(courseDTO);
     }
 
     @DeleteMapping("/{courseId}")
-    @Operation(summary = "Delete a Course", description = "Will require authorized educator or institution.", tags = { "course" })
+    @Operation(summary = "Delete a Course", description = "Requires assigned educator or institution (admin) account to succeed.", tags = { "course" })
     //TODO: Secure so that only course owners (instructors and institutions) can delete courses
     public String deleteCourse(@PathVariable Long courseId) {
         return courseService.deleteById(courseId);
