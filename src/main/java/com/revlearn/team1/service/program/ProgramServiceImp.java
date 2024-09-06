@@ -56,6 +56,11 @@ public class ProgramServiceImp implements ProgramService {
 
     @Override
     public List<UserResDTO> getProgramStudents(Long programId) {
+        //verify request authorization
+        if (SecurityContextService.getUserRole() != Roles.INSTITUTION) {
+            throw new UserNotAuthorizedException("Unauthorized to get program students.  Must be institution (admin) account.");
+        }
+
         Program program = programRepo.findById(programId)
                 .orElseThrow(() -> new ProgramNotFoundException(
                         String.format("Program with id: %d not found", programId)));
@@ -65,12 +70,22 @@ public class ProgramServiceImp implements ProgramService {
 
     @Override
     public ProgramResDTO createProgram(ProgramReqDTO programReqDTO) {
+        //verify request authorization
+        if (SecurityContextService.getUserRole() != Roles.INSTITUTION) {
+            throw new UserNotAuthorizedException("Unauthorized to create program.  Must be institution (admin) account.");
+        }
+
         Program program = programMapper.toEntity(programReqDTO);
         return programMapper.toResponseDTO(programRepo.save(program));
     }
 
     @Override
     public ProgramResDTO updateProgram(Long programId, ProgramReqDTO programReqDTO) {
+        //verify request authorization
+        if (SecurityContextService.getUserRole() != Roles.INSTITUTION) {
+            throw new UserNotAuthorizedException("Unauthorized to update program.  Must be institution (admin) account.");
+        }
+
         Program program = programRepo.findById(programId)
                 .orElseThrow(() -> new ProgramNotFoundException(
                         String.format("Program with id: %d not found", programId)));
@@ -82,6 +97,11 @@ public class ProgramServiceImp implements ProgramService {
 
     @Override
     public MessageDTO deleteProgram(Long programId) {
+        //verify request authorization
+        if (SecurityContextService.getUserRole() != Roles.INSTITUTION) {
+            throw new UserNotAuthorizedException("Unauthorized to delete program.  Must be institution (admin) account.");
+        }
+
         Program program = programRepo.findById(programId)
                 .orElseThrow(() -> new ProgramNotFoundException(
                         String.format("Program with id: %d not found", programId)));

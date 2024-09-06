@@ -133,62 +133,77 @@ class ProgramServiceImpTest {
 
     @Test
     void getProgramStudents_ShouldReturnListOfStudents() {
-        program.getStudents().add(new User());
-        when(programRepo.findById(1L)).thenReturn(Optional.of(program));
-        when(userMapper.toResDTO(any())).thenReturn(new UserResDTO(1, "John Doe", "john.doe@example.com", Roles.STUDENT, "John", "Doe"));
+        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
+            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
+            program.getStudents().add(new User());
+            when(programRepo.findById(1L)).thenReturn(Optional.of(program));
+            when(userMapper.toResDTO(any())).thenReturn(new UserResDTO(1, "John Doe", "john.doe@example.com", Roles.STUDENT, "John", "Doe"));
 
-        List<UserResDTO> students = programService.getProgramStudents(1L);
+            List<UserResDTO> students = programService.getProgramStudents(1L);
 
-        assertEquals(1, students.size());
-        assertEquals("John Doe", students.get(0).username());
-        verify(programRepo).findById(1L);
-        verify(userMapper).toResDTO(any());
+            assertEquals(1, students.size());
+            assertEquals("John Doe", students.get(0).username());
+            verify(programRepo).findById(1L);
+            verify(userMapper).toResDTO(any());
+        }
     }
 
     @Test
     void createProgram_ShouldSaveProgram() {
-        when(programMapper.toEntity(any(ProgramReqDTO.class))).thenReturn(program);
-        when(programRepo.save(program)).thenReturn(program);
-        when(programMapper.toResponseDTO(program)).thenReturn(programResDTO);
+        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
+            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
+            when(programMapper.toEntity(any(ProgramReqDTO.class))).thenReturn(program);
+            when(programRepo.save(program)).thenReturn(program);
+            when(programMapper.toResponseDTO(program)).thenReturn(programResDTO);
 
-        ProgramResDTO createdProgram = programService.createProgram(programReqDTO);
+            ProgramResDTO createdProgram = programService.createProgram(programReqDTO);
 
-        assertEquals(programResDTO, createdProgram);
-        verify(programMapper).toEntity(any(ProgramReqDTO.class));
-        verify(programRepo).save(program);
-        verify(programMapper).toResponseDTO(program);
+            assertEquals(programResDTO, createdProgram);
+            verify(programMapper).toEntity(any(ProgramReqDTO.class));
+            verify(programRepo).save(program);
+            verify(programMapper).toResponseDTO(program);
+        }
     }
 
     @Test
     void updateProgram_ShouldUpdateProgram() {
-        when(programRepo.findById(1L)).thenReturn(Optional.of(program));
-        when(programRepo.save(program)).thenReturn(program);
-        when(programMapper.toResponseDTO(program)).thenReturn(programResDTO);
+        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
+            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
+            when(programRepo.findById(1L)).thenReturn(Optional.of(program));
+            when(programRepo.save(program)).thenReturn(program);
+            when(programMapper.toResponseDTO(program)).thenReturn(programResDTO);
 
-        ProgramResDTO updatedProgram = programService.updateProgram(1L, programReqDTO);
+            ProgramResDTO updatedProgram = programService.updateProgram(1L, programReqDTO);
 
-        assertEquals(programResDTO, updatedProgram);
-        verify(programRepo).findById(1L);
-        verify(programRepo).save(program);
-        verify(programMapper).updateEntityFromDTO(any(ProgramReqDTO.class), eq(program));
-        verify(programMapper).toResponseDTO(program);
+            assertEquals(programResDTO, updatedProgram);
+            verify(programRepo).findById(1L);
+            verify(programRepo).save(program);
+            verify(programMapper).updateEntityFromDTO(any(ProgramReqDTO.class), eq(program));
+            verify(programMapper).toResponseDTO(program);
+        }
     }
 
     @Test
     void deleteProgram_ShouldDeleteProgram() {
-        when(programRepo.findById(1L)).thenReturn(Optional.of(program));
+        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
+            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
+            when(programRepo.findById(1L)).thenReturn(Optional.of(program));
 
-        programService.deleteProgram(1L);
+            programService.deleteProgram(1L);
 
-        verify(programRepo).delete(program);
+            verify(programRepo).delete(program);
+        }
     }
 
     @Test
     void deleteProgram_ShouldThrowException_WhenProgramNotFound() {
-        when(programRepo.findById(1L)).thenReturn(Optional.empty());
+        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
+            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
+            when(programRepo.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(ProgramNotFoundException.class, () -> programService.deleteProgram(1L));
-        verify(programRepo).findById(1L);
+            assertThrows(ProgramNotFoundException.class, () -> programService.deleteProgram(1L));
+            verify(programRepo).findById(1L);
+        }
     }
 
     @Test

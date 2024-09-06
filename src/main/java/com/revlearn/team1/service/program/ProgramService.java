@@ -7,7 +7,6 @@ import com.revlearn.team1.dto.program.ProgramResDTO;
 import com.revlearn.team1.dto.user.UserResDTO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ProgramService {
     List<ProgramResDTO> getAllPrograms();
