@@ -4,8 +4,6 @@ import com.revlearn.team1.dto.discussionBoard.DiscussionBoardRequestDTO;
 import com.revlearn.team1.dto.discussionBoard.DiscussionBoardResponseDTO;
 import com.revlearn.team1.exceptions.DiscussionBoardNotFoundException;
 import com.revlearn.team1.mapper.DiscussionBoardMapper;
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.User;
 import com.revlearn.team1.model.DiscussionBoard;
 import com.revlearn.team1.repository.DiscussionBoardRepo;
 import org.springframework.stereotype.Service;

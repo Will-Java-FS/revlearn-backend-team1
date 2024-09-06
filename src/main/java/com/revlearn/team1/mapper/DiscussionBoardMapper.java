@@ -7,8 +7,6 @@ import com.revlearn.team1.model.DiscussionBoard;
 import com.revlearn.team1.model.User;
 import org.springframework.stereotype.Component;
 
-import com.revlearn.team1.mapper.DiscussionPostMapper;
-
 @Component
 public class DiscussionBoardMapper {
 

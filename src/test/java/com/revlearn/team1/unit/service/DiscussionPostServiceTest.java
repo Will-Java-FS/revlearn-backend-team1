@@ -16,14 +16,14 @@
 //import static org.mockito.Mockito.when;
 //import org.mockito.MockitoAnnotations;
 //
-//import com.revlearn.team1.dto.DiscussionPostDTO;
+//import com.revlearn.team1.dto.discussionPost.DiscussionPostDTO;
 //import com.revlearn.team1.exceptions.DiscussionPostNotFoundException;
 //import com.revlearn.team1.mapper.DiscussionPostMapper;
 //import com.revlearn.team1.model.Course;
 //import com.revlearn.team1.model.DiscussionPost;
 //import com.revlearn.team1.model.User;
 //import com.revlearn.team1.repository.DiscussionPostRepo;
-//import com.revlearn.team1.service.DiscussionPostService;
+//import com.revlearn.team1.service.discussionPost.DiscussionPostService;
 //
 //
 //class DiscussionPostServiceTest{

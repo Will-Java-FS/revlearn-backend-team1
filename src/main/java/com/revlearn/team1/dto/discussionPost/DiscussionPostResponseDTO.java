@@ -1,11 +1,8 @@
-package com.revlearn.team1.dto;
-
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.User;
+package com.revlearn.team1.dto.discussionPost;
 
 import java.time.LocalDateTime;
 
-public record DiscussionPostDTO(
+public record DiscussionPostResponseDTO(
         Long discussionBoardId,
         Long discussionId,
         Long courseId,

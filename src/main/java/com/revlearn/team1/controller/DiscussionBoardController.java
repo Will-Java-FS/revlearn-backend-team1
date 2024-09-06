@@ -3,6 +3,7 @@ package com.revlearn.team1.controller;
 import com.revlearn.team1.dto.discussionBoard.DiscussionBoardRequestDTO;
 import com.revlearn.team1.dto.discussionBoard.DiscussionBoardResponseDTO;
 import com.revlearn.team1.service.discussionBoard.DiscussionBoardServiceImp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/discussion_board")
 public class DiscussionBoardController {
 
+    @Autowired
     private final DiscussionBoardServiceImp discussionBoardService;
 
     public DiscussionBoardController(DiscussionBoardServiceImp discussionBoardService){
