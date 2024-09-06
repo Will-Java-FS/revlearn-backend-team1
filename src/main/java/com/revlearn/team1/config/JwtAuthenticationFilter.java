@@ -44,7 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            System.out.println("No auth header");
             return;
         }
 
@@ -53,11 +52,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userId = jwtUtil.extractUserId(jwt);
         User user = userService.findById(userId.intValue())
                 .orElseThrow(() -> new UserNotFoundException(String.format("User with id %d not found", userId)));
-        System.out.println("User found: ");
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            System.out.println("Authenticating user");
             if (jwtUtil.validateToken(jwt, user)) {
-                System.out.println("Token is valid");
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         user,
                         null,
@@ -69,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 }

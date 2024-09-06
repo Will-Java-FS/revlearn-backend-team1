@@ -2,6 +2,7 @@ package com.revlearn.team1.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.revlearn.team1.enums.Roles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +44,7 @@ public class User implements UserDetails {
 
     //add note to enums that "institution" is really an admin role
     @Column(name = "role", nullable = false)
-    private String role;
+    private Roles role;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -84,7 +85,7 @@ public class User implements UserDetails {
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(new SimpleGrantedAuthority(role));
+        return Set.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @JsonIgnore
