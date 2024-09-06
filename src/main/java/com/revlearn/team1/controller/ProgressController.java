@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/progress")
 public class ProgressController {
 
     private ProgressService progressService;
@@ -19,20 +20,23 @@ public class ProgressController {
     public ProgressController(ProgressService progressService){
         this.progressService = progressService;
     }
-    /*
-    Endpoints Needed:
-    - GET progress
-    - Update progress
+
+    /**
+     * GET All progress for every course, user etc.
+     * @return List<Progress>
      */
-    //Return user's progress of all enrolled courses
-    //Want this to be returning percentages
-    @GetMapping("/progress")
+    @GetMapping
     public ResponseEntity<List<Progress>> getAllProgress(){
         List<Progress> progress = progressService.getAllProgress();
         return ResponseEntity.status(200).body(progress);
     }
 
-    @GetMapping("/progress/user/{user_id}")
+    /**
+     * GET All progress for specific user.
+     * @param user_id: id of user you want to obtain progress for
+     * @return List<Progress> for user by user_id
+     */
+    @GetMapping("/user/{user_id}")
     public ResponseEntity<List<Progress>> getProgressByUser(@PathVariable Long user_id){
         List<Progress> studentProgress = progressService.getProgressByUser(user_id);
         if(studentProgress.isEmpty()){
@@ -41,7 +45,12 @@ public class ProgressController {
         return ResponseEntity.status(200).body(studentProgress);
     }
 
-    @GetMapping("/progress/course/{course_id}")
+    /**
+     * GET all progress by course
+     * @param course_id: id for course you want to obtain progress for
+     * @return List<Progress> for course by course_id
+     */
+    @GetMapping("/course/{course_id}")
     public ResponseEntity<List<Progress>> getProgressByCourse(@PathVariable Long course_id){
         List<Progress> courseProgress = progressService.getProgressByCourse(course_id);
         if(courseProgress.isEmpty()){
@@ -50,14 +59,25 @@ public class ProgressController {
         return ResponseEntity.status(200).body(courseProgress);
     }
 
-    //Returns progress for specific user in specific course
-    @GetMapping("/progress/user/{user_id}/course/{course_id}")
+    /**
+     * GET progress for specific user in a specific course
+     * @param user_id: id of user you want to obtain progress for
+     * @param course_id: id for course you want to obtain progress for
+     * @return Progress entity
+     */
+    @GetMapping("/user/{user_id}/course/{course_id}")
     public ResponseEntity<Progress> getStudentCourseProgress(@PathVariable Long user_id, @PathVariable Long course_id){
         Progress progress = progressService.getProgressByUserCourse(user_id, course_id);
         return ResponseEntity.status(200).body(progress);
     }
 
-    @PutMapping("/progress/{progress_id}")
+    /**
+     * Updates progress by progress_id
+     * @param progress_id: id of progress entity to be updated
+     * @param progress: entity that obtains the updates to be applied
+     * @return Updated progress
+     */
+    @PutMapping("/{progress_id}")
     public ResponseEntity<Progress> updateProgress(@PathVariable Long progress_id, @RequestBody Progress progress){
         Progress updated = progressService.updateProgress(progress_id, progress);
         return ResponseEntity.status(200).body(updated);

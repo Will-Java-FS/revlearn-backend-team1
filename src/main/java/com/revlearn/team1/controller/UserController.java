@@ -60,7 +60,7 @@ public class UserController {
             }
             User u = userService.createUser(user);
             String token = jwtUtil.generateToken(u);
-            return ResponseEntity.status(HttpStatus.CREATED).body(token);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("JWT", token));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("\"An error occurred while registering the user: " + e.getMessage());
         }
