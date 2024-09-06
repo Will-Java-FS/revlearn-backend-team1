@@ -6,6 +6,7 @@ import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.exceptions.UserNotAuthorizedException;
 import com.revlearn.team1.exceptions.UserNotFoundException;
@@ -78,8 +79,8 @@ public class CourseServiceImp implements CourseService {
         Course course = courseMapper.fromDto(courseDTO);
 
         //Guard clause to verify user is authorized to create a course
-        String userRole = SecurityContextService.getUserRole();
-        if (!userRole.equals("Educator") && !userRole.equals("Institution"))
+        Roles userRole = SecurityContextService.getUserRole();
+        if (!userRole.equals(Roles.EDUCATOR) && !userRole.equals(Roles.INSTITUTION))
             throw new UserNotAuthorizedException("User is not authorized to create a course.  Must be an educator or institution.");
 
         //Get user
@@ -257,11 +258,11 @@ public class CourseServiceImp implements CourseService {
     public void verifyStudentLevelAccess(Course course) {
 
         Long userId = SecurityContextService.getUserId();
-        String userRole = SecurityContextService.getUserRole();
+        Roles userRole = SecurityContextService.getUserRole();
 
         if (course.getStudents().stream().noneMatch(s -> s.getId() == userId)
                 && course.getEducators().stream().noneMatch(e -> e.getId() == userId)
-                && !userRole.equals("Institution"))
+                && !userRole.equals(Roles.INSTITUTION))
             throw new UserNotAuthorizedException(
                     "User is not authorized to access this course.  Must be enrolled student, assigned educator, or administrator.");
     }
@@ -269,10 +270,10 @@ public class CourseServiceImp implements CourseService {
     public void verifyEducatorLevelAccess(Course course) {
 
         Long userId = SecurityContextService.getUserId();
-        String userRole = SecurityContextService.getUserRole();
+        Roles userRole = SecurityContextService.getUserRole();
 
         if (course.getEducators().stream().noneMatch(e -> e.getId() == userId)
-                && !userRole.equals("Institution"))
+                && !userRole.equals(Roles.INSTITUTION))
             throw new UserNotAuthorizedException(
                     "User is not authorized to access this course.  Must be assigned educator or administrator.");
     }

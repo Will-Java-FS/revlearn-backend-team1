@@ -6,6 +6,7 @@ import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.course.CourseNotFoundException;
 import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.Course;
@@ -168,7 +169,7 @@ public class CourseServiceImpTest {
         when(courseMapper.toDto(course)).thenReturn(courseDTO);
         Mockito.doNothing().when(courseService).verifyEducatorLevelAccess(course);
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
-        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn("Educator");
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.EDUCATOR);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(2L);
         when(userRepo.findById(2)).thenReturn(Optional.of(educator));
 

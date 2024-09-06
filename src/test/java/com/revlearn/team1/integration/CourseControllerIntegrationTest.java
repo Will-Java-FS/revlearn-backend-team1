@@ -3,6 +3,7 @@ package com.revlearn.team1.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
@@ -72,7 +73,7 @@ class CourseControllerIntegrationTest {
         user.setFirstName("Test");
         user.setLastName("Last");
         user.setPassword("password");
-        user.setRole("Institution");
+        user.setRole(Roles.INSTITUTION);
         userRepo.save(user);
 
     }
@@ -116,7 +117,7 @@ class CourseControllerIntegrationTest {
         // Arrange
         CourseDTO courseDTO = new CourseDTO(6L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
-        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn("Institution");
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
 
         // Act
@@ -141,7 +142,7 @@ class CourseControllerIntegrationTest {
         course.setName("Updated Course Name");
         CourseDTO courseDTO = new CourseDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
-        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn("Institution");
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
 
         // Act
@@ -164,7 +165,7 @@ class CourseControllerIntegrationTest {
     void deleteCourse_ShouldDeleteCourse_WhenCourseExists() throws Exception {
         //Arrange
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
-        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn("Institution");
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
 
         // Act
