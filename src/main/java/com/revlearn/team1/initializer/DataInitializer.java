@@ -1,6 +1,7 @@
 package com.revlearn.team1.initializer;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,17 +65,15 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void createInitialCourses(JsonNode coursesNode) {
-        JsonNode jwtNode = null;
-        //TODO: Set authorization header with JWT of educator or admin user
+
         try{
-            jwtNode = getAuthorizationHeader();
+            String jwt = getAdminJWT();
+            String requestUrl = apiUrl + "/course";
+            for (JsonNode courseNode : coursesNode) {
+                sendAdminRequest(requestUrl, HttpMethod.POST, courseNode, jwt);
+            }
         }catch (Exception e){
             logger.error("Exception occurred while sending request: ", e);
-        }
-        String requestUrl = apiUrl + "/course";
-        for (JsonNode courseNode : coursesNode) {
-            assert jwtNode != null;
-            sendRequestAdmin(requestUrl, HttpMethod.POST, courseNode, jwtNode.get("JWT").asText());
         }
     }
 
@@ -110,7 +109,7 @@ public class DataInitializer implements ApplicationRunner {
             logger.error("Exception occurred while sending request: ", e);
         }
     }
-    private void sendRequestAdmin(String url, HttpMethod method, JsonNode requestBody, String jwt) {
+    private void sendAdminRequest(String url, HttpMethod method, JsonNode requestBody, String jwt) {
         try {
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -133,7 +132,7 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private JsonNode getAuthorizationHeader() throws IOException {
+    private String getAdminJWT() throws IOException {
         String requestUrl = apiUrl + "/user/register";
         HttpMethod method = HttpMethod.POST;
         JsonNode rootNode = objectMapper.readTree(new ClassPathResource("initial-data.json").getInputStream());
@@ -141,7 +140,7 @@ public class DataInitializer implements ApplicationRunner {
         try{
             HttpEntity<JsonNode> requestEntity = new HttpEntity<>(requestBody);
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestUrl, method, requestEntity, JsonNode.class);
-            return response.getBody();
+            return Objects.requireNonNull(response.getBody()).get("JWT").asText();
         } catch (Exception e) {
             logger.error("Exception occurred while sending request: ", e);
             return null;
