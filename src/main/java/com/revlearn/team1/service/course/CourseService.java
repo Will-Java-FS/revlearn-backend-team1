@@ -1,12 +1,12 @@
 package com.revlearn.team1.service.course;
 
-import com.revlearn.team1.dto.course.response.CourseResDTO;
-import com.revlearn.team1.dto.course.request.CourseReqDTO;
-import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
+import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.model.User;
 
 import java.util.List;

@@ -7,6 +7,7 @@ import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.course.CourseNotFoundException;
 import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.Course;
@@ -14,12 +15,10 @@ import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.course.CourseServiceImp;
+import com.revlearn.team1.service.securityContext.SecurityContextService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public class CourseServiceImpTest {
     private User student;
     private User educator;
 
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -66,6 +66,8 @@ public class CourseServiceImpTest {
 
         educator = new User("educator");
         educator.setId(2);
+
+        courseService = Mockito.spy(courseService);
     }
 
     @Test
@@ -90,6 +92,7 @@ public class CourseServiceImpTest {
         // Arrange
         course.getStudents().add(student);
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
+        Mockito.doNothing().when(courseService).verifyStudentLevelAccess(course);
 
         // Act
         List<User> students = courseService.getAllStudentsOfCourseId(1L);
@@ -113,7 +116,7 @@ public class CourseServiceImpTest {
         // Arrange
         course.getEducators().add(educator);
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-
+        Mockito.doNothing().when(courseService).verifyStudentLevelAccess(course);
         // Act
         List<User> educators = courseService.getAllEducatorsOfCourseId(1L);
 
@@ -167,6 +170,12 @@ public class CourseServiceImpTest {
         when(courseMapper.fromReqDto(courseReqDTO)).thenReturn(course);
         when(courseRepo.save(course)).thenReturn(course);
         when(courseMapper.toDto(course)).thenReturn(courseResDTO);
+        when(courseMapper.toDto(course)).thenReturn(courseDTO);
+        Mockito.doNothing().when(courseService).verifyEducatorLevelAccess(course);
+        MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.EDUCATOR);
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(2L);
+        when(userRepo.findById(2)).thenReturn(Optional.of(educator));
 
         // Act
         CourseResDTO result = courseService.createCourse(courseReqDTO);
@@ -176,6 +185,8 @@ public class CourseServiceImpTest {
         verify(courseRepo).save(course);
         verify(courseMapper).fromReqDto(courseReqDTO);
         verify(courseMapper).toDto(course);
+
+        securityContextServiceMockedStatic.close();
     }
 
     @Test
@@ -187,8 +198,18 @@ public class CourseServiceImpTest {
 
         when(courseRepo.findById(courseId)).thenReturn(Optional.of(course));
         Mockito.doNothing().when(courseMapper).updateCourseFromReqDto(course, courseReqDTO);
+        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 93.11F); // Assume it has the correct ID.
+
+//        course.getEducators().add(educator);
+//        educator.getTaughtCourses().add(course);
+
+        System.out.println("course: " + course);
+        when(courseRepo.findById(courseDTO.id())).thenReturn(Optional.of(course));
+        Mockito.doNothing().when(courseMapper).updateCourseFromDto(course, courseDTO);
         when(courseRepo.save(course)).thenReturn(course);
         when(courseMapper.toDto(course)).thenReturn(courseResDTO);
+        when(courseMapper.toDto(course)).thenReturn(courseDTO);
+        Mockito.doNothing().when(courseService).verifyEducatorLevelAccess(course);
 
         // Act
         CourseResDTO result = courseService.updateCourse(courseId, courseReqDTO);
@@ -218,6 +239,7 @@ public class CourseServiceImpTest {
 //        Course course = new Course();
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
         Mockito.doNothing().when(courseRepo).deleteById(1L);
+        Mockito.doNothing().when(courseService).verifyEducatorLevelAccess(course);
 
         // Act
         String result = courseService.deleteById(1L);
@@ -245,6 +267,8 @@ public class CourseServiceImpTest {
         when(userRepo.findById(1)).thenReturn(Optional.of(student));
         when(courseRepo.save(course)).thenReturn(course);
         when(userRepo.save(student)).thenReturn(student);
+        MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
 
         // Act
         CourseStudentResDTO result = courseService.enrollStudent(courseStudentDTO);
@@ -256,6 +280,8 @@ public class CourseServiceImpTest {
 
         verify(courseRepo).save(course);
         verify(userRepo).save(student);
+
+        securityContextServiceMockedStatic.close();
     }
 
     @Test
@@ -286,9 +312,10 @@ public class CourseServiceImpTest {
         student.getEnrolledCourses().add(course);
 
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-//        when(userRepo.findById(1)).thenReturn(Optional.of(student));
         when(courseRepo.save(course)).thenReturn(course);
         when(userRepo.save(student)).thenReturn(student);
+        MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
 
         // Act
         CourseStudentResDTO result = courseService.withdrawStudent(courseStudentDTO);
@@ -300,6 +327,8 @@ public class CourseServiceImpTest {
 
         verify(courseRepo).save(course);
         verify(userRepo).save(student);
+
+        securityContextServiceMockedStatic.close();
     }
 
     @Test
@@ -332,7 +361,9 @@ public class CourseServiceImpTest {
         when(userRepo.findById(2)).thenReturn(Optional.of(educator));
         when(courseRepo.save(course)).thenReturn(course);
         when(userRepo.save(educator)).thenReturn(educator);
-
+        Mockito.doNothing().when(courseService).verifyEducatorLevelAccess(course);
+        MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
+        securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
         // Act
         CourseEducatorResDTO result = courseService.addEducator(dto);
 
@@ -342,6 +373,8 @@ public class CourseServiceImpTest {
         verify(userRepo).findById(2);
         verify(courseRepo).save(course);
         verify(userRepo).save(educator);
+
+        securityContextServiceMockedStatic.close();
     }
 
     @Test
@@ -363,7 +396,7 @@ public class CourseServiceImpTest {
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
         when(courseRepo.save(course)).thenReturn(course);
         when(userRepo.save(educator)).thenReturn(educator);
-
+        Mockito.doNothing().when(courseService).verifyEducatorLevelAccess(course);
         // Act
         CourseEducatorResDTO result = courseService.removeEducator(courseEducatorDTO);
 
