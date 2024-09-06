@@ -3,8 +3,6 @@ package com.revlearn.team1.unit.controller;
 import com.revlearn.team1.controller.DiscussionPostController;
 import com.revlearn.team1.dto.discussionPost.DiscussionPostRequestDTO;
 import com.revlearn.team1.dto.discussionPost.DiscussionPostResponseDTO;
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.discussionPost.DiscussionPostServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,18 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class DiscussionPostControllerTest {
 
