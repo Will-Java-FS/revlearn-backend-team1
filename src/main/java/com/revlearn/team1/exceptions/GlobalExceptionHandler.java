@@ -69,4 +69,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUserNotAuthorizedException(UserNotAuthorizedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
+    @ExceptionHandler(ProgramNotFoundException.class)
+    public ResponseEntity<String> handleProgramNotFoundException(ProgramNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

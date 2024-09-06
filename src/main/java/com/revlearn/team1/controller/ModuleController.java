@@ -52,6 +52,7 @@ public class ModuleController {
     }
 
     @GetMapping("/{moduleId}/exams")
+    @Operation(summary = "Get All Exams of a Module", description = "Will require authenticated and authorized user (ie enrolled student, assigned educator, or owner institution).", tags = {"module"})
     public List<Exam> getExams(@PathVariable Long moduleId) {
         return moduleService.getExams(moduleId);
     }
