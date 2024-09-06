@@ -6,6 +6,7 @@ import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.Course;
+import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
@@ -113,7 +114,6 @@ class CourseControllerIntegrationTest {
         CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
         CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
 
-        CourseDTO courseDTO = new CourseDTO(6L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
@@ -142,7 +142,6 @@ class CourseControllerIntegrationTest {
         CourseReqDTO courseReqDTO = new CourseReqDTO(course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
         CourseResDTO courseResDTO = new CourseResDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
 
-        CourseDTO courseDTO = new CourseDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
