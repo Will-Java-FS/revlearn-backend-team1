@@ -55,16 +55,4 @@ public class Progress {
         return completed;
     }
 
-    /*
-    Not sure if I need to use this
-Don't have user entity yet
-    @PrePersist
-    @PreUpdate
-    public void checkStudent(){}
-    if(!"user".equals(user.getRole())){
-        throw new IllegalArgumentException("User must be a user");
-    }
-
- */
-
 }
