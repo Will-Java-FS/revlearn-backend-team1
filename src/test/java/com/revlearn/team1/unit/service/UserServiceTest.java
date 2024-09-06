@@ -1,5 +1,6 @@
 package com.revlearn.team1.unit.service;
 
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.user.UserServiceImp;
@@ -60,7 +61,7 @@ public class UserServiceTest {
         user.setEmail("email");
         user.setFirstName("firstName");
         user.setLastName("lastName");
-        user.setRole("Student"); // Default role
+        user.setRole(Roles.STUDENT); // Default role
         user.setCreatedAt(LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18));
         user.setUpdatedAt(LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18));
         return user;

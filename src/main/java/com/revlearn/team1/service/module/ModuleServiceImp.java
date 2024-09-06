@@ -5,6 +5,7 @@ import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.model.CourseModule;
+import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.ModulePage;
 import com.revlearn.team1.repository.ModuleRepo;
 import lombok.RequiredArgsConstructor;
@@ -80,5 +81,15 @@ public class ModuleServiceImp implements ModuleService {
                 () -> new ModuleNotFoundException(moduleId));
         //TODO: convert to DTOs
         return courseModule.getModulePages();
+    }
+
+    @Override
+    public List<Exam> getExams(Long moduleId) {
+        //TODO: Secure so only course affiliated users can access (enrolled students, assigned educators, & institution)
+        //Verify module exists
+        CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
+                () -> new ModuleNotFoundException(moduleId));
+        //TODO: convert to DTOs
+        return courseModule.getExams();
     }
 }

@@ -5,7 +5,7 @@
       "username": "johndoe123",
       "password": "Passw0rd!",
       "email": "john.doe@example.com",
-      "role": "Student",
+      "role": "STUDENT",
       "firstName": "John",
       "lastName": "Doe"
     },
@@ -14,7 +14,7 @@
       "username": "janesmith456",
       "password": "SecureP@ss",
       "email": "jane.smith@example.com",
-      "role": "Educator",
+      "role": "EDUCATOR",
       "firstName": "Jane",
       "lastName": "Smith"
     },
@@ -23,7 +23,7 @@
       "username": "alexbrown789",
       "password": "Br0wnieS3cure",
       "email": "alex.brown@example.com",
-      "role": "Institution",
+      "role": "INSTITUTION",
       "firstName": "Alex",
       "lastName": "Brown"
     },
@@ -32,7 +32,7 @@
       "username": "michaeljohnson001",
       "password": "M1cha3lRocks",
       "email": "michael.johnson@example.com",
-      "role": "Student",
+      "role": "STUDENT",
       "firstName": "Michael",
       "lastName": "Johnson"
     },
@@ -41,7 +41,7 @@
       "username": "emilydavis002",
       "password": "D@v1sEmily",
       "email": "emily.davis@example.com",
-      "role": "Educator",
+      "role": "EDUCATOR",
       "firstName": "Emily",
       "lastName": "Davis"
     },
@@ -50,7 +50,7 @@
       "username": "sarahwilson003",
       "password": "S@rahW1ls0n",
       "email": "sarah.wilson@example.com",
-      "role": "Institution",
+      "role": "INSTITUTION",
       "firstName": "Sarah",
       "lastName": "Wilson"
     },
@@ -59,7 +59,7 @@
       "username": "davidmiller004",
       "password": "M1ll3rD@vid",
       "email": "david.miller@example.com",
-      "role": "Student",
+      "role": "STUDENT",
       "firstName": "David",
       "lastName": "Miller"
     },
@@ -68,7 +68,7 @@
       "username": "amandalee005",
       "password": "L33Amanda",
       "email": "amanda.lee@example.com",
-      "role": "Educator",
+      "role": "EDUCATOR",
       "firstName": "Amanda",
       "lastName": "Lee"
     },
@@ -77,7 +77,7 @@
       "username": "chrisgarcia006",
       "password": "Garci@Chr1s",
       "email": "chris.garcia@example.com",
-      "role": "Institution",
+      "role": "INSTITUTION",
       "firstName": "Chris",
       "lastName": "Garcia"
     },
@@ -86,7 +86,7 @@
       "username": "rachelmoore007",
       "password": "R@ch3lM00re",
       "email": "rachel.moore@example.com",
-      "role": "Student",
+      "role": "STUDENT",
       "firstName": "Rachel",
       "lastName": "Moore"
     }
@@ -96,18 +96,18 @@
     {
       "name": "Java Programming",
       "description": "An advanced course on Java programming.",
-      "institutionId": 1,
       "startDate": "2024-09-01",
       "endDate": "2024-12-15",
-      "attendanceMethod": "HYBRID"
+      "attendanceMethod": "HYBRID",
+      "price": 150.00
     },
     {
       "name": "Data Structures",
       "description": "A comprehensive course on data structures.",
-      "institutionId": 1,
       "startDate": "2024-10-01",
       "endDate": "2024-11-30",
-      "attendanceMethod": "ONLINE"
+      "attendanceMethod": "ONLINE",
+      "price": 175.00
     }
   ],
   "transactions": [

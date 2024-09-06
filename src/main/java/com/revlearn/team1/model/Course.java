@@ -37,6 +37,9 @@ public class Course {
     @Column(nullable = false)
     private AttendanceMethod attendanceMethod;
 
+    @Column(nullable = false)
+    private Float price;
+
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<CourseModule> courseModules = new ArrayList<>();
 
@@ -65,10 +68,10 @@ public class Course {
     )
     private List<User> students = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "institution_id", nullable = false)
-    @JsonIgnore
-    private User institution;
+//    @ManyToOne
+//    @JoinColumn(name = "institution_id", nullable = true)
+//    @JsonIgnore
+//    private User institution;
 
     @OneToMany(mappedBy = "course")
     @JsonManagedReference("course-transactions")

@@ -1,6 +1,7 @@
 package com.revlearn.team1.service.module;
 
 import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.ModulePage;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface ModuleService {
     String deleteModule(Long moduleId);
 
     List<ModulePage> getModulePages(Long moduleId);
+
+    List<Exam> getExams(Long moduleId);
 }

@@ -1,5 +1,6 @@
 package com.revlearn.team1.unit.controller;
 
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -107,7 +108,7 @@ public class ExamResultControllerTest {
         user.setEmail("email");
         user.setFirstName("firstName");
         user.setLastName("lastName");
-        user.setRole("Student"); // Default role
+        user.setRole(Roles.STUDENT); // Default role
         user.setCreatedAt(LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18));
         user.setUpdatedAt(LocalDateTime.of(2024, Month.AUGUST, 28, 8, 48, 18));
         return user;

@@ -1,12 +1,12 @@
 package com.revlearn.team1.util;
 
+import com.revlearn.team1.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.security.WeakKeyException;
 import org.springframework.beans.factory.annotation.Value;
-import com.revlearn.team1.model.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -16,9 +16,9 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+    private final long validityInMilliseconds = 24 * 60 * 60 * 1000; // 1 day in milliseconds
     @Value("${SECRET_KEY}")
     private String secretKey;
-    private final long validityInMilliseconds = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
     public String generateToken(String subject, String role) {
         if (role == null || role.isEmpty())
@@ -52,7 +52,6 @@ public class JwtUtil {
                 .claim("firstName", user.getFirstName())
                 .claim("lastName", user.getLastName())
                 .claim("email", user.getEmail())
-                .claim("userId", user.getId())
                 .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -71,7 +70,12 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        return decodeJWT(token).getSubject();
+        return decodeJWT(token).get("username", String.class); // Default to null if the username is not present
+    }
+
+
+    public Long extractUserId(String token) {
+        return Long.valueOf(decodeJWT(token).getSubject()); // Default to null if the userId is not present
     }
 
     public String extractRole(String token) {
@@ -80,15 +84,22 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token, User user) {
-        if (token == null || user == null)
+        if (token == null || user == null) {
+            System.out.println("Token or user is null");
             return false;
+        }
         final String username = extractUsername(token);
-        if (username == null || user.getUsername() == null)
+        if (username == null || user.getUsername() == null) {
+            System.out.println("Username is null");
             return false;
+        }
+        System.out.println("Username: " + username);
+        System.out.println("User: " + user.getUsername());
         return username.equals(user.getUsername()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
+        System.out.println("token is expired: " + decodeJWT(token).getExpiration().before(new Date()));
         return decodeJWT(token).getExpiration().before(new Date());
     }
 }
