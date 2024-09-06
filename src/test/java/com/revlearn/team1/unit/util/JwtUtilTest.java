@@ -40,7 +40,6 @@ public class JwtUtilTest {
 
         // Generate a token for the test user
         token = jwtUtil.generateToken(testUser);
-//        token = jwtUtil.generateToken(testUser.getUsername(), String.valueOf(testUser.getRole()));
     }
 
     @Test
