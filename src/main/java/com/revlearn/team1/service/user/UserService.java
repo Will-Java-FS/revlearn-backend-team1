@@ -1,6 +1,6 @@
 package com.revlearn.team1.service.user;
 
-import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,9 +19,9 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    List<CourseDTO> getEnrolledCourses(Long studentId);
+    List<CourseResDTO> getEnrolledCourses(Long studentId);
 
-    List<CourseDTO> getTaughtCourses(Long educatorId);
+    List<CourseResDTO> getTaughtCourses(Long educatorId);
 
 //    List<CourseDTO> getInstitutionCourses(Long institutionId);
 

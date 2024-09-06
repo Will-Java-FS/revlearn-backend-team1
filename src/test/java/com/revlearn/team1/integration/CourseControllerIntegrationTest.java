@@ -1,7 +1,8 @@
 package com.revlearn.team1.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.Course;
@@ -49,12 +50,6 @@ class CourseControllerIntegrationTest {
 
     private Course course;
 
-//    @AfterEach
-//    void clearDatabase() {
-//        courseRepo.deleteAll();
-//        userRepo.deleteAll();
-//    }
-
     @BeforeEach
     void setUp() {
         // Initialize a sample Course for testing
@@ -65,6 +60,7 @@ class CourseControllerIntegrationTest {
         course.setEndDate(LocalDate.now().plusMonths(2));
         course.setAttendanceMethod(AttendanceMethod.ONLINE);
         course.setPrice(99.99F);
+
         courseRepo.save(course);
 
         User user = new User();
@@ -115,7 +111,9 @@ class CourseControllerIntegrationTest {
     @Test
     void postCourse_ShouldCreateNewCourse() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(6L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
+        CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
+
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
@@ -123,12 +121,12 @@ class CourseControllerIntegrationTest {
         // Act
         ResultActions response = mockMvc.perform(post("/api/v1/course")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(courseDTO)));
+                .content(objectMapper.writeValueAsString(courseReqDTO)));
 
         // Assert
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("New Course"))
-                .andExpect(jsonPath("$.description").value("New Description"));
+                .andExpect(jsonPath("$.name").value(courseResDTO.name()))
+                .andExpect(jsonPath("$.description").value(courseResDTO.description()));
 
         // Ensure it was saved in the DB
         assert (courseRepo.findAll().size() == 2); // since we have one course already in setup
@@ -140,19 +138,22 @@ class CourseControllerIntegrationTest {
     void updateCourse_ShouldUpdateExistingCourse() throws Exception {
         // Arrange
         course.setName("Updated Course Name");
-        CourseDTO courseDTO = new CourseDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
+        long courseId = course.getId();
+        CourseReqDTO courseReqDTO = new CourseReqDTO(course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
+        CourseResDTO courseResDTO = new CourseResDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
+
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
 
         // Act
-        ResultActions response = mockMvc.perform(put("/api/v1/course")
+        ResultActions response = mockMvc.perform(put("/api/v1/course/" + courseId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(courseDTO)));
+                .content(objectMapper.writeValueAsString(courseReqDTO)));
 
         // Assert
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Updated Course Name"));
+                .andExpect(jsonPath("$.name").value(courseResDTO.name()));
 
         // Ensure it was updated in the DB
         Course updatedCourse = courseRepo.findById(course.getId()).orElseThrow();
