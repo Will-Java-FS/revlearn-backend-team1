@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,6 +21,12 @@ public class ModulePage {
 
     @Column(columnDefinition = "TEXT")
     private String markdownContent;
+
+    private Long pageNumber;
+
+    private String instructorNotes;
+
+    private List<String> attachmentsUrls = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "course_module_id", nullable = false)
