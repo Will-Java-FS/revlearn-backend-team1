@@ -1,9 +1,10 @@
 package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.controller.CourseController;
-import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.service.course.CourseServiceImp;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,11 +38,11 @@ public class CourseControllerLogicTest {
     @Test
     public void testGetAllCourses() {
         // Arrange
-        List<CourseDTO> courses = Arrays.asList(new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 24.33F), new CourseDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 66.54F));
+        List<CourseResDTO> courses = Arrays.asList(new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 24.33F), new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 66.54F));
         when(courseService.getAll()).thenReturn(courses);
 
         // Act
-        List<CourseDTO> result = courseController.getAllCourses();
+        List<CourseResDTO> result = courseController.getAllCourses();
 
         // Assert
         assertEquals(courses, result);
@@ -51,43 +52,48 @@ public class CourseControllerLogicTest {
     @Test
     public void testGetCourseById() {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 43.53F);  // Initialize with actual data
-        when(courseService.getById(1L)).thenReturn(courseDTO);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 43.53F);  // Initialize with actual data
+        when(courseService.getById(1L)).thenReturn(courseResDTO);
 
         // Act
-        CourseDTO result = courseController.getCourseById(1L);
+        CourseResDTO result = courseController.getCourseById(1L);
 
         // Assert
-        assertEquals(courseDTO, result);
+        assertEquals(courseResDTO, result);
         verify(courseService).getById(1L);
     }
 
     @Test
     public void testPostCourse() {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 22.33F);
-        when(courseService.createCourse(any(CourseDTO.class))).thenReturn(courseDTO);
+        CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 22.33F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 22.33F);
+
+        when(courseService.createCourse(any(CourseReqDTO.class))).thenReturn(courseResDTO);
 
         // Act
-        CourseDTO result = courseController.postCourse(courseDTO);
+        CourseResDTO result = courseController.postCourse(courseReqDTO);
 
         // Assert
-        assertEquals(courseDTO, result);
-        verify(courseService).createCourse(courseDTO);
+        assertEquals(courseResDTO, result);
+        verify(courseService).createCourse(courseReqDTO);
     }
 
     @Test
     public void testUpdateCourse() {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
-        when(courseService.updateCourse(any(CourseDTO.class))).thenReturn(courseDTO);
+        Long courseId = 1L;
+        CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
+
+        when(courseService.updateCourse(any(Long.class), any(CourseReqDTO.class))).thenReturn(courseResDTO);
 
         // Act
-        CourseDTO result = courseController.updateCourse(courseDTO);
+        CourseResDTO result = courseController.updateCourse(courseId, courseReqDTO);
 
         // Assert
-        assertEquals(courseDTO, result);
-        verify(courseService).updateCourse(courseDTO);
+        assertEquals(courseResDTO, result);
+        verify(courseService).updateCourse(courseId, courseReqDTO);
     }
 
     @Test

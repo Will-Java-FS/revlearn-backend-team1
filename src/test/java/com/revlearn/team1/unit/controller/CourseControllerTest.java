@@ -1,11 +1,13 @@
 package com.revlearn.team1.unit.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revlearn.team1.controller.CourseController;
-import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.model.User;
@@ -33,18 +35,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class CourseControllerTest {
 
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Mock
     private CourseServiceImp courseService;
-
     @InjectMocks
     private CourseController courseController;
-
     @Autowired
     private MockMvc mockMvc;
 
-    private static String asJsonString(final Object obj) {
+    {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
+
+    private String asJsonString(final Object obj) {
         try {
-            return new ObjectMapper().writeValueAsString(obj);
+            return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -59,7 +65,7 @@ public class CourseControllerTest {
     @Test
     public void testGetAllCourses() throws Exception {
         // Arrange
-        List<CourseDTO> courses = Arrays.asList(new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 239.34F), new CourseDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 239.34F)); // Initialize with actual data
+        List<CourseResDTO> courses = Arrays.asList(new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 239.34F), new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 239.34F)); // Initialize with actual data
         when(courseService.getAll()).thenReturn(courses);
 
         // Act & Assert
@@ -69,39 +75,40 @@ public class CourseControllerTest {
     @Test
     public void testGetCourseById() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 95.43F); // Initialize with actual data
-        when(courseService.getById(1L)).thenReturn(courseDTO);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 95.43F); // Initialize with actual data
+        when(courseService.getById(1L)).thenReturn(courseResDTO);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/course/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(courseDTO.id()));
+        mockMvc.perform(get("/api/v1/course/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(courseResDTO.id()));
     }
 
     @Test
     public void testPostCourse() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 59.23F); // Initialize with actual data
-        when(courseService.createCourse(any(CourseDTO.class))).thenReturn(courseDTO);
+        CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 59.23F); // Initialize with actual data
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 59.23F); // Initialize with actual data
+
+        when(courseService.createCourse(any(CourseReqDTO.class))).thenReturn(courseResDTO);
 
         // Act & Assert
-        mockMvc.perform(post("/api/v1/course").contentType(MediaType.APPLICATION_JSON).content("{         \"startDate\": 1,\n" + "        \"endDate\":2,\n" + "        \"attendanceMethod\":\"HYBRID\",\n" + "        \"name\":\"Econ\",\n" + "        \"description\":\"Money and stuff\" }")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(courseDTO.id()));
+        mockMvc.perform(post("/api/v1/course").contentType(MediaType.APPLICATION_JSON).content("{         \"startDate\": 1,\n" + "        \"endDate\":2,\n" + "        \"attendanceMethod\":\"HYBRID\",\n" + "        \"name\":\"Econ\",\n" + "        \"description\":\"Money and stuff\" }")).andExpect(status().isOk()).andExpect(jsonPath("$.id").value(courseResDTO.id()));
     }
 
     @Test
     public void testUpdateCourse() throws Exception {
         // Arrange
-        CourseDTO courseDTO = new CourseDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 44.32F); // Initialize with actual data
-        when(courseService.updateCourse(any(CourseDTO.class))).thenReturn(courseDTO);
+        long courseId = 1L;
+        CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 44.32F); // Initialize with actual data
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 44.32F); // Initialize with actual data
+
+        when(courseService.updateCourse(any(Long.class), any(CourseReqDTO.class))).thenReturn(courseResDTO);
 
         // Act & Assert
-        mockMvc.perform(put("/api/v1/course")
+        mockMvc.perform(put("/api/v1/course/" + courseId)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{ \"startDate\": 1,\n"
-                                + "        \"endDate\":2,\n"
-                                + "        \"attendanceMethod\":\"HYBRID\",\n"
-                                + "        \"name\":\"Econ\",\n"
-                                + "        \"description\":\"Money and stuff\" }"))
+                        .content(asJsonString(courseReqDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(courseDTO.id()));
+                .andExpect(jsonPath("$.id").value(courseResDTO.id()));
     }
 
     @Test

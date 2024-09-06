@@ -90,8 +90,15 @@
       "firstName": "Rachel",
       "lastName": "Moore"
     }
-  ]
-,
+  ],
+  "adminUser": {
+    "username": "TestUser0",
+    "password": "password",
+    "email": "TestUserEmail@email.com",
+    "role": "INSTITUTION",
+    "firstName": "TestUserAdminFirst",
+    "lastName": "TestUserAdminLast"
+  },
   "courses": [
     {
       "name": "Java Programming",
@@ -111,9 +118,24 @@
     }
   ],
   "transactions": [
-    {"toUserId": 2, "fromUserId": 1, "price": 100.50, "description": "Payment for services"},
-    {"toUserId": 1, "fromUserId": 2, "price": 200.00, "description": "Refund for overpayment"},
-    {"toUserId": 3, "fromUserId": 2, "price": 50.25, "description": "Personal transfer"}
+    {
+      "toUserId": 2,
+      "fromUserId": 1,
+      "price": 100.50,
+      "description": "Payment for services"
+    },
+    {
+      "toUserId": 1,
+      "fromUserId": 2,
+      "price": 200.00,
+      "description": "Refund for overpayment"
+    },
+    {
+      "toUserId": 3,
+      "fromUserId": 2,
+      "price": 50.25,
+      "description": "Personal transfer"
+    }
   ],
   "modules": [
     {
