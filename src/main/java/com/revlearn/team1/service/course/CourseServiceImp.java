@@ -1,12 +1,10 @@
 package com.revlearn.team1.service.course;
 
-import com.revlearn.team1.dto.course.response.CourseResDTO;
-import com.revlearn.team1.dto.course.request.CourseReqDTO;
-import com.revlearn.team1.dto.module.ModuleDTO;
-import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
 import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.enums.Roles;
@@ -78,14 +76,10 @@ public class CourseServiceImp implements CourseService {
 
     @Override
     public CourseResDTO createCourse(CourseReqDTO courseReqDTO) {
-        //TODO: Secure so that only instructors and institutions can create courses
-        // Maybe require user information as parameter
+
         Course course = courseMapper.fromReqDto(courseReqDTO);
-    public CourseDTO createCourse(CourseDTO courseDTO) {
 
-        Course course = courseMapper.fromDto(courseDTO);
-
-        //Guard clause to verify user is authorized to create a course
+        //Guard: verify user is authorized to create a course
         Roles userRole = SecurityContextService.getUserRole();
         if (!userRole.equals(Roles.EDUCATOR) && !userRole.equals(Roles.INSTITUTION))
             throw new UserNotAuthorizedException("User is not authorized to create a course.  Must be an educator or institution.");
@@ -108,9 +102,6 @@ public class CourseServiceImp implements CourseService {
 
     @Override
     public CourseResDTO updateCourse(Long courseId, CourseReqDTO courseReqDTO) {
-        //TODO: Secure so that only course owners (educator(s) or institution) can modify.
-        // Compare provided course information (educator(s) id(s), or institutionId) to authenticated user properties.
-    public CourseDTO updateCourse(CourseDTO courseDTO) {
 
         //Verify course already exists in database
         Course course = courseRepo.findById(courseId).orElseThrow(
@@ -145,7 +136,6 @@ public class CourseServiceImp implements CourseService {
         return String.format("Successfully deleted course %d.", id);
     }
 
-
     @Override
     public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO) {
         //verify course and student exist
@@ -162,10 +152,10 @@ public class CourseServiceImp implements CourseService {
         Long userId = SecurityContextService.getUserId();
         if (userId != student.getId()) {
             //Throws exception if user is not course educator or institution
-            verifyEducatorLevelAccess(course);
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to enroll this student in course.  Must be the student, course educator, or institution."
-            );
+            if (!verifyEducatorLevelAccess(course))
+                throw new UserNotAuthorizedException(
+                        "User is not authorized to enroll this student in course.  Must be the student, course educator, or institution."
+                );
         }
 
         // TODO: How does Stripe payment system interact with this?
@@ -192,10 +182,10 @@ public class CourseServiceImp implements CourseService {
         Long userId = SecurityContextService.getUserId();
         if (userId != student.getId()) {
             //Throws exception if user is not course educator or institution
-            verifyEducatorLevelAccess(course);
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to withdraw this student from course.  Must be the student, course educator, or institution."
-            );
+            if (!verifyEducatorLevelAccess(course))
+                throw new UserNotAuthorizedException(
+                        "User is not authorized to withdraw this student from course.  Must be the student, course educator, or institution."
+                );
         }
         // TODO: How does Stripe payment system interact with this?
 
@@ -265,7 +255,7 @@ public class CourseServiceImp implements CourseService {
         return course.getCourseModules().stream().map(moduleMapper::toDto).toList();
     }
 
-    public void verifyStudentLevelAccess(Course course) {
+    public boolean verifyStudentLevelAccess(Course course) {
 
         Long userId = SecurityContextService.getUserId();
         Roles userRole = SecurityContextService.getUserRole();
@@ -275,9 +265,11 @@ public class CourseServiceImp implements CourseService {
                 && !userRole.equals(Roles.INSTITUTION))
             throw new UserNotAuthorizedException(
                     "User is not authorized to access this course.  Must be enrolled student, assigned educator, or administrator.");
+
+        return true;
     }
 
-    public void verifyEducatorLevelAccess(Course course) {
+    public boolean verifyEducatorLevelAccess(Course course) {
 
         Long userId = SecurityContextService.getUserId();
         Roles userRole = SecurityContextService.getUserRole();
@@ -286,5 +278,7 @@ public class CourseServiceImp implements CourseService {
                 && !userRole.equals(Roles.INSTITUTION))
             throw new UserNotAuthorizedException(
                     "User is not authorized to access this course.  Must be assigned educator or administrator.");
+
+        return true;
     }
 }
