@@ -1,6 +1,7 @@
 package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.controller.ProgramController;
+import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.program.ProgramReqDTO;
 import com.revlearn.team1.dto.program.ProgramResDTO;
@@ -21,8 +22,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -155,5 +155,37 @@ class ProgramControllerTest {
                 .andExpect(status().isOk());
 
         verify(programService).deleteProgram(1L);
+    }
+
+    @Test
+    void addCourseToProgram_ShouldReturnSuccessMessage() throws Exception {
+        // Arrange
+        MessageDTO messageDTO = new MessageDTO("Successfully added course with id: 123 to program with id: 456");
+        when(programService.addCourseToProgram(anyLong(), anyLong())).thenReturn(messageDTO);
+
+        // Act & Assert
+        mockMvc.perform(patch("/api/v1/program/456/addCourse/123")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Successfully added course with id: 123 to program with id: 456"));
+
+        // Verify the service call
+        verify(programService).addCourseToProgram(456L, 123L);
+    }
+
+    @Test
+    void removeCourseFromProgram_ShouldReturnSuccessMessage() throws Exception {
+        // Arrange
+        MessageDTO messageDTO = new MessageDTO("Successfully removed course with id: 123 from program with id: 456");
+        when(programService.removeCourseFromProgram(anyLong(), anyLong())).thenReturn(messageDTO);
+
+        // Act & Assert
+        mockMvc.perform(patch("/api/v1/program/456/removeCourse/123")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("Successfully removed course with id: 123 from program with id: 456"));
+
+        // Verify the service call
+        verify(programService).removeCourseFromProgram(456L, 123L);
     }
 }

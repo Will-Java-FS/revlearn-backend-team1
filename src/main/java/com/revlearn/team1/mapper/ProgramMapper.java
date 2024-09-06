@@ -59,7 +59,7 @@ public class ProgramMapper {
         if (dto.format() != null) {
             program.setFormat(dto.format());
         }
-        if(dto.cost()!=0){
+        if (dto.cost() != 0) {
             program.setCost(dto.cost());
         }
     }

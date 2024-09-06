@@ -68,11 +68,6 @@ public class Course {
     )
     private List<User> students = new ArrayList<>();
 
-//    @ManyToOne
-//    @JoinColumn(name = "institution_id", nullable = true)
-//    @JsonIgnore
-//    private User institution;
-
     @OneToMany(mappedBy = "course")
     @JsonManagedReference("course-transactions")
     private List<TransactionModel> transactions;
@@ -80,7 +75,7 @@ public class Course {
     //Most courses will only have one program, but some might be part of more
     //ie Math 75 is required for Physics degrees and Computer Science degrees
     @ManyToMany
-    private List<Program> programs;
+    private List<Program> programs = new ArrayList<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;

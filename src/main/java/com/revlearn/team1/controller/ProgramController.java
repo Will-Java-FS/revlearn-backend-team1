@@ -1,5 +1,6 @@
 package com.revlearn.team1.controller;
 
+import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.program.ProgramReqDTO;
 import com.revlearn.team1.dto.program.ProgramResDTO;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/program")
@@ -55,7 +57,19 @@ public class ProgramController {
 
     @DeleteMapping("{programId}")
     @Operation(summary = "Delete a Program", description = "Delete an existing program.", tags = {"program"})
-    public void deleteProgram(@PathVariable Long programId) {
-        programService.deleteProgram(programId);
+    public MessageDTO deleteProgram(@PathVariable Long programId) {
+        return programService.deleteProgram(programId);
+    }
+
+    @PatchMapping("{programId}/addCourse/{courseId}")
+    @Operation(summary = "Add a Course to a Program", description = "Add a course to a program.", tags = {"program"})
+    public MessageDTO addCourseToProgram(@PathVariable Long programId, @PathVariable Long courseId) {
+        return programService.addCourseToProgram(programId, courseId);
+    }
+
+    @PatchMapping("{programId}/removeCourse/{courseId}")
+    @Operation(summary = "Remove a Course from a Program", description = "Remove a course from a program.", tags = {"program"})
+    public MessageDTO removeCourseFromProgram(@PathVariable Long programId, @PathVariable Long courseId) {
+        return programService.removeCourseFromProgram(programId, courseId);
     }
 }
