@@ -1,6 +1,7 @@
 package com.revlearn.team1.service.course;
 
-import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.module.ModuleDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
@@ -30,7 +31,7 @@ public class CourseServiceImp implements CourseService {
     private final ModuleMapper moduleMapper;
 
     @Override
-    public List<CourseDTO> getAll() {
+    public List<CourseResDTO> getAll() {
         //TODO: Consider pagination instead of the return of every course
         //TODO: Add sort methods: alphabetical, by program
         try {
@@ -57,33 +58,33 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public CourseDTO getById(Long courseId) {
+    public CourseResDTO getById(Long courseId) {
         Course retrievedCourse = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("CourseService.getById()", courseId));
         return courseMapper.toDto(retrievedCourse);
     }
 
     @Override
-    public CourseDTO createCourse(CourseDTO courseDTO) {
+    public CourseResDTO createCourse(CourseReqDTO courseReqDTO) {
         //TODO: Secure so that only instructors and institutions can create courses
         // Maybe require user information as parameter
-        Course course = courseMapper.fromDto(courseDTO);
+        Course course = courseMapper.fromReqDto(courseReqDTO);
         Course savedCourse = courseRepo.save(course);
         return courseMapper.toDto(savedCourse);
     }
 
     @Override
-    public CourseDTO updateCourse(CourseDTO courseDTO) {
+    public CourseResDTO updateCourse(Long courseId, CourseReqDTO courseReqDTO) {
         //TODO: Secure so that only course owners (educator(s) or institution) can modify.
         // Compare provided course information (educator(s) id(s), or institutionId) to authenticated user properties.
 
         //Verify course already exists in database
-        Course course = courseRepo.findById(courseDTO.id()).orElseThrow(
-                () -> new CourseNotFoundException("CourseService.updateCourse()", courseDTO.id()));
+        Course course = courseRepo.findById(courseId).orElseThrow(
+                () -> new CourseNotFoundException("CourseService.updateCourse()", courseId));
 
 
         //Update retrieved course object with courseDTO information
-        courseMapper.updateCourseFromDto(course, courseDTO);
+        courseMapper.updateCourseFromReqDto(course, courseReqDTO);
 
         //Save updated course to database
         Course savedCourse = courseRepo.save(course);

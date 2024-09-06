@@ -1,6 +1,7 @@
 package com.revlearn.team1.unit.mapper;
 
-import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
 import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.model.Course;
@@ -15,8 +16,8 @@ import org.mockito.MockitoAnnotations;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 class CourseMapperTest {
 
@@ -46,25 +47,24 @@ class CourseMapperTest {
         course.setDescription("Test Description");
 
         // Act
-        CourseDTO courseDTO = courseMapper.toDto(course);
+        CourseResDTO courseResDTO = courseMapper.toDto(course);
 
         // Assert
-        assertEquals(1L, courseDTO.id());
-        assertEquals(LocalDate.of(2023, 1, 1), courseDTO.startDate());
-        assertEquals(LocalDate.of(2023, 12, 31), courseDTO.endDate());
-        assertEquals(AttendanceMethod.ONLINE, courseDTO.attendanceMethod());
-        assertEquals("Test Course", courseDTO.name());
-        assertEquals("Test Description", courseDTO.description());
+        assertEquals(1L, courseResDTO.id());
+        assertEquals(LocalDate.of(2023, 1, 1), courseResDTO.startDate());
+        assertEquals(LocalDate.of(2023, 12, 31), courseResDTO.endDate());
+        assertEquals(AttendanceMethod.ONLINE, courseResDTO.attendanceMethod());
+        assertEquals("Test Course", courseResDTO.name());
+        assertEquals("Test Description", courseResDTO.description());
     }
 
     @Test
-    void testFromDto() {
+    void testFromReqDto() {
         // Arrange
         User institution = new User();
         institution.setId(1);
 
-        CourseDTO courseDTO = new CourseDTO(
-                1L,
+        CourseReqDTO courseReqDTO = new CourseReqDTO(
                 LocalDate.of(2023, 1, 1),
                 LocalDate.of(2023, 12, 31),
                 AttendanceMethod.ONLINE,
@@ -76,7 +76,7 @@ class CourseMapperTest {
         when(userRepository.findById(1)).thenReturn(Optional.of(institution));
 
         // Act
-        Course course = courseMapper.fromDto(courseDTO);
+        Course course = courseMapper.fromReqDto(courseReqDTO);
 
         // Assert
         assertEquals(LocalDate.of(2023, 1, 1), course.getStartDate());
@@ -86,31 +86,6 @@ class CourseMapperTest {
         assertEquals("Test Description", course.getDescription());
         assertEquals(0.0F, course.getPrice());
     }
-
-//    @Test
-//    void testFromDto_UserNotFound() {
-//        // Arrange
-//        CourseDTO courseDTO = new CourseDTO(
-//                1L,
-//                LocalDate.of(2023, 1, 1),
-//                LocalDate.of(2023, 12, 31),
-//                AttendanceMethod.ONLINE,
-//                "Test Course",
-//                "Test Description",
-//                0.0F
-//        );
-//
-//        when(userRepository.findById(999)).thenReturn(Optional.empty());
-//
-//        // Act & Assert
-//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-//            courseMapper.fromDto(courseDTO);
-//        });
-//
-//        assertEquals("User not found with ID: 999", exception.getMessage());
-//
-//        verify(userRepository, times(1)).findById(999);
-//    }
 
     @Test
     void testUpdateCourseFromDto() {
@@ -122,8 +97,7 @@ class CourseMapperTest {
         course.setDescription("Old Description");
         course.setAttendanceMethod(AttendanceMethod.ONLINE);
 
-        CourseDTO courseDTO = new CourseDTO(
-                1L,
+        CourseReqDTO courseReqDTO = new CourseReqDTO(
                 LocalDate.of(2024, 1, 1),
                 LocalDate.of(2024, 12, 31),
                 AttendanceMethod.IN_PERSON,
@@ -132,8 +106,9 @@ class CourseMapperTest {
                 0.0F
         );
 
+
         // Act
-        courseMapper.updateCourseFromDto(course, courseDTO);
+        courseMapper.updateCourseFromReqDto(course, courseReqDTO);
 
         // Assert
         assertEquals(LocalDate.of(2024, 1, 1), course.getStartDate());

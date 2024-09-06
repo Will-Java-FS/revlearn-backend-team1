@@ -1,6 +1,7 @@
 package com.revlearn.team1.controller;
 
-import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
@@ -22,7 +23,7 @@ public class CourseController {
 
     @GetMapping
     @Operation(summary = "Get All Courses", description = "This will probably never be used because courses should be categorized and retrieved by institution.", tags = { "course" })
-    public List<CourseDTO> getAllCourses() {
+    public List<CourseResDTO> getAllCourses() {
         return courseService.getAll();
     }
 
@@ -40,23 +41,23 @@ public class CourseController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get Course by Id", description = "", tags = { "course" })
-    public CourseDTO getCourseById(@PathVariable Long id) {
+    public CourseResDTO getCourseById(@PathVariable Long id) {
         return courseService.getById(id);
     }
 
 
     @PostMapping
     @Operation(summary = "Create a Course", description = "Will require request to be made by an authenticated educator or institution.", tags = { "course" })
-    public CourseDTO postCourse(@RequestBody CourseDTO courseDTO) {
+    public CourseResDTO postCourse(@RequestBody CourseReqDTO courseReqDTO) {
         //TODO: Secure so that only instructors and institutions can create courses
-        return courseService.createCourse(courseDTO);
+        return courseService.createCourse(courseReqDTO);
     }
 
-    @PutMapping
+    @PutMapping("/{courseId}")
     @Operation(summary = "Update a Course", description = "Will require authorized educator or institution.", tags = { "course" })
-    public CourseDTO updateCourse(@RequestBody CourseDTO courseDTO) {
+    public CourseResDTO updateCourse(@PathVariable Long courseId, @RequestBody CourseReqDTO courseReqDTO) {
         //TODO: Secure so only educators and institution roles can access.  Further security in service layer.
-        return courseService.updateCourse(courseDTO);
+        return courseService.updateCourse(courseId, courseReqDTO);
     }
 
     @DeleteMapping("/{courseId}")
