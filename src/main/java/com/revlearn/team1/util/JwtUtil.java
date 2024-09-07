@@ -18,8 +18,6 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
-
     private final long validityInMilliseconds = 24 * 60 * 60 * 1000; // 1 day in milliseconds
     @Value("${SECRET_KEY}")
     private String secretKey;
@@ -89,12 +87,10 @@ public class JwtUtil {
 
     public boolean validateToken(String token, User user) {
         if (token == null || user == null) {
-            logger.info("Token or user is null");
             return false;
         }
         final String username = extractUsername(token);
         if (username == null || user.getUsername() == null) {
-            logger.info("Username is null");
             return false;
         }
         return username.equals(user.getUsername()) && !isTokenExpired(token);
