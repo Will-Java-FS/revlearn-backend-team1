@@ -6,7 +6,7 @@ import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
-import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.course.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -94,7 +94,7 @@ public class CourseController {
 
     @GetMapping("/{courseId}/modules")
     @Operation(summary = "Get All Modules of Course", description = "Requires authorization: enrolled student, assigned educator, or institution (admin) account.", tags = { "course" })
-    public List<ModuleDTO> getModulesByCourseId(@PathVariable Long courseId) {
+    public List<ModuleResDTO> getModulesByCourseId(@PathVariable Long courseId) {
         //TODO: Secure so only course affiliated users can access (students, educators, & institution)
         return courseService.getModulesByCourseId(courseId);
     }

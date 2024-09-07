@@ -6,7 +6,7 @@ import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
-import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.exceptions.UserNotAuthorizedException;
@@ -245,14 +245,14 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public List<ModuleDTO> getModulesByCourseId(Long courseId) {
+    public List<ModuleResDTO> getModulesByCourseId(Long courseId) {
 
         Course course = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("Course not found", courseId));
 
         verifyStudentLevelAccess(course);
 
-        return course.getCourseModules().stream().map(moduleMapper::toDto).toList();
+        return course.getCourseModules().stream().map(moduleMapper::toResDto).toList();
     }
 
     public boolean verifyStudentLevelAccess(Course course) {
