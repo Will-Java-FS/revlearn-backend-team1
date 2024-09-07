@@ -139,18 +139,12 @@
   ],
   "modules": [
     {
-      "id": null,
       "title": "Introduction to Variables",
-      "description": "Learn about variables in Java programming.",
-      "orderIndex": null,
-      "courseId": 1
+      "description": "Learn about variables in Java programming."
     },
     {
-      "id": null,
       "title": "Introduction to Methods",
-      "description": "Learn about methods in Java programming.",
-      "orderIndex": null,
-      "courseId": 1
+      "description": "Learn about methods in Java programming."
     }
   ]
 }

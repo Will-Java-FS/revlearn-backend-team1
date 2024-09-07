@@ -85,7 +85,7 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void createInitialModules(JsonNode modulesNode) {
-        String requestUrl = apiUrl + "/module";
+        String requestUrl = apiUrl + "/module/course/1";
         for (JsonNode moduleNode : modulesNode) {
             sendRequest(requestUrl, HttpMethod.POST, moduleNode);
         }
