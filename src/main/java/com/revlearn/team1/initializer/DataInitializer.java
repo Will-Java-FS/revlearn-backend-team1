@@ -43,21 +43,15 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void loadInitialData() throws IOException {
-//        TODO: Investigate current implementation of transactions. It is not clear what is stored in database.
-//        JsonNode transactions = objectMapper.readTree(new ClassPathResource("initialData/transactions.json").getInputStream());
-//        createInitialTransactions(rootNode.path("transactions"));
 
         //Create an admin (institution) user and store its JWT for future requests
-        JsonNode adminUser = objectMapper.readTree(new ClassPathResource("initialData/admin-user.json").getInputStream());
-        String jwt = getAdminJWT(adminUser);
+        String jwt = getAdminJWT(loadJson("admin-user.json"));
 
-        JsonNode users = objectMapper.readTree(new ClassPathResource("initialData/users.json").getInputStream());
-        JsonNode courses = objectMapper.readTree(new ClassPathResource("initialData/courses.json").getInputStream());
-        JsonNode modules = objectMapper.readTree(new ClassPathResource("initialData/modules.json").getInputStream());
-
-        createInitialUsers(users);
-        createInitialCourses(courses, jwt);
-        createInitialModules(modules);
+        createInitialUsers(loadJson("users.json"));
+        createInitialCourses(loadJson("courses.json"), jwt);
+        createInitialModules(loadJson("modules.json"));
+//        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
+//        createInitialTransactions(loadJson("transactions"));
 
         logger.info("Data initialization complete.");
     }
@@ -159,4 +153,12 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
+    private JsonNode loadJson(String fileName) throws IOException {
+        try {
+            return objectMapper.readTree(new ClassPathResource("initialData/" + fileName).getInputStream());
+        } catch (IOException e) {
+            logger.error("Error loading JSON file: " + fileName);
+            throw e;
+        }
+    }
 }
