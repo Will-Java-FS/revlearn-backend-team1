@@ -1,7 +1,7 @@
 package com.revlearn.team1.service.module;
 
-import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.dto.module.ModuleReqDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.exceptions.course.CourseNotFoundException;
@@ -19,13 +19,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ModuleServiceImp implements ModuleService {
+    public final CourseRepo courseRepo;
     private final ModuleRepo moduleRepo;
     private final ModuleMapper moduleMapper;
-    public final CourseRepo courseRepo;
 
     @Override
     public ModuleResDTO getModuleById(Long moduleId) {
+
         //TODO: Secure so only course affiliated users can access (enrolled students, assigned educators, & institution)
+
+
         return moduleRepo.findById(moduleId).map(moduleMapper::toResDto).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
     }

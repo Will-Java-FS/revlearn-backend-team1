@@ -18,6 +18,7 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
+import com.revlearn.team1.service.accessControl.AccessControlService;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -32,6 +33,7 @@ public class CourseServiceImp implements CourseService {
     private final CourseMapper courseMapper;
     private final UserRepository userRepo;
     private final ModuleMapper moduleMapper;
+    private final AccessControlService accessControlService;
 
     @Override
     public List<CourseResDTO> getAll() {
@@ -50,7 +52,7 @@ public class CourseServiceImp implements CourseService {
                 .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
 
         //Guard clause to verify user is authorized to access course
-        verifyStudentLevelAccess(course);
+        accessControlService.verifyStudentLevelAccess(course);
 
         return course.getStudents();
     }
@@ -62,7 +64,7 @@ public class CourseServiceImp implements CourseService {
                 .orElseThrow(() -> new CourseNotFoundException("getAllEducatorsByCourseId()", courseId));
 
         //Guard clause to verify user is authorized to access course
-        verifyStudentLevelAccess(course);
+        accessControlService.verifyStudentLevelAccess(course);
 
         return course.getEducators();
     }
@@ -108,7 +110,7 @@ public class CourseServiceImp implements CourseService {
                 () -> new CourseNotFoundException("CourseService.updateCourse()", courseId));
 
         //verify user is authorized to update course
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
 
         //Update retrieved course object with courseDTO information
         courseMapper.updateCourseFromReqDto(course, courseReqDTO);
@@ -128,7 +130,7 @@ public class CourseServiceImp implements CourseService {
                 () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
 
         //verify user is authorized to delete course
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
 
         //delete
         courseRepo.deleteById(id);
@@ -152,7 +154,7 @@ public class CourseServiceImp implements CourseService {
         Long userId = SecurityContextService.getUserId();
         if (userId != student.getId()) {
             //Throws exception if user is not course educator or institution
-            if (!verifyEducatorLevelAccess(course))
+            if (!accessControlService.verifyEducatorLevelAccess(course))
                 throw new UserNotAuthorizedException(
                         "User is not authorized to enroll this student in course.  Must be the student, course educator, or institution."
                 );
@@ -182,7 +184,7 @@ public class CourseServiceImp implements CourseService {
         Long userId = SecurityContextService.getUserId();
         if (userId != student.getId()) {
             //Throws exception if user is not course educator or institution
-            if (!verifyEducatorLevelAccess(course))
+            if (!accessControlService.verifyEducatorLevelAccess(course))
                 throw new UserNotAuthorizedException(
                         "User is not authorized to withdraw this student from course.  Must be the student, course educator, or institution."
                 );
@@ -211,7 +213,7 @@ public class CourseServiceImp implements CourseService {
         User educator = userRepo.findById(Math.toIntExact(courseEducatorDTO.educatorId())).orElseThrow(
                 () -> new UserNotFoundException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
 
         course.getEducators().add(educator);
         educator.getTaughtCourses().add(course);
@@ -233,7 +235,7 @@ public class CourseServiceImp implements CourseService {
                         String.format("Educator by id %d does not teach course by id %d.", courseEducatorDTO.educatorId(), course.getId())));
 
         //TODO: Consider restriction of self-removal of educator from course
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
 
         course.getEducators().remove(educator);
         educator.getTaughtCourses().remove(course);
@@ -250,35 +252,10 @@ public class CourseServiceImp implements CourseService {
         Course course = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("Course not found", courseId));
 
-        verifyStudentLevelAccess(course);
+        accessControlService.verifyStudentLevelAccess(course);
 
         return course.getCourseModules().stream().map(moduleMapper::toResDto).toList();
     }
 
-    public boolean verifyStudentLevelAccess(Course course) {
 
-        Long userId = SecurityContextService.getUserId();
-        Roles userRole = SecurityContextService.getUserRole();
-
-        if (course.getStudents().stream().noneMatch(s -> s.getId() == userId)
-                && course.getEducators().stream().noneMatch(e -> e.getId() == userId)
-                && !userRole.equals(Roles.INSTITUTION))
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to access this course.  Must be enrolled student, assigned educator, or administrator.");
-
-        return true;
-    }
-
-    public boolean verifyEducatorLevelAccess(Course course) {
-
-        Long userId = SecurityContextService.getUserId();
-        Roles userRole = SecurityContextService.getUserRole();
-
-        if (course.getEducators().stream().noneMatch(e -> e.getId() == userId)
-                && !userRole.equals(Roles.INSTITUTION))
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to access this course.  Must be assigned educator or administrator.");
-
-        return true;
-    }
 }
