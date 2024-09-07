@@ -2,6 +2,7 @@ package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.dto.module.ModuleReqDTO;
+import com.revlearn.team1.constants.AccessLevelDesc;
 import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.ModulePage;
 import com.revlearn.team1.service.module.ModuleService;
@@ -18,42 +19,41 @@ public class ModuleController {
     private final ModuleService moduleService;
 
     @GetMapping("/{moduleId}")
-    @Operation(summary = "Get Module", description = "Will require authenticated and authorized user (ie enrolled student, assigned educator, or owner institution).  Probably will not be used because course/{courseId}/modules can retrieve all of a course's modules.  To get more detailed information of the module use module/{moduleId}/pages and module/{moduleId}/exams.", tags = {"module"})
+    @Operation(summary = "Get Module", description = AccessLevelDesc.ENROLLED_STUDENT + "To get more detailed information of the module use module/{moduleId}/pages and module/{moduleId}/exams.", tags = {"module"})
     public ModuleResDTO getModuleById(@PathVariable Long moduleId) {
-        //TODO: Secure so only course affiliated users can access (students, educators, & institution)
         return moduleService.getModuleById(moduleId);
     }
 
     @PostMapping("/course/{courseId}")
-    @Operation(summary = "Create Module", description = "Will require authorized user (assigned educator or institution).  Once a module is created, pages and exams can be added to it.", tags = {"module"})
+    @Operation(summary = "Create Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR + "Once a module is created, pages and exams can be added to it through their respective controllers.", tags = {"module"})
     public ModuleResDTO createModule(@PathVariable Long courseId, @RequestBody ModuleReqDTO moduleReqDTO) {
         //TODO: Secure so only course owners (instructors and institutions) can create modules
         return moduleService.createModule(courseId, moduleReqDTO);
     }
 
     @PutMapping("/{moduleId}/course/{courseId}")
-    @Operation(summary = "Update Module", description = "Will require authorized user (assigned educator or institution).", tags = {"module"})
+    @Operation(summary = "Update Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR, tags = {"module"})
     public ModuleResDTO updateModule(@PathVariable Long moduleId, @RequestBody ModuleReqDTO moduleReqDTO) {
         //TODO: Secure so only course owners (instructors and institutions) can update modules
         return moduleService.updateModule(moduleId, moduleReqDTO);
     }
 
     @DeleteMapping("{moduleId}")
-    @Operation(summary = "Delete Module", description = "Will require authorized user (assigned educator or institution).", tags = {"module"})
+    @Operation(summary = "Delete Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR, tags = {"module"})
     public String deleteModule(@PathVariable Long moduleId) {
         //TODO: Secure so only course owners (instructors and institutions) can delete modules
         return moduleService.deleteModule(moduleId);
     }
 
     @GetMapping("/{moduleId}/pages")
-    @Operation(summary = "Get All Pages of a Module", description = "Will require authenticated and authorized user (ie enrolled student, assigned educator, or owner institution).", tags = {"module"})
+    @Operation(summary = "Get All Pages of a Module", description = AccessLevelDesc.ENROLLED_STUDENT, tags = {"module"})
     public List<ModulePage> getModulePages(@PathVariable Long moduleId) {
         //TODO: Secure so only course affiliated users can access (enrolled students, assigned educators, & owner institution)
         return moduleService.getModulePages(moduleId);
     }
 
     @GetMapping("/{moduleId}/exams")
-    @Operation(summary = "Get All Exams of a Module", description = "Will require authenticated and authorized user (ie enrolled student, assigned educator, or owner institution).", tags = {"module"})
+    @Operation(summary = "Get All Exams of a Module", description = AccessLevelDesc.ENROLLED_STUDENT, tags = {"module"})
     public List<Exam> getExams(@PathVariable Long moduleId) {
         return moduleService.getExams(moduleId);
     }

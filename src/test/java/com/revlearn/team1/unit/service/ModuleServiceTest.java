@@ -10,6 +10,7 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.CourseModule;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.ModuleRepo;
+import com.revlearn.team1.service.accessControl.AccessControlService;
 import com.revlearn.team1.service.module.ModuleService;
 import com.revlearn.team1.service.module.ModuleServiceImp;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,8 @@ class ModuleServiceTest {
     private ModuleMapper moduleMapper;
     @Mock
     private CourseRepo courseRepo;
+    @Mock
+    private AccessControlService accessControlService;
     @InjectMocks
     private ModuleServiceImp moduleServiceImp;
 
