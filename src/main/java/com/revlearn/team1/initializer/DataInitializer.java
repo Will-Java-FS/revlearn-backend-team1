@@ -1,8 +1,8 @@
 package com.revlearn.team1.initializer;
 
-import java.io.IOException;
-import java.util.Objects;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,25 +15,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
 @Profile("!test")
 public class DataInitializer implements ApplicationRunner {
 
-    @Value("${SPRING_API_URL}")
-    private String apiUrl;
-
-    @Value("${app.runner.enabled}")
-    private boolean isRunnerEnabled;
-
     private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+    @Value("${SPRING_API_URL}")
+    private String apiUrl;
+    @Value("${app.runner.enabled}")
+    private boolean isRunnerEnabled;
 
     @Override
     @Transactional
@@ -47,12 +43,23 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void loadInitialData() throws IOException {
-        JsonNode rootNode = objectMapper.readTree(new ClassPathResource("initial-data.json").getInputStream());
+//        TODO: Investigate current implementation of transactions. It is not clear what is stored in database.
+//        JsonNode transactions = objectMapper.readTree(new ClassPathResource("initialData/transactions.json").getInputStream());
+//        createInitialTransactions(rootNode.path("transactions"));
 
-        createInitialUsers(rootNode.path("users"));
-        createInitialCourses(rootNode.path("courses"));
-        createInitialTransactions(rootNode.path("transactions"));
-        createInitialModules(rootNode.path("modules"));
+        //Create an admin (institution) user and store its JWT for future requests
+        JsonNode adminUser = objectMapper.readTree(new ClassPathResource("initialData/admin-user.json").getInputStream());
+        String jwt = getAdminJWT(adminUser);
+
+        JsonNode users = objectMapper.readTree(new ClassPathResource("initialData/users.json").getInputStream());
+        JsonNode courses = objectMapper.readTree(new ClassPathResource("initialData/courses.json").getInputStream());
+        JsonNode modules = objectMapper.readTree(new ClassPathResource("initialData/modules.json").getInputStream());
+
+        createInitialUsers(users);
+        createInitialCourses(courses, jwt);
+        createInitialModules(modules);
+
+        logger.info("Data initialization complete.");
     }
 
 
@@ -64,15 +71,14 @@ public class DataInitializer implements ApplicationRunner {
         logger.info("Initial users created.");
     }
 
-    private void createInitialCourses(JsonNode coursesNode) {
+    private void createInitialCourses(JsonNode coursesNode, String jwt) {
 
-        try{
-            String jwt = getAdminJWT();
+        try {
             String requestUrl = apiUrl + "/course";
             for (JsonNode courseNode : coursesNode) {
                 sendAdminRequest(requestUrl, HttpMethod.POST, courseNode, jwt);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Exception occurred while sending request: ", e);
         }
     }
@@ -99,7 +105,7 @@ public class DataInitializer implements ApplicationRunner {
 
             ResponseEntity<JsonNode> response = restTemplate.exchange(url, method, requestEntity, JsonNode.class);
 
-            if (response.getStatusCode().is2xxSuccessful())  {
+            if (response.getStatusCode().is2xxSuccessful()) {
                 logger.info("Request successful: " + response.getBody());
             } else {
                 logger.error(
@@ -109,6 +115,7 @@ public class DataInitializer implements ApplicationRunner {
             logger.error("Exception occurred while sending request: ", e);
         }
     }
+
     private void sendAdminRequest(String url, HttpMethod method, JsonNode requestBody, String jwt) {
         try {
             HttpHeaders httpHeaders = new HttpHeaders();
@@ -121,7 +128,7 @@ public class DataInitializer implements ApplicationRunner {
 
             ResponseEntity<JsonNode> response = restTemplate.exchange(url, method, requestEntity, JsonNode.class);
 
-            if (response.getStatusCode().is2xxSuccessful())  {
+            if (response.getStatusCode().is2xxSuccessful()) {
                 logger.info("Request successful: " + response.getBody());
             } else {
                 logger.error(
@@ -132,14 +139,19 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private String getAdminJWT() throws IOException {
+    private String getAdminJWT(JsonNode requestBody) {
         String requestUrl = apiUrl + "/user/register";
-        HttpMethod method = HttpMethod.POST;
-        JsonNode rootNode = objectMapper.readTree(new ClassPathResource("initial-data.json").getInputStream());
-        JsonNode requestBody = rootNode.path("adminUser");
-        try{
-            HttpEntity<JsonNode> requestEntity = new HttpEntity<>(requestBody);
-            ResponseEntity<JsonNode> response = restTemplate.exchange(requestUrl, method, requestEntity, JsonNode.class);
+        HttpEntity<JsonNode> requestEntity = new HttpEntity<>(requestBody);
+        logger.info("Sending request to URL: " + requestUrl);
+        logger.info("Request body: " + requestBody.toPrettyString());
+        try {
+            ResponseEntity<JsonNode> response = restTemplate.exchange(requestUrl, HttpMethod.POST, requestEntity, JsonNode.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                logger.info("Admin JWT Acquisition Successful: " + response.getBody());
+            } else {
+                logger.error(
+                        "Error in request: " + response.getStatusCode() + ", Response body: " + response.getBody());
+            }
             return Objects.requireNonNull(response.getBody()).get("JWT").asText();
         } catch (Exception e) {
             logger.error("Exception occurred while sending request: ", e);

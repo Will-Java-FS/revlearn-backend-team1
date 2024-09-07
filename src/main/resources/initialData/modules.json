@@ -1,0 +1,52 @@
+[
+  {
+    "title": "Introduction to Programming",
+    "description": "An overview of basic programming concepts and structures.",
+    "courseId": 3
+  },
+  {
+    "title": "Data Structures",
+    "description": "Learn about arrays, lists, stacks, queues, and trees.",
+    "courseId": 3
+  },
+  {
+    "title": "Object-Oriented Programming",
+    "description": "Understand the principles of classes, objects, inheritance, and polymorphism.",
+    "courseId": 3
+  },
+  {
+    "title": "Algorithms",
+    "description": "Explore common algorithms like sorting, searching, and recursion.",
+    "courseId": 3
+  },
+  {
+    "title": "Web Development Basics",
+    "description": "Introduction to HTML, CSS, and JavaScript for building web applications.",
+    "courseId": 3
+  },
+  {
+    "title": "Database Fundamentals",
+    "description": "Learn about relational databases, SQL, and data modeling.",
+    "courseId": 3
+  },
+  {
+    "title": "Software Engineering",
+    "description": "Understand the software development lifecycle, project management, and version control.",
+    "courseId": 3
+  },
+  {
+    "title": "Mobile App Development",
+    "description": "Develop mobile applications using Android and iOS platforms.",
+    "courseId": 3
+  },
+  {
+    "title": "Cybersecurity Essentials",
+    "description": "Learn the basics of protecting networks, systems, and data from cyber threats.",
+    "courseId": 3
+  },
+  {
+    "title": "Cloud Computing",
+    "description": "Introduction to cloud platforms, services, and deployment models.",
+    "courseId": 3
+  }
+]
