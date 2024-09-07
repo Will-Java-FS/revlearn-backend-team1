@@ -1,11 +1,14 @@
 package com.revlearn.team1.util;
 
+import com.revlearn.team1.initializer.DataInitializer;
 import com.revlearn.team1.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.security.WeakKeyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +18,7 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     private final long validityInMilliseconds = 24 * 60 * 60 * 1000; // 1 day in milliseconds
     @Value("${SECRET_KEY}")
@@ -85,21 +89,18 @@ public class JwtUtil {
 
     public boolean validateToken(String token, User user) {
         if (token == null || user == null) {
-            System.out.println("Token or user is null");
+            logger.info("Token or user is null");
             return false;
         }
         final String username = extractUsername(token);
         if (username == null || user.getUsername() == null) {
-            System.out.println("Username is null");
+            logger.info("Username is null");
             return false;
         }
-        System.out.println("Username: " + username);
-        System.out.println("User: " + user.getUsername());
         return username.equals(user.getUsername()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
-        System.out.println("token is expired: " + decodeJWT(token).getExpiration().before(new Date()));
         return decodeJWT(token).getExpiration().before(new Date());
     }
 }
