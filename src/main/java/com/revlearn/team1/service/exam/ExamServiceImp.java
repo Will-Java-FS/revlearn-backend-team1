@@ -2,8 +2,7 @@ package com.revlearn.team1.service.exam;
 
 import com.revlearn.team1.exceptions.ExamNotFoundException;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
-import com.revlearn.team1.exceptions.course.CourseNotFoundException;
-import com.revlearn.team1.model.CourseModule;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.repository.ExamRepo;
 import com.revlearn.team1.repository.ModuleRepo;
@@ -29,11 +28,11 @@ public class ExamServiceImp implements ExamService {
     public Exam createExam(Long moduleId, Exam exam) {
         //TODO Verify authenticated user is course owner or admin account
         //verify that the module exists
-        CourseModule module = moduleRepo.findById(moduleId)
+        Module module = moduleRepo.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
         //Set the module for the exam
-        exam.setCourseModule(module);
+        exam.setModule(module);
         module.getExams().add(exam);
 
         //Save the exam

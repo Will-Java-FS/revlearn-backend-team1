@@ -1,6 +1,7 @@
 package com.revlearn.team1.unit.service;
 
 import com.revlearn.team1.model.*;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.repository.ProgressRepo;
 import com.revlearn.team1.service.ProgressService;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,7 @@ public class ProgressServiceTest {
     void allArgsConstructorTest() {
         User user = new User();
         Course course = new Course();
-        CourseModule module = new CourseModule();
+        Module module = new Module();
         Page page = new Page();
         Progress progress = new Progress(1L, true, 70.0F, course, module, page, user);
 
@@ -52,7 +53,7 @@ public class ProgressServiceTest {
         assertTrue(progress.getCompleted());
         assertEquals(70.0F, progress.getCompletedProgress());
         assertEquals(course, progress.getCourse());
-        assertEquals(module, progress.getCourseModule());
+        assertEquals(module, progress.getModule());
         assertEquals(page, progress.getPage());
         assertEquals(user, progress.getUser());
 

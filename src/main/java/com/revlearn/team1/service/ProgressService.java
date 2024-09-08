@@ -46,7 +46,7 @@ public class ProgressService {
         existingProgress.setCompleted(progress.getCompleted());
         existingProgress.setCompletedProgress(progress.getCompletedProgress());
         existingProgress.setCourse(progress.getCourse());
-        existingProgress.setCourseModule(progress.getCourseModule());
+        existingProgress.setModule(progress.getModule());
         existingProgress.setPage(progress.getPage());
         existingProgress.setUser(progress.getUser());
         return progressRepo.save(existingProgress);

@@ -7,7 +7,7 @@ import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.exceptions.course.CourseNotFoundException;
 import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.CourseModule;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.Page;
 import com.revlearn.team1.repository.CourseRepo;
@@ -29,14 +29,14 @@ public class ModuleServiceImp implements ModuleService {
     @Override
     public ModuleResDTO getModuleById(Long moduleId) {
         //Verify module exists
-        CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
+        Module module = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
 
         //Verify only course affiliated users can access (enrolled students, assigned educators, & institution)
-        Course course = courseModule.getCourse();
+        Course course = module.getCourse();
         accessControlService.verifyStudentLevelAccess(course);
 
-        return moduleMapper.toResDto(courseModule);
+        return moduleMapper.toResDto(module);
     }
 
     @Override
@@ -49,16 +49,16 @@ public class ModuleServiceImp implements ModuleService {
         accessControlService.verifyEducatorLevelAccess(course);
 
         //Create module
-        CourseModule courseModule = moduleMapper.toEntityFromReqDto(moduleReqDTO);
+        Module module = moduleMapper.toEntityFromReqDto(moduleReqDTO);
 
         //Set Course
-        courseModule.setCourse(course);
+        module.setCourse(course);
 
         //Set orderIndex: default to last in list
-        courseModule.setOrderIndex((long) courseModule.getCourse().getCourseModules().size());
+        module.setOrderIndex((long) module.getCourse().getModules().size());
 
         try {
-            return moduleMapper.toResDto(moduleRepo.save(courseModule));
+            return moduleMapper.toResDto(moduleRepo.save(module));
         } catch (Exception e) {
             throw new ServiceLayerDataAccessException("Failed to create module", e);
         }
@@ -68,18 +68,18 @@ public class ModuleServiceImp implements ModuleService {
     public ModuleResDTO updateModule(Long moduleId, ModuleReqDTO moduleReqDTO) {
 
         //Verify module exists
-        CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
+        Module module = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
 
-        Course course = courseModule.getCourse();
+        Course course = module.getCourse();
         //only course owners can update (assigned educators, & institution)
         accessControlService.verifyEducatorLevelAccess(course);
 
         //Update module
-        moduleMapper.updateEntityFromReqDto(courseModule, moduleReqDTO);
+        moduleMapper.updateEntityFromReqDto(module, moduleReqDTO);
 
         try {
-            return moduleMapper.toResDto(moduleRepo.save(courseModule));
+            return moduleMapper.toResDto(moduleRepo.save(module));
         } catch (Exception e) {
             throw new ServiceLayerDataAccessException("Failed to update module", e);
         }
@@ -89,16 +89,16 @@ public class ModuleServiceImp implements ModuleService {
     public String deleteModule(Long moduleId) {
 
         //Verify module exists
-        CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
+        Module module = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
 
-        Course course = courseModule.getCourse();
+        Course course = module.getCourse();
         //only course owners can delete (assigned educators, & institution)
         accessControlService.verifyEducatorLevelAccess(course);
 
         //delete
         try {
-            moduleRepo.delete(courseModule);
+            moduleRepo.delete(module);
             return "Module deleted";
         } catch (Exception e) {
             throw new ServiceLayerDataAccessException("Failed to delete module", e);
@@ -108,30 +108,30 @@ public class ModuleServiceImp implements ModuleService {
     @Override
     public List<Page> getModulePages(Long moduleId) {
         //Verify module exists
-        CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
+        Module module = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
 
         //verify only course affiliated users can access (enrolled students, assigned educators, & institution)
-        Course course = courseModule.getCourse();
+        Course course = module.getCourse();
         accessControlService.verifyStudentLevelAccess(course);
 
         //TODO: convert to DTOs
-        return courseModule.getPages();
+        return module.getPages();
     }
 
     @Override
     public List<Exam> getExams(Long moduleId) {
 
         //Verify module exists
-        CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
+        Module module = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
 
         //verify only course affiliated users can access (enrolled students, assigned educators, & institution)
-        Course course = courseModule.getCourse();
+        Course course = module.getCourse();
         accessControlService.verifyStudentLevelAccess(course);
 
         //TODO: convert to DTOs
-        return courseModule.getExams();
+        return module.getExams();
     }
 
     //TODO: implement method to allow client to rearrange modules' orderIndexes

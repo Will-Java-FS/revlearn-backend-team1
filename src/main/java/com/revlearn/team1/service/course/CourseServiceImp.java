@@ -254,7 +254,7 @@ public class CourseServiceImp implements CourseService {
 
         accessControlService.verifyStudentLevelAccess(course);
 
-        return course.getCourseModules().stream().map(moduleMapper::toResDto).toList();
+        return course.getModules().stream().map(moduleMapper::toResDto).toList();
     }
 
 

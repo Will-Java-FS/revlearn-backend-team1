@@ -28,7 +28,7 @@ public class Progress {
 
     @OneToOne
     @JoinColumn(name = "course_module_id")
-    private CourseModule courseModule;
+    private Module module;
 
     @OneToOne
     @JoinColumn(name = "module_page_id")
@@ -45,7 +45,7 @@ public class Progress {
                 ", completed:" + completed +
                 ", completedProgress:" + completedProgress +
                 ", course:" + course +
-                ", module:" + courseModule +
+                ", module:" + module +
                 ", page_id" + page +
                 ", user:" + user;
 

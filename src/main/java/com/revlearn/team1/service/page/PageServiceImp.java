@@ -5,7 +5,7 @@ import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.PageNotFoundException;
 import com.revlearn.team1.exceptions.UserNotAuthorizedException;
-import com.revlearn.team1.model.CourseModule;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.model.Page;
 import com.revlearn.team1.repository.ModuleRepo;
 import com.revlearn.team1.repository.PageRepo;
@@ -30,7 +30,7 @@ public class PageServiceImp implements PageService {
     public Page createPage(Long moduleId, Page page) {
 
         //verify module exists
-        CourseModule module = moduleRepo.findById(moduleId)
+        Module module = moduleRepo.findById(moduleId)
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
         //verify module is owned by requester or requester is an institution (admin) account
@@ -42,7 +42,7 @@ public class PageServiceImp implements PageService {
 
         //Attach page to module
         module.getPages().add(page);
-        page.setCourseModule(module);
+        page.setModule(module);
 
 
         //Save page
@@ -58,7 +58,7 @@ public class PageServiceImp implements PageService {
                 .orElseThrow(() -> new PageNotFoundException("Page with id: " + pageId + " not found"));
 
         //verify module exists
-        CourseModule module = existingPage.getCourseModule();
+        Module module = existingPage.getModule();
 
         //verify module is owned by requester or requester is an institution (admin) account
         Long requesterId = SecurityContextService.getUserId();
@@ -84,7 +84,7 @@ public class PageServiceImp implements PageService {
                 .orElseThrow(() -> new PageNotFoundException("Page with id: " + pageId + " not found"));
 
         //verify module exists
-        CourseModule module = existingPage.getCourseModule();
+        Module module = existingPage.getModule();
 
         //verify module is owned by requester or requester is an institution (admin) account
         Long requesterId = SecurityContextService.getUserId();
