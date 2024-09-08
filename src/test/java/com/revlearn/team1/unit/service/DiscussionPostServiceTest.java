@@ -6,72 +6,74 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.revlearn.team1.dto.discussionPost.DiscussionPostRequestDTO;
+import com.revlearn.team1.dto.discussionPost.DiscussionPostResponseDTO;
+import com.revlearn.team1.service.discussionPost.DiscussionPostServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
-import com.revlearn.team1.dto.DiscussionPostDTO;
 import com.revlearn.team1.exceptions.DiscussionPostNotFoundException;
 import com.revlearn.team1.mapper.DiscussionPostMapper;
-import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.DiscussionPost;
-import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.DiscussionPostRepo;
-import com.revlearn.team1.service.DiscussionPostService;
 
 
 class DiscussionPostServiceTest{
 
     @Mock
-    private DiscussionPostRepo disRepo;
+    private DiscussionPostRepo discussionPostRepository;
 
     @Mock
-    private DiscussionPostMapper disMapper;
+    private DiscussionPostMapper discussionPostMapper;
 
     @InjectMocks
-    private DiscussionPostService disServ;
+    private DiscussionPostServiceImp discussionPostService;
 
     @BeforeEach
     void setup() {MockitoAnnotations.openMocks(this);}
 
     @Test
     void testGetDiscussionByIdSuccess(){
+        // Arrange
         DiscussionPost disPost = new DiscussionPost();
-        DiscussionPostDTO disDto = new DiscussionPostDTO(
-                11L,
-                new Course(),
-                new User(),
+        DiscussionPostResponseDTO discussionPostResponseDTO = new DiscussionPostResponseDTO(
+                10L,
+                10L,
+                10L,
+                10,
                 "content",
                 LocalDateTime.of(2024,5,1,13,30),
                 LocalDateTime.of(2024,5,1,13,30)
         );
 
-        when(disRepo.findById(11L)).thenReturn(Optional.of(disPost));
-        when(disMapper.toDto(disPost)).thenReturn(disDto);
+        when(discussionPostRepository.findById(11L)).thenReturn(Optional.of(disPost));
+        when(discussionPostMapper.toDto(disPost)).thenReturn(discussionPostResponseDTO);
 
-        DiscussionPostDTO retrievedDis = disServ.getDiscussionById(11L);
+        // Act
+        DiscussionPostResponseDTO result = discussionPostService.getDiscussionById(11L);
 
-        assertEquals(retrievedDis, disDto);
-        verify(disRepo, times(1)).findById(11L);
-        verify(disMapper, times(1)).toDto(disPost);
+        assertEquals(result, discussionPostResponseDTO);
+        verify(discussionPostRepository).findById(11L);
+        verify(discussionPostMapper).toDto(disPost);
     }
 
     @Test
     void testGetDiscussionByIdFail() {
         // Arrange
         Long discussionId = 11L;
-        when(disRepo.findById(discussionId)).thenReturn(Optional.empty());
+        when(discussionPostRepository.findById(discussionId)).thenReturn(Optional.empty());
 
         // Act and Assert
         DiscussionPostNotFoundException thrownException = assertThrows(
                 DiscussionPostNotFoundException.class,
-                () -> disServ.getDiscussionById(discussionId),
+                () -> discussionPostService.getDiscussionById(discussionId),
                 "Expected getDiscussionById() to throw DiscussionPostNotFoundException, but it didn't");
 
         // Optionally, verify the exception message if your exception contains a
@@ -81,96 +83,124 @@ class DiscussionPostServiceTest{
 
     @Test
     void testPostDiscussionPost(){
-        DiscussionPost disPost = new DiscussionPost();
-        DiscussionPostDTO disDto = new DiscussionPostDTO(
-                11L,
-                new Course(),
-                new User(),
+        // Arrange
+        DiscussionPost discussionPost = new DiscussionPost();
+
+        DiscussionPostRequestDTO discussionPostRequestDTO = new DiscussionPostRequestDTO(
+                10L,
+                10L,
+                10,
+                "discussionPostRequestDTO"
+        );
+
+        DiscussionPostResponseDTO discussionPostResponseDTO = new DiscussionPostResponseDTO(
+                10L,
+                10L,
+                10L,
+                10,
                 "content",
                 LocalDateTime.of(2024,5,1,13,30),
                 LocalDateTime.of(2024,5,1,13,30)
         );
 
-        when(disMapper.fromDto(disDto)).thenReturn(disPost);
-        when(disRepo.save(disPost)).thenReturn(disPost);
-        when(disMapper.toDto(disPost)).thenReturn(disDto);
+        when(discussionPostMapper.fromDto(discussionPostRequestDTO)).thenReturn(discussionPost);
+        when(discussionPostRepository.save(discussionPost)).thenReturn(discussionPost);
+        when(discussionPostMapper.toDto(discussionPost)).thenReturn(discussionPostResponseDTO);
 
-        DiscussionPostDTO createdDis = disServ.postDiscussionPost(disDto);
+        // Act
+        DiscussionPostResponseDTO result = discussionPostService.postDiscussionPost(discussionPostRequestDTO);
 
-        assertEquals(createdDis, disDto);
-        verify(disMapper).fromDto(disDto);
-        verify(disRepo).save(disPost);
-        verify(disMapper).toDto(disPost);
+        // Assert
+        assertEquals(result, discussionPostResponseDTO);
+        verify(discussionPostMapper).fromDto(discussionPostRequestDTO);
+        verify(discussionPostRepository).save(discussionPost);
+        verify(discussionPostMapper).toDto(discussionPost);
     }
 
     @Test
     void testUpdateDiscussionPostSuccess(){
-        DiscussionPost disPost = new DiscussionPost();
-        DiscussionPostDTO disDto = new DiscussionPostDTO(
+        // Arrange
+        DiscussionPost discussionPost = new DiscussionPost();
+
+        DiscussionPostRequestDTO discussionPostRequestDTO = new DiscussionPostRequestDTO(
+                10L,
+                10L,
+                10,
+                "discussionPostRequestDTO"
+        );
+
+        DiscussionPostResponseDTO discussionPostResponseDTO = new DiscussionPostResponseDTO(
+                10L,
                 11L,
-                new Course(),
-                new User(),
+                10L,
+                10,
                 "content",
                 LocalDateTime.of(2024,5,1,13,30),
                 LocalDateTime.of(2024,5,1,13,30)
         );
 
-        when(disRepo.findById(11L)).thenReturn(Optional.of(disPost));
-        when(disRepo.save(disPost)).thenReturn(disPost);
-        when(disMapper.toDto(disPost)).thenReturn(disDto);
+        when(discussionPostRepository.findById(11L)).thenReturn(Optional.of(discussionPost));
+        when(discussionPostRepository.save(discussionPost)).thenReturn(discussionPost);
+        when(discussionPostMapper.toDto(discussionPost)).thenReturn(discussionPostResponseDTO);
 
-        DiscussionPostDTO updatedDis = disServ.updateDiscussionPost(11L,disDto);
+        // Act
+        DiscussionPostResponseDTO result = discussionPostService.updateDiscussionPost(11L,discussionPostRequestDTO);
 
-        assertEquals(updatedDis, disDto);
-        verify(disRepo).findById(11L);
-        verify(disRepo).save(disPost);
-        verify(disMapper).toDto(disPost);
+        // Assert
+        assertEquals(result, discussionPostResponseDTO);
+        verify(discussionPostRepository).findById(11L);
+        verify(discussionPostRepository).save(discussionPost);
+        verify(discussionPostMapper).toDto(discussionPost);
     }
 
     @Test
     void testUpdateDiscussionPostFail() {
         // Arrange
-        DiscussionPostDTO disDto = new DiscussionPostDTO(
-                11L,
-                new Course(),
-                new User(),
-                "content",
-                LocalDateTime.of(2024, 5, 1, 13, 30),
-                LocalDateTime.of(2024, 5, 1, 13, 30));
-        when(disRepo.findById(11L)).thenReturn(Optional.empty());
+        DiscussionPostRequestDTO discussionPostRequestDTO = new DiscussionPostRequestDTO(
+                10L,
+                10L,
+                10,
+                "discussionPostRequestDTO"
+        );
+
+        when(discussionPostRepository.findById(11L)).thenReturn(Optional.empty());
 
         // Act & Assert
         DiscussionPostNotFoundException thrownException = assertThrows(
                 DiscussionPostNotFoundException.class,
-                () -> disServ.updateDiscussionPost(11L, disDto));
+                () -> discussionPostService.updateDiscussionPost(11L, discussionPostRequestDTO),
+                "Expected getDiscussionById() to throw DiscussionPostNotFoundException, but it didn't");
 
         assertEquals("Discussion Post with ID 11 not found.", thrownException.getMessage());
     }
 
     @Test
     void testDeleteDiscussionByIdSuccess(){
-        DiscussionPost disPost = new DiscussionPost();
+        // Arrange
+        DiscussionPost discussionPost = new DiscussionPost();
 
-        when(disRepo.findById(11L)).thenReturn(Optional.of(disPost));
-        doNothing().when(disRepo).deleteById(11L);
+        when(discussionPostRepository.findById(11L)).thenReturn(Optional.of(discussionPost));
+        doNothing().when(discussionPostRepository).deleteById(11L);
 
-        String deletedDis = disServ.deleteDiscussionById(11L);
+        // Act
+        String result = discussionPostService.deleteDiscussionById(11L);
 
-        assertEquals("Discussion post with id: 11 deleted", deletedDis);
-        verify(disRepo).findById(11L);
-        verify(disRepo).deleteById(11L);
+        // Assert
+        assertEquals(result,"Discussion post with id: 11 deleted");
+        verify(discussionPostRepository).findById(11L);
+        verify(discussionPostRepository).deleteById(11L);
     }
 
     @Test
     void testDeleteDiscussionByIdFail() {
         // Arrange
         Long discussionId = 11L;
-        when(disRepo.findById(discussionId)).thenReturn(Optional.empty());
+        when(discussionPostRepository.findById(discussionId)).thenReturn(Optional.empty());
 
         // Act and Assert
         DiscussionPostNotFoundException thrownException = assertThrows(
                 DiscussionPostNotFoundException.class,
-                () -> disServ.deleteDiscussionById(discussionId),
+                () -> discussionPostService.deleteDiscussionById(discussionId),
                 "Expected deleteDiscussionById() to throw DiscussionPostNotFoundException, but it didn't");
 
         assertEquals("Discussion Post with ID 11 not found.", thrownException.getMessage());

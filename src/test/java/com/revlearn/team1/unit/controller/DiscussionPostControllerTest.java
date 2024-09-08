@@ -1,118 +1,131 @@
 package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.controller.DiscussionPostController;
-import com.revlearn.team1.dto.DiscussionPostDTO;
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.User;
-import com.revlearn.team1.service.DiscussionPostService;
+import com.revlearn.team1.dto.discussionPost.DiscussionPostRequestDTO;
+import com.revlearn.team1.dto.discussionPost.DiscussionPostResponseDTO;
+import com.revlearn.team1.service.discussionPost.DiscussionPostServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class DiscussionPostControllerTest {
 
     @Mock
-    private DiscussionPostService disServ;
+    private DiscussionPostServiceImp discussionPostService;
 
     @InjectMocks
-    private DiscussionPostController disCon;
+    private DiscussionPostController discussionPostController;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    private MockMvc mockMvc;
-
     @Test
-    void testGetDiscussionById() throws Exception{
-        mockMvc = MockMvcBuilders.standaloneSetup(disCon).build();
-        DiscussionPostDTO disDto = new DiscussionPostDTO(
+    void testGetDiscussionById(){
+        // Arrange
+        DiscussionPostResponseDTO discussionPostResponseDTO = new DiscussionPostResponseDTO(
                 10L,
-                new Course(),
-                new User(),
+                10L,
+                10L,
+                10,
                 "content",
                 LocalDateTime.of(2024,5,1,13,30),
                 LocalDateTime.of(2024,5,1,13,30)
         );
 
-        when(disServ.getDiscussionById(10L)).thenReturn(disDto);
+        when(discussionPostService.getDiscussionById(10L)).thenReturn(discussionPostResponseDTO);
 
-//        ResponseEntity<DiscussionPostDTO> disDtoResult = disCon.getDiscussionById(10L);
+        // Act
+        ResponseEntity<DiscussionPostResponseDTO> result = discussionPostController.getDiscussionById(10L);
 
-//        assertEquals(HttpStatus.OK, disDtoResult.getStatusCode());
-//        assertEquals(disDto, disDtoResult.getBody());
-//        verify(disServ).getDiscussionById(10L);
+        // & Assert
+        assertEquals(result.getBody(), discussionPostResponseDTO);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        verify(discussionPostService).getDiscussionById(10L);
 
-        mockMvc.perform(get("/api/v1/discussion/{id}", "10")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.discussionId").value(disDto.discussionId()));
     }
 
     @Test
     void testPostDiscussionPost(){
-        DiscussionPostDTO disDto = new DiscussionPostDTO(
+        // Arrange
+        DiscussionPostRequestDTO discussionPostRequestDTO = new DiscussionPostRequestDTO(
                 10L,
-                new Course(),
-                new User(),
+                10L,
+                10,
+                "discussionPostRequestDTO"
+        );
+
+        DiscussionPostResponseDTO discussionPostResponseDTO = new DiscussionPostResponseDTO(
+                10L,
+                10L,
+                10L,
+                10,
                 "content",
                 LocalDateTime.of(2024,5,1,13,30),
                 LocalDateTime.of(2024,5,1,13,30)
         );
 
-        when(disServ.postDiscussionPost(any(DiscussionPostDTO.class))).thenReturn(disDto);
+        when(discussionPostService.postDiscussionPost(any(DiscussionPostRequestDTO.class))).thenReturn(discussionPostResponseDTO);
 
-        ResponseEntity<DiscussionPostDTO> disDtoResult = disCon.postDiscussionPost(disDto);
+        // Act
+        ResponseEntity<DiscussionPostResponseDTO> result = discussionPostController.postDiscussionPost(discussionPostRequestDTO);
 
-        assertEquals(HttpStatus.CREATED, disDtoResult.getStatusCode());
-        assertEquals(disDto, disDtoResult.getBody());
-        verify(disServ, times(1)).postDiscussionPost(disDto);
+        // Assert
+        assertEquals(result.getStatusCode(),HttpStatus.CREATED);
+        assertEquals(result.getBody(), discussionPostResponseDTO);
+        verify(discussionPostService).postDiscussionPost(discussionPostRequestDTO);
     }
 
     @Test
     void testUpdateDiscussionPost(){
-        DiscussionPostDTO disDto = new DiscussionPostDTO(
+        // Arrange
+        DiscussionPostRequestDTO discussionPostRequestDTO = new DiscussionPostRequestDTO(
                 10L,
-                new Course(),
-                new User(),
+                10L,
+                10,
+                "discussionPostRequestDTO"
+        );
+
+        DiscussionPostResponseDTO discussionPostResponseDTO = new DiscussionPostResponseDTO(
+                10L,
+                10L,
+                10L,
+                10,
                 "content",
                 LocalDateTime.of(2024,5,1,13,30),
                 LocalDateTime.of(2024,5,1,13,30)
         );
 
-        when(disServ.updateDiscussionPost(eq(10L), any(DiscussionPostDTO.class))).thenReturn(disDto);
+        when(discussionPostService.updateDiscussionPost(eq(10L), any(DiscussionPostRequestDTO.class))).thenReturn(discussionPostResponseDTO);
 
-        ResponseEntity<DiscussionPostDTO> disDtoResult = disCon.updateDiscussionPost(10L, disDto);
+        // Act
+        ResponseEntity<DiscussionPostResponseDTO> result = discussionPostController.updateDiscussionPost(10L, discussionPostRequestDTO);
 
-        assertEquals(HttpStatus.OK, disDtoResult.getStatusCode());
-        assertEquals(disDto, disDtoResult.getBody());
-        verify(disServ, times(1)).updateDiscussionPost(10L, disDto);
+        // Assert
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        assertEquals(result.getBody(), discussionPostResponseDTO);
+        verify(discussionPostService).updateDiscussionPost(10L, discussionPostRequestDTO);
     }
 
     @Test
     void testDeleteDiscussionById(){
-        when(disServ.deleteDiscussionById(eq(10L))).thenReturn("Discussion post with id: 10 deleted");
+        when(discussionPostService.deleteDiscussionById(eq(10L))).thenReturn("Discussion post with id: 10 deleted");
 
-        ResponseEntity<String> deletedDis = disCon.deleteDiscussionById(10L);
+        ResponseEntity<String> deletedDis = discussionPostController.deleteDiscussionById(10L);
 
         assertEquals(HttpStatus.OK, deletedDis.getStatusCode());
         assertEquals("Discussion post with id: 10 deleted", deletedDis.getBody());
-        verify(disServ, times(1)).deleteDiscussionById(10L);
+        verify(discussionPostService).deleteDiscussionById(10L);
     }
 }

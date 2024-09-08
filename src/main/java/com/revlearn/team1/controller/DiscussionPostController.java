@@ -1,5 +1,6 @@
 package com.revlearn.team1.controller;
 
+import com.revlearn.team1.dto.discussionPost.DiscussionPostRequestDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.revlearn.team1.dto.DiscussionPostDTO;
-import com.revlearn.team1.service.DiscussionPostService;
+import com.revlearn.team1.dto.discussionPost.DiscussionPostResponseDTO;
+import com.revlearn.team1.service.discussionPost.DiscussionPostServiceImp;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,30 +22,32 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiscussionPostController {
 
-    private final DiscussionPostService disServ;
+    private final DiscussionPostServiceImp discussionPostService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DiscussionPostDTO> getDiscussionById(@PathVariable Long id) {
-        DiscussionPostDTO getDis = disServ.getDiscussionById(id);
-        return new ResponseEntity<>(getDis, HttpStatus.OK);
+
+
+    @GetMapping("/{discussionPostId}")
+    public ResponseEntity<DiscussionPostResponseDTO> getDiscussionById(@PathVariable Long discussionPostId) {
+        DiscussionPostResponseDTO discussionPost = discussionPostService.getDiscussionById(discussionPostId);
+        return new ResponseEntity<>(discussionPost, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<DiscussionPostDTO> postDiscussionPost(@RequestBody DiscussionPostDTO disDto){
-        DiscussionPostDTO postDis = disServ.postDiscussionPost(disDto);
-        return new ResponseEntity<>(postDis, HttpStatus.CREATED);
+    public ResponseEntity<DiscussionPostResponseDTO> postDiscussionPost(@RequestBody DiscussionPostRequestDTO discussionPostRequestDTO){
+        DiscussionPostResponseDTO createdDiscussionPost = discussionPostService.postDiscussionPost(discussionPostRequestDTO);
+        return new ResponseEntity<>(createdDiscussionPost, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DiscussionPostDTO> updateDiscussionPost(@PathVariable Long id, @RequestBody DiscussionPostDTO disDto){
-        DiscussionPostDTO updatedDis = disServ.updateDiscussionPost(id, disDto);
-        return new ResponseEntity<>(updatedDis, HttpStatus.OK);
+    @PutMapping("/{discussionPostId}")
+    public ResponseEntity<DiscussionPostResponseDTO> updateDiscussionPost(@PathVariable Long discussionPostId, @RequestBody DiscussionPostRequestDTO discussionPostRequestDTO){
+        DiscussionPostResponseDTO updatedDiscussionPost = discussionPostService.updateDiscussionPost(discussionPostId, discussionPostRequestDTO);
+        return new ResponseEntity<>(updatedDiscussionPost, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDiscussionById(@PathVariable Long id){
-        String deletedDis = disServ.deleteDiscussionById(id);
-        return new ResponseEntity<>(deletedDis, HttpStatus.OK);
+    @DeleteMapping("/{discussionPostId}")
+    public ResponseEntity<String> deleteDiscussionById(@PathVariable Long discussionPostId){
+        String deletedDiscussionPost = discussionPostService.deleteDiscussionById(discussionPostId);
+        return new ResponseEntity<>(deletedDiscussionPost, HttpStatus.OK);
     }
 
 }
