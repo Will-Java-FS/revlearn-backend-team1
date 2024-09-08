@@ -1,0 +1,106 @@
+[
+  {
+    "name": "Java Programming",
+    "description": "An advanced course on Java programming.",
+    "startDate": "2024-09-01",
+    "endDate": "2024-12-15",
+    "attendanceMethod": "HYBRID",
+    "price": 150.00
+  },
+  {
+    "name": "Data Structures",
+    "description": "A comprehensive course on data structures.",
+    "startDate": "2024-10-01",
+    "endDate": "2024-11-30",
+    "attendanceMethod": "ONLINE",
+    "price": 175.00
+  },
+  {
+    "name": "An Introduction to Programming",
+    "description": "A survey of the software industry.",
+    "startDate": "2024-10-01",
+    "endDate": "2024-11-30",
+    "attendanceMethod": "IN_PERSON",
+    "price": 175.00
+  },
+  {
+    "startDate": "2024-01-10",
+    "endDate": "2024-05-15",
+    "attendanceMethod": "IN_PERSON",
+    "name": "Introduction to Computer Science",
+    "description": "An introductory course covering the basics of computer science and programming.",
+    "price": 1500.00
+  },
+  {
+    "startDate": "2024-02-01",
+    "endDate": "2024-06-30",
+    "attendanceMethod": "ONLINE",
+    "name": "Data Structures and Algorithms",
+    "description": "An in-depth exploration of data structures and algorithms, including hands-on coding exercises.",
+    "price": 1800.00
+  },
+  {
+    "startDate": "2024-03-01",
+    "endDate": "2024-07-01",
+    "attendanceMethod": "HYBRID",
+    "name": "Introduction to Cybersecurity",
+    "description": "A course focused on the fundamentals of cybersecurity and protection against digital threats.",
+    "price": 2000.00
+  },
+  {
+    "startDate": "2024-04-15",
+    "endDate": "2024-08-15",
+    "attendanceMethod": "IN_PERSON",
+    "name": "Web Development Bootcamp",
+    "description": "A bootcamp that teaches web development, including HTML, CSS, JavaScript, and modern frameworks.",
+    "price": 2500.00
+  },
+  {
+    "startDate": "2024-05-10",
+    "endDate": "2024-09-10",
+    "attendanceMethod": "ONLINE",
+    "name": "Machine Learning Fundamentals",
+    "description": "An introductory course to machine learning, focusing on basic algorithms and their applications.",
+    "price": 2200.00
+  },
+  {
+    "startDate": "2024-06-01",
+    "endDate": "2024-10-01",
+    "attendanceMethod": "HYBRID",
+    "name": "Mobile Application Development",
+    "description": "Learn to develop mobile applications for both iOS and Android platforms.",
+    "price": 3000.00
+  },
+  {
+    "startDate": "2024-07-01",
+    "endDate": "2024-11-01",
+    "attendanceMethod": "IN_PERSON",
+    "name": "Digital Marketing Essentials",
+    "description": "This course covers the core concepts of digital marketing, including SEO, social media, and PPC.",
+    "price": 1200.00
+  },
+  {
+    "startDate": "2024-08-15",
+    "endDate": "2024-12-15",
+    "attendanceMethod": "ONLINE",
+    "name": "Cloud Computing with AWS",
+    "description": "A comprehensive course on cloud computing services using Amazon Web Services (AWS).",
+    "price": 2500.00
+  },
+  {
+    "startDate": "2024-09-10",
+    "endDate": "2025-01-10",
+    "attendanceMethod": "HYBRID",
+    "name": "Advanced Data Science",
+    "description": "An advanced-level course focusing on data science techniques and machine learning models.",
+    "price": 3500.00
+  },
+  {
+    "startDate": "2024-10-01",
+    "endDate": "2025-02-01",
+    "attendanceMethod": "IN_PERSON",
+    "name": "Artificial Intelligence for Beginners",
+    "description": "A beginner-friendly course on artificial intelligence and its applications in various industries.",
+    "price": 1800.00
+  }
+]

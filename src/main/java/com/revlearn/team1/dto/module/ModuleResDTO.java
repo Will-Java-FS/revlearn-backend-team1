@@ -1,6 +1,6 @@
 package com.revlearn.team1.dto.module;
 
-public record ModuleDTO(
+public record ModuleResDTO(
         Long id,
         String title,
         String description,
