@@ -1,0 +1,102 @@
+[
+  {
+    "title": "Bachelor of Computer Science",
+    "description": "A program focused on the study of computer algorithms, data structures, and programming languages to prepare students for a career in software development.",
+    "department": "Department of Computer Science",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-Campus",
+    "format": "Full-time",
+    "cost": 45000.00
+  },
+  {
+    "title": "Master of Business Administration",
+    "description": "An advanced program designed to develop leadership skills and provide knowledge of business operations, including finance, marketing, and management.",
+    "department": "Business School",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Hybrid",
+    "format": "Part-time",
+    "cost": 35000.00
+  },
+  {
+    "title": "Associate of Arts in Graphic Design",
+    "description": "A program aimed at teaching the fundamentals of visual communication, including graphic design software, typography, and branding strategies.",
+    "department": "School of Art and Design",
+    "degree": "Associate's",
+    "duration": "2 years",
+    "location": "Online",
+    "format": "Full-time",
+    "cost": 20000.00
+  },
+  {
+    "title": "Bachelor of Mechanical Engineering",
+    "description": "A comprehensive program that covers the principles of mechanics, thermodynamics, and material science, preparing students for careers in engineering design and development.",
+    "department": "Department of Mechanical Engineering",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-Campus",
+    "format": "Full-time",
+    "cost": 48000.00
+  },
+  {
+    "title": "Master of Data Science",
+    "description": "An advanced degree focusing on data analysis, machine learning, and big data technologies to equip students with the skills required for data-driven decision making.",
+    "department": "Department of Data Science",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Online",
+    "format": "Full-time",
+    "cost": 50000.00
+  },
+  {
+    "title": "Bachelor of Fine Arts",
+    "description": "A creative program that encourages the development of artistic skills in painting, sculpture, and multimedia, preparing students for professional careers in the arts.",
+    "department": "School of Fine Arts",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-Campus",
+    "format": "Full-time",
+    "cost": 30000.00
+  },
+  {
+    "title": "Diploma in Digital Marketing",
+    "description": "A short-term program that provides skills in online marketing, including SEO, social media, and content creation, to help students excel in the digital marketing field.",
+    "department": "School of Business and Marketing",
+    "degree": "Diploma",
+    "duration": "1 year",
+    "location": "Online",
+    "format": "Part-time",
+    "cost": 10000.00
+  },
+  {
+    "title": "Bachelor of Nursing",
+    "description": "A comprehensive program that prepares students for careers in healthcare, focusing on clinical skills, patient care, and medical ethics.",
+    "department": "Department of Nursing",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-Campus",
+    "format": "Full-time",
+    "cost": 35000.00
+  },
+  {
+    "title": "Master of Public Health",
+    "description": "An interdisciplinary program that covers epidemiology, public health policy, and healthcare systems, designed to prepare students for leadership roles in public health organizations.",
+    "department": "School of Public Health",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Hybrid",
+    "format": "Full-time",
+    "cost": 40000.00
+  },
+  {
+    "title": "Certificate in Web Development",
+    "description": "A short-term program that teaches the fundamentals of front-end and back-end web development, including HTML, CSS, JavaScript, and server-side programming.",
+    "department": "Department of Computer Science",
+    "degree": "Certificate",
+    "duration": "6 months",
+    "location": "Online",
+    "format": "Part-time",
+    "cost": 5000.00
+  }
+]
