@@ -1,5 +1,6 @@
 package com.revlearn.team1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,6 +31,7 @@ public class ModulePage {
 
     @ManyToOne
     @JoinColumn(name = "course_module_id", nullable = false)
+    @JsonIgnore
     private CourseModule courseModule;
 
     @CreationTimestamp

@@ -13,22 +13,22 @@ public class PageController {
     private final PageService pageService;
 
     @GetMapping("/{pageId}")
-    public ModulePage getPageById(Long pageId) {
+    public ModulePage getPageById(@PathVariable Long pageId) {
         return pageService.getPageById(pageId);
     }
 
     @PostMapping("/module/{moduleId}")
-    public ModulePage createPage(Long moduleId, ModulePage page) {
+    public ModulePage createPage(@PathVariable Long moduleId, @RequestBody ModulePage page) {
         return pageService.createPage(moduleId, page);
     }
 
     @PutMapping("/{pageId}")
-    public ModulePage updatePage(Long pageId, ModulePage page) {
+    public ModulePage updatePage(@PathVariable Long pageId, @RequestBody ModulePage page) {
         return pageService.updatePage(pageId, page);
     }
 
     @DeleteMapping("/{pageId}")
-    public MessageDTO deletePage(Long pageId) {
+    public MessageDTO deletePage(@PathVariable Long pageId) {
         return pageService.deletePage(pageId);
     }
 
