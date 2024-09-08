@@ -27,28 +27,24 @@ public class ModuleController {
     @PostMapping("/course/{courseId}")
     @Operation(summary = "Create Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR + "Once a module is created, pages and exams can be added to it through their respective controllers.", tags = {"module"})
     public ModuleResDTO createModule(@PathVariable Long courseId, @RequestBody ModuleReqDTO moduleReqDTO) {
-        //TODO: Secure so only course owners (instructors and institutions) can create modules
         return moduleService.createModule(courseId, moduleReqDTO);
     }
 
     @PutMapping("/{moduleId}/course/{courseId}")
     @Operation(summary = "Update Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR, tags = {"module"})
     public ModuleResDTO updateModule(@PathVariable Long moduleId, @RequestBody ModuleReqDTO moduleReqDTO) {
-        //TODO: Secure so only course owners (instructors and institutions) can update modules
         return moduleService.updateModule(moduleId, moduleReqDTO);
     }
 
     @DeleteMapping("{moduleId}")
     @Operation(summary = "Delete Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR, tags = {"module"})
     public String deleteModule(@PathVariable Long moduleId) {
-        //TODO: Secure so only course owners (instructors and institutions) can delete modules
         return moduleService.deleteModule(moduleId);
     }
 
     @GetMapping("/{moduleId}/pages")
     @Operation(summary = "Get All Pages of a Module", description = AccessLevelDesc.ENROLLED_STUDENT, tags = {"module"})
     public List<ModulePage> getModulePages(@PathVariable Long moduleId) {
-        //TODO: Secure so only course affiliated users can access (enrolled students, assigned educators, & owner institution)
         return moduleService.getModulePages(moduleId);
     }
 
