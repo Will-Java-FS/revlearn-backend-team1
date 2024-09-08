@@ -51,7 +51,7 @@ public class DataInitializer implements ApplicationRunner {
 
         createInitialUsers(loadJson("users.json"));
         createInitialCourses(loadJson("courses.json"), jwt);
-        createInitialModules(loadJson("modules.json"));
+        createInitialModules(loadJson("modules.json"), jwt);
         createInitialPrograms(loadJson("programs.json"), jwt);
 //        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
 //        createInitialTransactions(loadJson("transactions"));
@@ -110,11 +110,18 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void createInitialModules(JsonNode modulesNode) {
-        String requestUrl = apiUrl + "/module";
+    private void createInitialModules(JsonNode modulesNode, String jwt) {
+        String requestUrl = apiUrl + "/module/course/3";
         for (JsonNode moduleNode : modulesNode) {
             //TODO: Make admin requests after service class is secured
-            sendRequest(requestUrl, HttpMethod.POST, moduleNode);
+            sendAdminRequest(requestUrl, HttpMethod.POST, moduleNode, jwt);
+        }
+    }
+
+    private void createInitialPrograms(JsonNode programsNode, String jwt) {
+        String requestUrl = apiUrl + "/program";
+        for (JsonNode programNode : programsNode) {
+            sendAdminRequest(requestUrl, HttpMethod.POST, programNode, jwt);
         }
     }
 

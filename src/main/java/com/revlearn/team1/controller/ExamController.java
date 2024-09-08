@@ -16,9 +16,9 @@ public class ExamController {
         return examService.getById(examId);
     }
 
-    @PostMapping
-    public Exam createExam(@RequestBody Exam exam) {
-        return examService.createExam(exam);
+    @PostMapping("/create/{moduleId}")
+    public Exam createExam(@PathVariable Long moduleId, @RequestBody Exam exam) {
+        return examService.createExam(moduleId, exam);
     }
 
     @PutMapping("/{examId}")
