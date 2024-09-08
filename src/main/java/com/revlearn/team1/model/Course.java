@@ -74,7 +74,7 @@ public class Course {
 
     //Most courses will only have one program, but some might be part of more
     //ie Math 75 is required for Physics degrees and Computer Science degrees
-    @ManyToMany
+    @ManyToMany(mappedBy = "courses")
     private List<Program> programs = new ArrayList<>();
 
     @CreationTimestamp
