@@ -4,19 +4,19 @@ import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.user.UserServiceImp;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -28,7 +28,7 @@ public class UserServiceTest {
     @InjectMocks
     UserServiceImp userService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -51,7 +51,7 @@ public class UserServiceTest {
         when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 
         UserDetails result = userService.loadUserByUsername(username);
-        Assert.assertEquals(user, result);
+        assertEquals(user, result);
     }
 
     private User createUser(String username) {
