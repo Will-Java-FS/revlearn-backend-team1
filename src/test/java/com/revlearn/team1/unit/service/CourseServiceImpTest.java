@@ -14,6 +14,7 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
+import com.revlearn.team1.service.accessControl.AccessControlService;
 import com.revlearn.team1.service.course.CourseServiceImp;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +43,8 @@ public class CourseServiceImpTest {
 
     @Mock
     private CourseMapper courseMapper;
+    @Mock
+    private AccessControlService accessControlService;
 
     @InjectMocks
     private CourseServiceImp courseService;
@@ -92,7 +95,7 @@ public class CourseServiceImpTest {
         // Arrange
         course.getStudents().add(student);
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-        Mockito.doReturn(true).when(courseService).verifyStudentLevelAccess(course);
+        Mockito.doReturn(true).when(accessControlService).verifyStudentLevelAccess(course);
 
         // Act
         List<User> students = courseService.getAllStudentsOfCourseId(1L);
@@ -116,7 +119,7 @@ public class CourseServiceImpTest {
         // Arrange
         course.getEducators().add(educator);
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
-        Mockito.doReturn(true).when(courseService).verifyStudentLevelAccess(course);
+        Mockito.doReturn(true).when(accessControlService).verifyStudentLevelAccess(course);
         // Act
         List<User> educators = courseService.getAllEducatorsOfCourseId(1L);
 
@@ -170,7 +173,7 @@ public class CourseServiceImpTest {
         when(courseMapper.fromReqDto(courseReqDTO)).thenReturn(course);
         when(courseRepo.save(course)).thenReturn(course);
         when(courseMapper.toDto(course)).thenReturn(courseResDTO);
-        Mockito.doReturn(true).when(courseService).verifyEducatorLevelAccess(course);
+        Mockito.doReturn(true).when(accessControlService).verifyEducatorLevelAccess(course);
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.EDUCATOR);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(2L);
@@ -199,7 +202,7 @@ public class CourseServiceImpTest {
         Mockito.doNothing().when(courseMapper).updateCourseFromReqDto(course, courseReqDTO);
         when(courseRepo.save(course)).thenReturn(course);
         when(courseMapper.toDto(course)).thenReturn(courseResDTO);
-        Mockito.doReturn(true).when(courseService).verifyEducatorLevelAccess(course);
+        Mockito.doReturn(true).when(accessControlService).verifyEducatorLevelAccess(course);
 
         // Act
         CourseResDTO result = courseService.updateCourse(courseId, courseReqDTO);
@@ -229,7 +232,7 @@ public class CourseServiceImpTest {
 //        Course course = new Course();
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
         Mockito.doNothing().when(courseRepo).deleteById(1L);
-        Mockito.doReturn(true).when(courseService).verifyEducatorLevelAccess(course);
+        Mockito.doReturn(true).when(accessControlService).verifyEducatorLevelAccess(course);
 
         // Act
         String result = courseService.deleteById(1L);
@@ -351,7 +354,7 @@ public class CourseServiceImpTest {
         when(userRepo.findById(2)).thenReturn(Optional.of(educator));
         when(courseRepo.save(course)).thenReturn(course);
         when(userRepo.save(educator)).thenReturn(educator);
-        Mockito.doReturn(true).when(courseService).verifyEducatorLevelAccess(course);
+        Mockito.doReturn(true).when(accessControlService).verifyEducatorLevelAccess(course);
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserId).thenReturn(1L);
         // Act
@@ -386,7 +389,7 @@ public class CourseServiceImpTest {
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
         when(courseRepo.save(course)).thenReturn(course);
         when(userRepo.save(educator)).thenReturn(educator);
-        Mockito.doReturn(true).when(courseService).verifyEducatorLevelAccess(course);
+        Mockito.doReturn(true).when(accessControlService).verifyEducatorLevelAccess(course);
         // Act
         CourseEducatorResDTO result = courseService.removeEducator(courseEducatorDTO);
 

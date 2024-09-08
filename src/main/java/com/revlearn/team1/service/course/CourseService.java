@@ -6,7 +6,7 @@ import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
-import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.model.User;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public interface CourseService {
 
     CourseStudentResDTO withdrawStudent(CourseStudentDTO courseStudentDTO);
 
-    List<ModuleDTO> getModulesByCourseId(Long courseId);
+    List<ModuleResDTO> getModulesByCourseId(Long courseId);
 
 
 }
