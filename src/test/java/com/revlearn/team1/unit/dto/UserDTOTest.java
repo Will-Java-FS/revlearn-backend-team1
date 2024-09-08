@@ -1,8 +1,9 @@
 package com.revlearn.team1.unit.dto;
 
 import com.revlearn.team1.dto.user.UserDTO;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UserDTOTest {
     UserDTO userDTO = new UserDTO("username", "password");
@@ -10,7 +11,7 @@ public class UserDTOTest {
     @Test
     public void testToString() throws Exception {
         String expected = "LoginRequest{username='username', password='password'}";
-        Assert.assertEquals(expected, userDTO.toString());
+        assertEquals(expected, userDTO.toString());
     }
 }
 
