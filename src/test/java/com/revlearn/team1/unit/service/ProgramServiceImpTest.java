@@ -7,16 +7,14 @@ import com.revlearn.team1.dto.program.ProgramResDTO;
 import com.revlearn.team1.dto.user.UserResDTO;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.ProgramNotFoundException;
-import com.revlearn.team1.exceptions.UserNotAuthorizedException;
-import com.revlearn.team1.mapper.CourseMapper;
 import com.revlearn.team1.mapper.ProgramMapper;
 import com.revlearn.team1.mapper.UserMapper;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.Program;
 import com.revlearn.team1.model.User;
-import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.ProgramRepo;
 import com.revlearn.team1.service.program.ProgramServiceImp;
+import com.revlearn.team1.service.programCourse.ProgramCourseService;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,23 +37,20 @@ class ProgramServiceImpTest {
 
     @Mock
     private ProgramRepo programRepo;
-    @Mock
-    private CourseRepo courseRepo;
 
     @Mock
     private ProgramMapper programMapper;
 
     @Mock
-    private CourseMapper courseMapper;
+    private UserMapper userMapper;
 
     @Mock
-    private UserMapper userMapper;
+    private ProgramCourseService programCourseService;
 
     @InjectMocks
     private ProgramServiceImp programService;
 
     private Program program;
-    private Course course;
     private ProgramReqDTO programReqDTO;
     private ProgramResDTO programResDTO;
 
@@ -70,9 +65,6 @@ class ProgramServiceImpTest {
         programReqDTO = new ProgramReqDTO("Computer Science", "Description", "CS Department", "Bachelor's", "4 years", "On-Campus", "Full-time", 40000);
 
         programResDTO = new ProgramResDTO(1L, "Computer Science", "Description", "CS Department", "Bachelor's", "4 years", "On-Campus", "Full-time", 40000);
-
-        course = new Course();
-        course.setId(123L);
     }
 
     @Test
@@ -111,16 +103,18 @@ class ProgramServiceImpTest {
     @Test
     void getProgramCourses_ShouldReturnListOfCourses() {
 
+        //Arrange
+        CourseResDTO courseResDTO = new CourseResDTO(1L, null, null, null, "Course 1", null, null);
         program.getCourses().add(new Course());
         when(programRepo.findById(1L)).thenReturn(Optional.of(program));
-        when(courseMapper.toDto(any())).thenReturn(new CourseResDTO(1L, null, null, null, "Course 1", null, null));
+        when(programCourseService.getProgramCourses(program)).thenReturn(List.of(courseResDTO));
 
         List<CourseResDTO> courses = programService.getProgramCourses(1L);
 
         assertEquals(1, courses.size());
         assertEquals("Course 1", courses.get(0).name());
         verify(programRepo).findById(1L);
-        verify(courseMapper).toDto(any());
+        verify(programCourseService).getProgramCourses(program);
     }
 
     @Test
@@ -207,138 +201,32 @@ class ProgramServiceImpTest {
     }
 
     @Test
-    void addCourseToProgram_ShouldThrowException_WhenUserNotAuthorized() {
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-            // Arrange
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.STUDENT); // Not authorized
-
-            // Act & Assert
-            assertThrows(UserNotAuthorizedException.class, () -> programService.addCourseToProgram(456L, 123L));
-
-            // Verify that no interactions with the repository happened
-            verifyNoInteractions(programRepo, courseRepo);
-        }
-    }
-
-    @Test
-    void addCourseToProgram_ShouldThrowException_WhenProgramNotFound() {
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-
-            // Arrange
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
-            when(programRepo.findById(anyLong())).thenReturn(Optional.empty());
-
-            // Act & Assert
-            assertThrows(ProgramNotFoundException.class, () -> programService.addCourseToProgram(456L, 123L));
-
-            // Verify the programRepo was called
-            verify(programRepo).findById(456L);
-            verifyNoInteractions(courseRepo);
-        }
-    }
-
-    @Test
-    void addCourseToProgram_ShouldReturnMessage_WhenCourseAlreadyInProgram() {
-        // Arrange
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
-            when(programRepo.findById(456L)).thenReturn(Optional.of(program));
-            when(courseRepo.findById(123L)).thenReturn(Optional.of(course));
-            program.getCourses().add(course); // Course already in program
-
-            // Act
-            MessageDTO message = programService.addCourseToProgram(456L, 123L);
-
-            // Assert
-            assertEquals("Course with id: 123 is already in program with id: 456", message.message());
-        }
-
-    }
-
-    @Test
     void addCourseToProgram_ShouldAddCourseToProgramAndReturnMessage() {
         // Arrange
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
-            when(programRepo.findById(456L)).thenReturn(Optional.of(program));
-            when(courseRepo.findById(123L)).thenReturn(Optional.of(course));
+        MessageDTO messageDTO = new MessageDTO("Successfully added course with id: 123 to program with id: 456");
+        when(programCourseService.addCourseToProgram(456L, 123L)).thenReturn(messageDTO);
 
-            // Act
-            MessageDTO message = programService.addCourseToProgram(456L, 123L);
 
-            // Assert
-            assertEquals("Successfully added course with id: 123 to program with id: 456", message.message());
-            assertEquals(1, program.getCourses().size()); // Course added
-            verify(programRepo).save(program);
-            verify(courseRepo).save(course);
-        }
+        // Act
+        MessageDTO messageResult = programService.addCourseToProgram(456L, 123L);
 
-    }
-
-    @Test
-    void removeCourseFromProgram_ShouldThrowException_WhenUserNotAuthorized() {
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-            // Arrange
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.STUDENT); // Not authorized
-
-            // Act & Assert
-            assertThrows(UserNotAuthorizedException.class, () -> programService.removeCourseFromProgram(456L, 123L));
-
-            // Verify that no interactions with the repository happened
-            verifyNoInteractions(programRepo, courseRepo);
-        }
-    }
-
-    @Test
-    void removeCourseFromProgram_ShouldThrowException_WhenProgramNotFound() {
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-            // Arrange
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
-            when(programRepo.findById(anyLong())).thenReturn(Optional.empty());
-
-            // Act & Assert
-            assertThrows(ProgramNotFoundException.class, () -> programService.removeCourseFromProgram(456L, 123L));
-
-            // Verify the programRepo was called
-            verify(programRepo).findById(456L);
-            verifyNoInteractions(courseRepo);
-        }
-
-    }
-
-    @Test
-    void removeCourseFromProgram_ShouldReturnMessage_WhenCourseNotInProgram() {
-        // Arrange
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
-            when(programRepo.findById(456L)).thenReturn(Optional.of(program));
-
-            // Act
-            MessageDTO message = programService.removeCourseFromProgram(456L, 123L);
-
-            // Assert
-            assertEquals("Course with id: 123 is not in program with id: 456", message.message());
-        }
+        // Assert
+        assertEquals("Successfully added course with id: 123 to program with id: 456", messageResult.message());
+        verify(programCourseService).addCourseToProgram(456L, 123L);
     }
 
     @Test
     void removeCourseFromProgram_ShouldRemoveCourseFromProgramAndReturnMessage() {
-        try (MockedStatic<SecurityContextService> mockedStatic = mockStatic(SecurityContextService.class)) {
-            // Arrange
-            mockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
-            when(programRepo.findById(456L)).thenReturn(Optional.of(program));
-            when(courseRepo.findById(123L)).thenReturn(Optional.of(course));
-            program.getCourses().add(course); // Course is in the program
+        // Arrange
+        MessageDTO successMessage = new MessageDTO("Successfully removed course with id: 123 from program with id: 456");
+        when(programCourseService.removeCourseFromProgram(456L, 123L)).thenReturn(successMessage);
 
-            // Act
-            MessageDTO message = programService.removeCourseFromProgram(456L, 123L);
+        // Act
+        MessageDTO message = programService.removeCourseFromProgram(456L, 123L);
 
-            // Assert
-            assertEquals("Successfully removed course with id: 123 from program with id: 456", message.message());
-            assertEquals(0, program.getCourses().size()); // Course removed
-            verify(programRepo).save(program);
-            verify(courseRepo).save(course);
-        }
-
+        // Assert
+        assertEquals("Successfully removed course with id: 123 from program with id: 456", message.message());
+        verify(programCourseService).removeCourseFromProgram(456L, 123L);
     }
+
 }
