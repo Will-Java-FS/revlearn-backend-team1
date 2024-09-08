@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
-        final List<String> skipFilterUrls = Arrays.asList("/auth/**");
+        final List<String> skipFilterUrls = Arrays.asList("/api/v1/user/register", "/api/v1/user/login");
         return skipFilterUrls.stream().anyMatch(url -> new AntPathRequestMatcher(url).matches(request));
     }
 
