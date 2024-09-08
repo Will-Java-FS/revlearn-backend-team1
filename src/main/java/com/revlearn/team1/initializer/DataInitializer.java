@@ -125,13 +125,6 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void createInitialPrograms(JsonNode programsNode, String jwt) {
-        String requestUrl = apiUrl + "/program";
-        for (JsonNode programNode : programsNode) {
-            sendAdminRequest(requestUrl, HttpMethod.POST, programNode, jwt);
-        }
-    }
-
     private void sendRequest(String url, HttpMethod method, JsonNode requestBody) {
         try {
             HttpEntity<JsonNode> requestEntity = new HttpEntity<>(requestBody);
