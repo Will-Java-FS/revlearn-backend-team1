@@ -73,4 +73,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleProgramNotFoundException(ProgramNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(PageNotFoundException.class)
+    public ResponseEntity<String> handlePageNotFoundException(PageNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

@@ -25,11 +25,11 @@ public class CourseModule {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ModulePage> modulePages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Exam> exams = new ArrayList<>();
 
