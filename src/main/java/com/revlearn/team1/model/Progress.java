@@ -32,7 +32,7 @@ public class Progress {
 
     @OneToOne
     @JoinColumn(name = "module_page_id")
-    private ModulePage modulePage;
+    private Page page;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
@@ -46,7 +46,7 @@ public class Progress {
                 ", completedProgress:" + completedProgress +
                 ", course:" + course +
                 ", module:" + courseModule +
-                ", page_id" + modulePage +
+                ", page_id" + page +
                 ", user:" + user;
 
     }

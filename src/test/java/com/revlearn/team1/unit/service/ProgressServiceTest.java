@@ -45,7 +45,7 @@ public class ProgressServiceTest {
         User user = new User();
         Course course = new Course();
         CourseModule module = new CourseModule();
-        ModulePage page = new ModulePage();
+        Page page = new Page();
         Progress progress = new Progress(1L, true, 70.0F, course, module, page, user);
 
         assertEquals(1L, progress.getProgress_id());
@@ -53,7 +53,7 @@ public class ProgressServiceTest {
         assertEquals(70.0F, progress.getCompletedProgress());
         assertEquals(course, progress.getCourse());
         assertEquals(module, progress.getCourseModule());
-        assertEquals(page, progress.getModulePage());
+        assertEquals(page, progress.getPage());
         assertEquals(user, progress.getUser());
 
     }

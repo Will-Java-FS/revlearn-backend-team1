@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class ModulePage {
+public class Page {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

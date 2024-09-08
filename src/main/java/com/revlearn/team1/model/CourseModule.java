@@ -27,7 +27,7 @@ public class CourseModule {
 
     @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<ModulePage> modulePages = new ArrayList<>();
+    private List<Page> pages = new ArrayList<>();
 
     @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

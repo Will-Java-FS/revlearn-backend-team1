@@ -1,14 +1,14 @@
 package com.revlearn.team1.service.page;
 
 import com.revlearn.team1.dto.MessageDTO;
-import com.revlearn.team1.model.ModulePage;
+import com.revlearn.team1.model.Page;
 
 public interface PageService {
-    public ModulePage getPageById(Long pageId);
+    public Page getPageById(Long pageId);
 
-    public ModulePage createPage(Long moduleId, ModulePage page);
+    public Page createPage(Long moduleId, Page page);
 
-    public ModulePage updatePage(Long pageId, ModulePage page);
+    public Page updatePage(Long pageId, Page page);
 
     public MessageDTO deletePage(Long pageId);
 }

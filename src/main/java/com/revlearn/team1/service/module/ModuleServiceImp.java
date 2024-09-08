@@ -9,7 +9,7 @@ import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.CourseModule;
 import com.revlearn.team1.model.Exam;
-import com.revlearn.team1.model.ModulePage;
+import com.revlearn.team1.model.Page;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.ModuleRepo;
 import com.revlearn.team1.service.accessControl.AccessControlService;
@@ -106,7 +106,7 @@ public class ModuleServiceImp implements ModuleService {
     }
 
     @Override
-    public List<ModulePage> getModulePages(Long moduleId) {
+    public List<Page> getModulePages(Long moduleId) {
         //Verify module exists
         CourseModule courseModule = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
@@ -116,7 +116,7 @@ public class ModuleServiceImp implements ModuleService {
         accessControlService.verifyStudentLevelAccess(course);
 
         //TODO: convert to DTOs
-        return courseModule.getModulePages();
+        return courseModule.getPages();
     }
 
     @Override

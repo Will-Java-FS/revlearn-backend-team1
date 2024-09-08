@@ -6,7 +6,7 @@ import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.PageNotFoundException;
 import com.revlearn.team1.exceptions.UserNotAuthorizedException;
 import com.revlearn.team1.model.CourseModule;
-import com.revlearn.team1.model.ModulePage;
+import com.revlearn.team1.model.Page;
 import com.revlearn.team1.repository.ModuleRepo;
 import com.revlearn.team1.repository.PageRepo;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
@@ -20,14 +20,14 @@ public class PageServiceImp implements PageService {
     private final ModuleRepo moduleRepo;
 
     @Override
-    public ModulePage getPageById(Long pageId) {
+    public Page getPageById(Long pageId) {
         //TODO: Verify requester is authorized to view page: enrolled student, assigned educator, or owner institution
         return pageRepo.findById(pageId)
                 .orElseThrow(() -> new PageNotFoundException("Page with id: " + pageId + " not found"));
     }
 
     @Override
-    public ModulePage createPage(Long moduleId, ModulePage page) {
+    public Page createPage(Long moduleId, Page page) {
 
         //verify module exists
         CourseModule module = moduleRepo.findById(moduleId)
@@ -41,7 +41,7 @@ public class PageServiceImp implements PageService {
         }
 
         //Attach page to module
-        module.getModulePages().add(page);
+        module.getPages().add(page);
         page.setCourseModule(module);
 
 
@@ -51,10 +51,10 @@ public class PageServiceImp implements PageService {
     }
 
     @Override
-    public ModulePage updatePage(Long pageId, ModulePage page) {
+    public Page updatePage(Long pageId, Page page) {
 
         //verify page exists
-        ModulePage existingPage = pageRepo.findById(pageId)
+        Page existingPage = pageRepo.findById(pageId)
                 .orElseThrow(() -> new PageNotFoundException("Page with id: " + pageId + " not found"));
 
         //verify module exists
@@ -80,7 +80,7 @@ public class PageServiceImp implements PageService {
     @Override
     public MessageDTO deletePage(Long pageId) {
         //verify page exists
-        ModulePage existingPage = pageRepo.findById(pageId)
+        Page existingPage = pageRepo.findById(pageId)
                 .orElseThrow(() -> new PageNotFoundException("Page with id: " + pageId + " not found"));
 
         //verify module exists
