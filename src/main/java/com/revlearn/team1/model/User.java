@@ -75,6 +75,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "fromUser", cascade = CascadeType.ALL)
     @JsonManagedReference("user-from-transaction")
     private List<TransactionModel> purchases;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ExamResult> examResults;
+
     @OneToMany(mappedBy = "institution")
     private List<Program> programs;
 

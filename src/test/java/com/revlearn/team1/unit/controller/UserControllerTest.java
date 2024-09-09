@@ -3,6 +3,7 @@ package com.revlearn.team1.unit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.revlearn.team1.controller.UserController;
+import com.revlearn.team1.dto.user.UpdateUserRequest;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.service.user.UserServiceImp;
@@ -12,7 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -23,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -98,6 +102,27 @@ public class UserControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value("Bearer " + token))
                 .andExpect(jsonPath("$.tokenType").value("Bearer"));
+    }
+
+    @Test
+    public void testUpdateUser() throws Exception
+    {
+        int userId = 1;
+        UpdateUserRequest updateRequest = new UpdateUserRequest();
+        updateRequest.setFirstName("John");
+        updateRequest.setLastName("Doe");
+
+        User mockUser = new User();
+        mockUser.setFirstName("John");
+        mockUser.setLastName("Doe");
+        when(userService.updateUser(userId, updateRequest)).thenReturn(mockUser);
+
+        // Act
+        ResponseEntity<User> response = userController.updateUser(userId, updateRequest);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockUser, response.getBody());
     }
 
     @Test
