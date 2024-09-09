@@ -1,5 +1,6 @@
 package com.revlearn.team1.unit.service;
 
+import com.revlearn.team1.dto.user.UpdateUserRequest;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.UserRepository;
@@ -16,8 +17,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
@@ -42,6 +42,36 @@ public class UserServiceTest {
         assertTrue(userService.checkExisting(username));
     }
 
+    @Test
+    public void testUpdateUser() throws Exception
+    {
+        // Arrange
+        int userId = 1;
+        UpdateUserRequest updateRequest = new UpdateUserRequest();
+        updateRequest.setFirstName("John");
+        updateRequest.setLastName("Doe");
+        updateRequest.setOldPassword("oldPassword");
+        updateRequest.setNewPassword("newPassword");
+
+        User existingUser = new User();
+        existingUser.setPassword("oldEncodedPassword");
+        existingUser.setFirstName("Jane");
+        existingUser.setLastName("Smith");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(passwordEncoder.matches(any(String.class), any(String.class))).thenReturn(true);
+        when(passwordEncoder.encode(any(String.class))).thenReturn("newEncodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(existingUser);
+
+        // Act
+        User updatedUser = userService.updateUser(userId, updateRequest);
+
+        // Assert
+        assertNotNull(updatedUser);
+        assertEquals("John", updatedUser.getFirstName());
+        assertEquals("Doe", updatedUser.getLastName());
+        verify(userRepository).save(updatedUser);
+    }
 
     @Test
     public void testLoadUserByUsername() throws Exception {
