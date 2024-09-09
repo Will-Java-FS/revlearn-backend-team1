@@ -80,7 +80,8 @@ public class CourseServiceImpTest {
     public void testGetAllSuccess() {
         // Arrange
         List<Course> courses = Arrays.asList(new Course(), new Course());
-        List<CourseResDTO> courseResDTOS = Arrays.asList(new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 53.32F), new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 23.66F));
+        List<CourseResDTO> courseResDTOS = Arrays.asList(
+                new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 53.32F, null), new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 23.66F, null));
         when(courseRepo.findAll()).thenReturn(courses);
         when(courseMapper.toDto(any(Course.class))).thenReturn(courseResDTOS.get(0), courseResDTOS.get(1));
 
@@ -144,7 +145,7 @@ public class CourseServiceImpTest {
     public void testGetByIdSuccess() {
         // Arrange
 //        Course course = new Course();
-        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 55.22F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 55.22F, null);
         when(courseRepo.findById(1L)).thenReturn(Optional.of(course));
         when(courseMapper.toDto(course)).thenReturn(courseResDTO);
 
@@ -170,7 +171,7 @@ public class CourseServiceImpTest {
     public void testCreateCourseSuccess() {
         // Arrange
         CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
-        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F, null);
 
 //        Course course = new Course();
         when(courseMapper.fromReqDto(courseReqDTO)).thenReturn(course);
@@ -199,7 +200,7 @@ public class CourseServiceImpTest {
         // Arrange
         Long courseId = 1L;
         CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 93.11F); // Assume it has the correct ID.
-        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 92.43F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 92.43F, null);
 
         when(courseRepo.findById(courseId)).thenReturn(Optional.of(course));
         Mockito.doNothing().when(courseMapper).updateCourseFromReqDto(course, courseReqDTO);
