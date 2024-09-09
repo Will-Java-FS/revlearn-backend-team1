@@ -45,6 +45,7 @@ public class PageServiceImp implements PageService {
         }
 
         Page page = pageMapper.toPage(pageReqDTO);
+        page.setPageNumber((long) module.getPages().size());
 
         //Attach page to module
         module.getPages().add(page);
@@ -75,7 +76,8 @@ public class PageServiceImp implements PageService {
         //update page
         existingPage.setTitle(pageReqDTO.title());
         existingPage.setMarkdownContent(pageReqDTO.markdownContent());
-        existingPage.setPageNumber(pageReqDTO.pageNumber());
+        //TODO: Handle page number (index) updates separately
+//        existingPage.setPageNumber(pageReqDTO.pageNumber());
         existingPage.setInstructorNotes(pageReqDTO.instructorNotes());
 
         //Save page
