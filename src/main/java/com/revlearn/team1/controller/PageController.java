@@ -1,6 +1,8 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.MessageDTO;
+import com.revlearn.team1.dto.page.PageReqDTO;
+import com.revlearn.team1.dto.page.PageResDTO;
 import com.revlearn.team1.model.Page;
 import com.revlearn.team1.service.page.PageService;
 import lombok.RequiredArgsConstructor;
@@ -13,18 +15,18 @@ public class PageController {
     private final PageService pageService;
 
     @GetMapping("/{pageId}")
-    public Page getPageById(@PathVariable Long pageId) {
+    public PageResDTO getPageById(@PathVariable Long pageId) {
         return pageService.getPageById(pageId);
     }
 
     @PostMapping("/module/{moduleId}")
-    public Page createPage(@PathVariable Long moduleId, @RequestBody Page page) {
-        return pageService.createPage(moduleId, page);
+    public PageResDTO createPage(@PathVariable Long moduleId, @RequestBody PageReqDTO pageReqDTO) {
+        return pageService.createPage(moduleId, pageReqDTO);
     }
 
     @PutMapping("/{pageId}")
-    public Page updatePage(@PathVariable Long pageId, @RequestBody Page page) {
-        return pageService.updatePage(pageId, page);
+    public PageResDTO updatePage(@PathVariable Long pageId, @RequestBody PageReqDTO pageReqDTO) {
+        return pageService.updatePage(pageId, pageReqDTO);
     }
 
     @DeleteMapping("/{pageId}")
