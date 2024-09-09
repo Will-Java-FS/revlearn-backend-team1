@@ -1,6 +1,6 @@
 package com.revlearn.team1.service;
 
-import com.revlearn.team1.model.ModulePage;
+import com.revlearn.team1.model.Page;
 import com.revlearn.team1.model.Progress;
 import com.revlearn.team1.repository.ProgressRepo;
 import org.springdoc.api.OpenApiResourceNotFoundException;
@@ -46,27 +46,27 @@ public class ProgressService {
         existingProgress.setCompleted(progress.getCompleted());
         existingProgress.setCompletedProgress(progress.getCompletedProgress());
         existingProgress.setCourse(progress.getCourse());
-        existingProgress.setCourseModule(progress.getCourseModule());
-        existingProgress.setModulePage(progress.getModulePage());
+        existingProgress.setModule(progress.getModule());
+        existingProgress.setPage(progress.getPage());
         existingProgress.setUser(progress.getUser());
         return progressRepo.save(existingProgress);
     }
 
     //want to implement some progress calculation to then .setProgressPercentage()
-    public double getProgressForCourse(List<ModulePage> modulePages) {
-        return calculateProgress(modulePages);
+    public double getProgressForCourse(List<Page> pages) {
+        return calculateProgress(pages);
     }
 
-    public static double calculateProgress(List<ModulePage> modulePages) {
+    public static double calculateProgress(List<Page> pages) {
         int completedModules = 0;
 
-        for (ModulePage modulePage : modulePages) {
+        for (Page page : pages) {
             //Not sure how to check this
-            if (modulePage!=null) {
+            if (page !=null) {
                 completedModules++;
             }
         }
 
-        return ((double) completedModules / modulePages.size()) * 100;
+        return ((double) completedModules / pages.size()) * 100;
     }
 }

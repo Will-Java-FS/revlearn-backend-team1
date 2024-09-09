@@ -4,7 +4,7 @@ import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.dto.module.ModuleReqDTO;
 import com.revlearn.team1.constants.AccessLevelDesc;
 import com.revlearn.team1.model.Exam;
-import com.revlearn.team1.model.ModulePage;
+import com.revlearn.team1.model.Page;
 import com.revlearn.team1.service.module.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class ModuleController {
 
     @GetMapping("/{moduleId}/pages")
     @Operation(summary = "Get All Pages of a Module", description = AccessLevelDesc.ENROLLED_STUDENT, tags = {"module"})
-    public List<ModulePage> getModulePages(@PathVariable Long moduleId) {
+    public List<Page> getModulePages(@PathVariable Long moduleId) {
         return moduleService.getModulePages(moduleId);
     }
 

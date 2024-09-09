@@ -41,7 +41,7 @@ public class Course {
     private Float price;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<CourseModule> courseModules = new ArrayList<>();
+    private List<Module> modules = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<DiscussionPost> discussionPosts = new ArrayList<>();
