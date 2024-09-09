@@ -34,4 +34,10 @@ public class AccessControlServiceImp implements AccessControlService {
 
         return true;
     }
+
+    public void verifyInstitutionAccess() {
+        if (SecurityContextService.getUserRole() != Roles.INSTITUTION) {
+            throw new UserNotAuthorizedException("Unauthorized to access resource.  Must be institution (admin) account.");
+        }
+    }
 }

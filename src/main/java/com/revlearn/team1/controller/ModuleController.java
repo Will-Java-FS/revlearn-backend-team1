@@ -30,7 +30,7 @@ public class ModuleController {
         return moduleService.createModule(courseId, moduleReqDTO);
     }
 
-    @PutMapping("/{moduleId}/course/{courseId}")
+    @PutMapping("/{moduleId}")
     @Operation(summary = "Update Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR, tags = {"module"})
     public ModuleResDTO updateModule(@PathVariable Long moduleId, @RequestBody ModuleReqDTO moduleReqDTO) {
         return moduleService.updateModule(moduleId, moduleReqDTO);
