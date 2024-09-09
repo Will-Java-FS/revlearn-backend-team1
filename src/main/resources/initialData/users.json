@@ -78,5 +78,165 @@
     "role": "STUDENT",
     "firstName": "Rachel",
     "lastName": "Moore"
+  },
+  {
+    "username": "lauramartin008",
+    "password": "password",
+    "email": "laura.martin@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Laura",
+    "lastName": "Martin"
+  },
+  {
+    "username": "jamesanderson009",
+    "password": "password",
+    "email": "james.anderson@example.com",
+    "role": "STUDENT",
+    "firstName": "James",
+    "lastName": "Anderson"
+  },
+  {
+    "username": "lisawhite010",
+    "password": "password",
+    "email": "lisa.white@example.com",
+    "role": "STUDENT",
+    "firstName": "Lisa",
+    "lastName": "White"
+  },
+  {
+    "username": "robertthomas011",
+    "password": "password",
+    "email": "robert.thomas@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Robert",
+    "lastName": "Thomas"
+  },
+  {
+    "username": "angelajackson012",
+    "password": "password",
+    "email": "angela.jackson@example.com",
+    "role": "STUDENT",
+    "firstName": "Angela",
+    "lastName": "Jackson"
+  },
+  {
+    "username": "kevinmartinez013",
+    "password": "password",
+    "email": "kevin.martinez@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Kevin",
+    "lastName": "Martinez"
+  },
+  {
+    "username": "karenyoung014",
+    "password": "password",
+    "email": "karen.young@example.com",
+    "role": "STUDENT",
+    "firstName": "Karen",
+    "lastName": "Young"
+  },
+  {
+    "username": "davidking015",
+    "password": "password",
+    "email": "david.king@example.com",
+    "role": "EDUCATOR",
+    "firstName": "David",
+    "lastName": "King"
+  },
+  {
+    "username": "barbarajones016",
+    "password": "password",
+    "email": "barbara.jones@example.com",
+    "role": "STUDENT",
+    "firstName": "Barbara",
+    "lastName": "Jones"
+  },
+  {
+    "username": "johnwilliams017",
+    "password": "password",
+    "email": "john.williams@example.com",
+    "role": "EDUCATOR",
+    "firstName": "John",
+    "lastName": "Williams"
+  },
+  {
+    "username": "melissabrown018",
+    "password": "password",
+    "email": "melissa.brown@example.com",
+    "role": "STUDENT",
+    "firstName": "Melissa",
+    "lastName": "Brown"
+  },
+  {
+    "username": "matthewtaylor019",
+    "password": "password",
+    "email": "matthew.taylor@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Matthew",
+    "lastName": "Taylor"
+  },
+  {
+    "username": "brianlee020",
+    "password": "password",
+    "email": "brian.lee@example.com",
+    "role": "STUDENT",
+    "firstName": "Brian",
+    "lastName": "Lee"
+  },
+  {
+    "username": "elizabethclark021",
+    "password": "password",
+    "email": "elizabeth.clark@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Elizabeth",
+    "lastName": "Clark"
+  },
+  {
+    "username": "danielhall022",
+    "password": "password",
+    "email": "daniel.hall@example.com",
+    "role": "STUDENT",
+    "firstName": "Daniel",
+    "lastName": "Hall"
+  },
+  {
+    "username": "stephaniewilson023",
+    "password": "password",
+    "email": "stephanie.wilson@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Stephanie",
+    "lastName": "Wilson"
+  },
+  {
+    "username": "justinmoore024",
+    "password": "password",
+    "email": "justin.moore@example.com",
+    "role": "STUDENT",
+    "firstName": "Justin",
+    "lastName": "Moore"
+  },
+  {
+    "username": "nancyallen025",
+    "password": "password",
+    "email": "nancy.allen@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Nancy",
+    "lastName": "Allen"
+  },
+  {
+    "username": "frankhernandez026",
+    "password": "password",
+    "email": "frank.hernandez@example.com",
+    "role": "STUDENT",
+    "firstName": "Frank",
+    "lastName": "Hernandez"
+  },
+  {
+    "username": "amyroberts027",
+    "password": "password",
+    "email": "amy.roberts@example.com",
+    "role": "EDUCATOR",
+    "firstName": "Amy",
+    "lastName": "Roberts"
   }
 ]

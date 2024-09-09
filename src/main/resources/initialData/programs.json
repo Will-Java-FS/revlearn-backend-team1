@@ -30,16 +30,6 @@
     "cost": 20000.00
   },
   {
-    "title": "Bachelor of Mechanical Engineering",
-    "description": "A comprehensive program that covers the principles of mechanics, thermodynamics, and material science, preparing students for careers in engineering design and development.",
-    "department": "Department of Mechanical Engineering",
-    "degree": "Bachelor's",
-    "duration": "4 years",
-    "location": "On-Campus",
-    "format": "Full-time",
-    "cost": 48000.00
-  },
-  {
     "title": "Master of Data Science",
     "description": "An advanced degree focusing on data analysis, machine learning, and big data technologies to equip students with the skills required for data-driven decision making.",
     "department": "Department of Data Science",
@@ -70,16 +60,6 @@
     "cost": 10000.00
   },
   {
-    "title": "Bachelor of Nursing",
-    "description": "A comprehensive program that prepares students for careers in healthcare, focusing on clinical skills, patient care, and medical ethics.",
-    "department": "Department of Nursing",
-    "degree": "Bachelor's",
-    "duration": "4 years",
-    "location": "On-Campus",
-    "format": "Full-time",
-    "cost": 35000.00
-  },
-  {
     "title": "Master of Public Health",
     "description": "An interdisciplinary program that covers epidemiology, public health policy, and healthcare systems, designed to prepare students for leadership roles in public health organizations.",
     "department": "School of Public Health",
@@ -98,5 +78,145 @@
     "location": "Online",
     "format": "Part-time",
     "cost": 5000.00
+  },
+  {
+    "title": "Bachelor of Electrical Engineering",
+    "description": "Covers electrical systems, electronics, and circuit design, with practical lab work.",
+    "department": "Electrical Engineering",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-campus",
+    "format": "Full-time",
+    "cost": 42000
+  },
+  {
+    "title": "Master of Artificial Intelligence",
+    "description": "Explores AI concepts such as machine learning, neural networks, and natural language processing.",
+    "department": "School of AI",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Online",
+    "format": "Part-time",
+    "cost": 32000
+  },
+  {
+    "title": "Master of Education",
+    "description": "Prepares students for leadership roles in educational settings with a focus on curriculum design.",
+    "department": "School of Education",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Hybrid",
+    "format": "Part-time",
+    "cost": 34000
+  },
+  {
+    "title": "Bachelor of Environmental Science",
+    "description": "Focuses on sustainability, ecology, and environmental policy to address global challenges.",
+    "department": "Environmental Sciences",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-campus",
+    "format": "Full-time",
+    "cost": 37000
+  },
+  {
+    "title": "Bachelor of Business Administration",
+    "description": "An undergraduate program focusing on business principles, management, and leadership skills.",
+    "department": "Business School",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-campus",
+    "format": "Full-time",
+    "cost": 38000
+  },
+  {
+    "title": "Master of Cybersecurity",
+    "description": "A program dedicated to the study of information security, network defense, and cryptography.",
+    "department": "Computer Science Department",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Hybrid",
+    "format": "Part-time",
+    "cost": 33000
+  },
+  {
+    "title": "Bachelor of Nursing",
+    "description": "Provides a foundation in medical sciences and patient care, preparing students for careers as registered nurses.",
+    "department": "Health Sciences",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-campus",
+    "format": "Full-time",
+    "cost": 46000
+  },
+  {
+    "title": "Master of Mechanical Engineering",
+    "description": "This program covers advanced topics in thermodynamics, material science, and engineering design.",
+    "department": "Mechanical Engineering",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Online",
+    "format": "Part-time",
+    "cost": 29000
+  },
+  {
+    "title": "Bachelor of Civil Engineering",
+    "description": "An undergraduate program focused on infrastructure design, construction, and environmental engineering.",
+    "department": "Civil Engineering Department",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-campus",
+    "format": "Full-time",
+    "cost": 41000
+  },
+  {
+    "title": "Master of Economics",
+    "description": "This program provides a deep understanding of economic theory, policy analysis, and quantitative methods.",
+    "department": "Economics Department",
+    "degree": "Master's",
+    "duration": "18 months",
+    "location": "Hybrid",
+    "format": "Part-time",
+    "cost": 31000
+  },
+  {
+    "title": "Bachelor of Architecture",
+    "description": "A program designed to develop skills in architectural design, planning, and construction.",
+    "department": "School of Architecture",
+    "degree": "Bachelor's",
+    "duration": "5 years",
+    "location": "On-campus",
+    "format": "Full-time",
+    "cost": 47000
+  },
+  {
+    "title": "Master of Social Work",
+    "description": "This program prepares students for careers in social services, focusing on community outreach and support.",
+    "department": "School of Social Work",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Online",
+    "format": "Part-time",
+    "cost": 28000
+  },
+  {
+    "title": "Bachelor of Psychology",
+    "description": "An undergraduate program that explores human behavior, mental health, and cognitive science.",
+    "department": "Psychology Department",
+    "degree": "Bachelor's",
+    "duration": "4 years",
+    "location": "On-campus",
+    "format": "Full-time",
+    "cost": 39000
+  },
+  {
+    "title": "Master of Finance",
+    "description": "A program focusing on advanced financial management, investment strategies, and corporate finance.",
+    "department": "School of Business",
+    "degree": "Master's",
+    "duration": "2 years",
+    "location": "Hybrid",
+    "format": "Part-time",
+    "cost": 34000
   }
 ]

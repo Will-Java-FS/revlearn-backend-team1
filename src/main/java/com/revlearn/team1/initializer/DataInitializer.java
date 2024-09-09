@@ -61,8 +61,6 @@ public class DataInitializer implements ApplicationRunner {
         JsonNode coursesNode = getAllCourses();
         //Add courses to program(s)
         addCoursesToProgram(coursesNode, jwt);
-//        addModulestoCourse()
-        //Add modules to course(s)
 
         JsonNode usersNode = getAllUsers();
         //add educators to courses
@@ -73,16 +71,17 @@ public class DataInitializer implements ApplicationRunner {
         removeAdminFromCourses(coursesNode, jwt);
 
 
-
         logger.info("Data initialization complete.");
     }
 
     private void addCoursesToProgram(JsonNode coursesNode, String jwt) {
 
+        int programId = 1;
+        int coursesCount = 0;
         for (JsonNode courseNode : coursesNode) {
             long courseId = courseNode.get("id").asLong();
             //TODO: Verify program with ID 1 exists
-            String requestUrl = apiUrl + "/program/1/addCourse/" + courseId;
+            String requestUrl = apiUrl + "/program/" +  programId + "/addCourse/" + courseId;
             logger.info(
                     webClient.patch()
                             .uri(requestUrl)
@@ -93,6 +92,11 @@ public class DataInitializer implements ApplicationRunner {
                             .block()
                             .toString()
             );
+            coursesCount++;
+            if (coursesCount == 6) {
+                programId++;
+                coursesCount = 0;
+            }
         }
     }
 
@@ -104,7 +108,7 @@ public class DataInitializer implements ApplicationRunner {
             if (userNode.get("role").asText().equals("EDUCATOR")) {
                 long educatorId = userNode.get("id").asLong();
                 String requestUrl = apiUrl + "/course/educator/add";
-                CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId,educatorId);
+                CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId, educatorId);
                 logger.info(
                         webClient.patch()
                                 .uri(requestUrl)
@@ -123,6 +127,7 @@ public class DataInitializer implements ApplicationRunner {
             }
         }
     }
+
     private void addStudentsToCourses(JsonNode usersNode, String jwt) {
 
         Long courseId = 1L;
@@ -131,7 +136,7 @@ public class DataInitializer implements ApplicationRunner {
             if (userNode.get("role").asText().equals("STUDENT")) {
                 long studentId = userNode.get("id").asLong();
                 String requestUrl = apiUrl + "/course/student/add";
-                CourseStudentDTO courseStudentDTO = new CourseStudentDTO(courseId,studentId);
+                CourseStudentDTO courseStudentDTO = new CourseStudentDTO(courseId, studentId);
                 logger.info(
                         webClient.patch()
                                 .uri(requestUrl)
@@ -150,11 +155,12 @@ public class DataInitializer implements ApplicationRunner {
             }
         }
     }
+
     private void removeAdminFromCourses(JsonNode coursesNode, String jwt) {
-        for(JsonNode courseNode : coursesNode){
+        for (JsonNode courseNode : coursesNode) {
             long courseId = courseNode.get("id").asLong();
             String requestUrl = apiUrl + "/course/educator/remove";
-            CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId,1L);
+            CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId, 1L);
             logger.info(
                     webClient.patch()
                             .uri(requestUrl)
@@ -196,9 +202,16 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void createInitialModules(JsonNode modulesNode, String jwt) {
-        String requestUrl = apiUrl + "/module/course/1";
+        int courseId = 1;
+        int modulesCount = 0;
         for (JsonNode moduleNode : modulesNode) {
+            String requestUrl = apiUrl + "/module/course/" + courseId;
             sendAdminRequest(requestUrl, HttpMethod.POST, moduleNode, jwt);
+            modulesCount++;
+            if (modulesCount == 6) {
+                courseId++;
+                modulesCount = 0;
+            }
         }
     }
 
@@ -246,7 +259,7 @@ public class DataInitializer implements ApplicationRunner {
         return null;
     }
 
-    private JsonNode getAllUsers(){
+    private JsonNode getAllUsers() {
         String requestUrl = apiUrl + "/user";
         try {
             logger.info("Sending getAllUsers request to URL: " + requestUrl);
