@@ -55,6 +55,7 @@ public class DataInitializer implements ApplicationRunner {
         createInitialCourses(loadJson("courses.json"), jwt);
         createInitialModules(loadJson("modules.json"), jwt);
         createInitialPrograms(loadJson("programs.json"), jwt);
+        createInitialPages(loadJson("pages.json"), jwt);
 //        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
 //        createInitialTransactions(loadJson("transactions"));
 
@@ -196,12 +197,12 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void createInitialTransactions(JsonNode transactionsNode) {
-        String requestUrl = apiUrl + "/transaction";
-        for (JsonNode transactionNode : transactionsNode) {
-            sendRequest(requestUrl, HttpMethod.POST, transactionNode);
-        }
-    }
+//    private void createInitialTransactions(JsonNode transactionsNode) {
+//        String requestUrl = apiUrl + "/transaction";
+//        for (JsonNode transactionNode : transactionsNode) {
+//            sendRequest(requestUrl, HttpMethod.POST, transactionNode);
+//        }
+//    }
 
     private void createInitialModules(JsonNode modulesNode, String jwt) {
         int courseId = 1;
@@ -221,6 +222,20 @@ public class DataInitializer implements ApplicationRunner {
         String requestUrl = apiUrl + "/program";
         for (JsonNode programNode : programsNode) {
             sendAdminRequest(requestUrl, HttpMethod.POST, programNode, jwt);
+        }
+    }
+
+    private void createInitialPages(JsonNode pagesNode, String jwt) {
+        int moduleId = 1;
+        int pagesCount = 0;
+        for (JsonNode pageNode : pagesNode) {
+            String requestUrl = apiUrl + "/page/module/" + moduleId;
+            sendAdminRequest(requestUrl, HttpMethod.POST, pageNode, jwt);
+            pagesCount++;
+            if (pagesCount == 4) {
+                moduleId++;
+                pagesCount = 0;
+            }
         }
     }
 

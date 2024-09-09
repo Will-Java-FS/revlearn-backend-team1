@@ -1,0 +1,283 @@
+[
+  {
+    "title": "Advanced Data Structures: Trees and Graphs",
+    "markdownContent": "## Introduction\nIn this lesson, we will dive deep into two critical data structures: trees and graphs.\n\n### Trees\nA tree is a hierarchical data structure where every node has a parent and child nodes, except for the root node, which has no parent. Trees are widely used in computer science for representing hierarchical structures like file systems and organizational charts.\n\n#### Types of Trees:\n- **Binary Trees**: Each node has at most two children.\n- **Binary Search Trees (BST)**: A binary tree where the left child is smaller than the parent, and the right child is greater.\n- **AVL Trees**: A self-balancing binary search tree where the heights of two child subtrees of any node differ by at most one.\n\n### Graphs\nGraphs consist of nodes (or vertices) connected by edges. Unlike trees, graphs can have cycles (circular paths).\n\n#### Types of Graphs:\n- **Directed Graphs**: Edges have directions, meaning they go from one vertex to another in a specific direction.\n- **Undirected Graphs**: Edges do not have directions, meaning the relationship between the vertices is mutual.\n- **Weighted Graphs**: Edges have weights or costs associated with them.\n\n### Use Cases\n- **Trees**: Used in databases (B-trees), artificial intelligence (decision trees), and file systems.\n- **Graphs**: Used in social networks, routing algorithms, and recommendation engines.\n\n### Traversal Techniques\n- **Tree Traversals**: Pre-order, In-order, and Post-order traversals are essential for visiting nodes in a specific order.\n- **Graph Traversals**: Depth-First Search (DFS) and Breadth-First Search (BFS) are widely used for exploring graphs.\n\n### Conclusion\nUnderstanding trees and graphs will help you design efficient algorithms for complex problems. Practice these structures to become proficient in solving real-world problems.",
+    "instructorNotes": "Make sure students can differentiate between binary trees and graphs. Emphasize the use cases of each data structure, and spend extra time on graph traversal algorithms like DFS and BFS.",
+    "attachmentsUrls": [
+      "https://example.com/resources/trees-and-graphs.pdf",
+      "https://example.com/assignments/data-structures-homework.pdf",
+      "https://example.com/videos/advanced-data-structures.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Algorithms",
+    "markdownContent": "In this lesson, we will explore the fundamentals of algorithms, which are step-by-step procedures for solving problems. You will learn about the importance of time complexity, basic algorithmic strategies such as divide and conquer, and how algorithms are the foundation of all computer programs.",
+    "instructorNotes": "Ensure students grasp the concept of algorithmic efficiency. Spend extra time on explaining Big-O notation and its practical applications.",
+    "attachmentsUrls": [
+      "https://example.com/notes/algorithms.pdf",
+      "https://example.com/videos/algorithms-intro.mp4"
+    ]
+  },
+  {
+    "title": "Object-Oriented Programming (OOP)",
+    "markdownContent": "This lesson introduces Object-Oriented Programming, a programming paradigm based on the concept of objects. You will learn about the four pillars of OOP: encapsulation, abstraction, inheritance, and polymorphism, and how they help in designing modular, reusable, and scalable software.",
+    "instructorNotes": "Focus on practical examples of OOP concepts using real-world scenarios. Encourage students to think about how objects interact with each other.",
+    "attachmentsUrls": [
+      "https://example.com/notes/oop-concepts.pdf",
+      "https://example.com/videos/oop-explained.mp4"
+    ]
+  },
+  {
+    "title": "Recursion in Programming",
+    "markdownContent": "Recursion is a powerful tool in programming where a function calls itself to solve smaller instances of a problem. This lesson covers the basic concepts of recursion, base cases, and how to apply recursive thinking to solve complex problems such as factorials, Fibonacci sequences, and tree traversals.",
+    "instructorNotes": "Help students understand the importance of base cases and recursive calls. Demonstrate how recursion can simplify otherwise complex problems.",
+    "attachmentsUrls": [
+      "https://example.com/notes/recursion.pdf",
+      "https://example.com/videos/recursion-explained.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Databases",
+    "markdownContent": "Databases are structured collections of data. In this lesson, you will learn the basics of relational databases, how data is stored in tables, and the importance of SQL (Structured Query Language) in managing and retrieving data efficiently.",
+    "instructorNotes": "Ensure students understand the role of databases in modern applications and emphasize the basics of SQL queries.",
+    "attachmentsUrls": [
+      "https://example.com/notes/databases.pdf",
+      "https://example.com/videos/intro-to-databases.mp4"
+    ]
+  },
+  {
+    "title": "RESTful APIs",
+    "markdownContent": "A RESTful API (Application Programming Interface) allows communication between client and server over HTTP. In this lesson, you will learn about the principles of REST, the structure of HTTP requests and responses, and how RESTful APIs are commonly used to build scalable web services.",
+    "instructorNotes": "Make sure students understand the principles of REST and the typical HTTP methods such as GET, POST, PUT, and DELETE.",
+    "attachmentsUrls": [
+      "https://example.com/notes/restful-apis.pdf",
+      "https://example.com/videos/restful-api-basics.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Machine Learning",
+    "markdownContent": "Machine Learning is a branch of artificial intelligence that enables computers to learn from data. In this lesson, you will explore the basics of supervised, unsupervised learning, and key algorithms like linear regression, decision trees, and clustering.",
+    "instructorNotes": "Emphasize the difference between supervised and unsupervised learning. Provide real-world examples to illustrate the applications of machine learning.",
+    "attachmentsUrls": [
+      "https://example.com/notes/machine-learning.pdf",
+      "https://example.com/videos/ml-intro.mp4"
+    ]
+  },
+  {
+    "title": "Data Structures: Arrays and Lists",
+    "markdownContent": "In this lesson, we cover fundamental data structures such as arrays and lists. You will learn how they store collections of elements, their use cases, and how to efficiently access, insert, and remove elements in each type.",
+    "instructorNotes": "Encourage students to consider the trade-offs between arrays and linked lists in terms of memory usage and access speed.",
+    "attachmentsUrls": [
+      "https://example.com/notes/arrays-lists.pdf",
+      "https://example.com/videos/data-structures-arrays-lists.mp4"
+    ]
+  },
+  {
+    "title": "Version Control with Git",
+    "markdownContent": "Version control is crucial for managing changes in software development. In this lesson, you will learn the basics of Git, including how to commit changes, create branches, and collaborate with others using tools like GitHub.",
+    "instructorNotes": "Focus on hands-on activities where students practice creating repositories and managing branches with Git.",
+    "attachmentsUrls": [
+      "https://example.com/notes/git-version-control.pdf",
+      "https://example.com/videos/git-basics.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Networks",
+    "markdownContent": "Computer networks enable devices to communicate with each other. This lesson covers the basic concepts of networking, including IP addresses, protocols like TCP/IP, and the difference between LANs and WANs.",
+    "instructorNotes": "Explain the importance of network layers and protocols in ensuring reliable communication over the internet.",
+    "attachmentsUrls": [
+      "https://example.com/notes/networks.pdf",
+      "https://example.com/videos/intro-to-networks.mp4"
+    ]
+  },
+  {
+    "title": "Responsive Web Design",
+    "markdownContent": "Responsive web design ensures that websites are accessible on devices of all sizes. In this lesson, you will learn how to use media queries, flexible grids, and images to create websites that adapt to different screen sizes.",
+    "instructorNotes": "Encourage students to experiment with building responsive layouts using CSS frameworks like Bootstrap.",
+    "attachmentsUrls": [
+      "https://example.com/notes/responsive-design.pdf",
+      "https://example.com/videos/responsive-web-design.mp4"
+    ]
+  },
+  {
+    "title": "Cloud Computing Basics",
+    "markdownContent": "Cloud computing provides scalable computing resources over the internet. This lesson introduces you to key concepts like IaaS, PaaS, and SaaS, and how cloud services help businesses reduce operational costs.",
+    "instructorNotes": "Explain the differences between IaaS, PaaS, and SaaS with real-world examples like AWS and Azure.",
+    "attachmentsUrls": [
+      "https://example.com/notes/cloud-computing.pdf",
+      "https://example.com/videos/cloud-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Blockchain",
+    "markdownContent": "Blockchain is a distributed ledger technology that ensures secure and transparent transactions. This lesson explores how blockchain works, its benefits, and its applications beyond cryptocurrencies.",
+    "instructorNotes": "Highlight the security benefits of blockchain and how it can be applied in industries like finance and supply chain.",
+    "attachmentsUrls": [
+      "https://example.com/notes/blockchain.pdf",
+      "https://example.com/videos/blockchain-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Cryptography",
+    "markdownContent": "Cryptography is essential for securing digital communication. This lesson covers encryption, decryption, and the various types of cryptographic algorithms used to secure data.",
+    "instructorNotes": "Focus on explaining symmetric and asymmetric encryption with practical examples.",
+    "attachmentsUrls": [
+      "https://example.com/notes/cryptography.pdf",
+      "https://example.com/videos/crypto-intro.mp4"
+    ]
+  },
+  {
+    "title": "Software Testing Fundamentals",
+    "markdownContent": "Testing is an integral part of software development. In this lesson, you will learn about unit testing, integration testing, and automated testing tools used to ensure software quality.",
+    "instructorNotes": "Encourage students to think about testing as part of the development process, not an afterthought.",
+    "attachmentsUrls": [
+      "https://example.com/notes/testing-basics.pdf",
+      "https://example.com/videos/testing-intro.mp4"
+    ]
+  },
+  {
+    "title": "Web Application Security",
+    "markdownContent": "This lesson covers the basic security measures every web application should have. Learn about common vulnerabilities like SQL injection, XSS, and how to secure applications against attacks.",
+    "instructorNotes": "Provide examples of real-world security breaches and explain how they could have been prevented.",
+    "attachmentsUrls": [
+      "https://example.com/notes/web-security.pdf",
+      "https://example.com/videos/security-intro.mp4"
+    ]
+  },
+  {
+    "title": "Data Analysis with Python",
+    "markdownContent": "Python is a powerful tool for data analysis. In this lesson, you'll learn how to use libraries like Pandas and NumPy to manipulate and analyze datasets, and how to visualize data using Matplotlib.",
+    "instructorNotes": "Demonstrate common data analysis workflows with real datasets and show how Python simplifies the process.",
+    "attachmentsUrls": [
+      "https://example.com/notes/python-data-analysis.pdf",
+      "https://example.com/videos/data-analysis-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Java",
+    "markdownContent": "Java is a versatile, object-oriented programming language. This lesson will guide you through the basics of Java, including syntax, data types, and the principles of object-oriented design.",
+    "instructorNotes": "Ensure students understand basic Java syntax before moving on to advanced concepts.",
+    "attachmentsUrls": [
+      "https://example.com/notes/java-intro.pdf",
+      "https://example.com/videos/java-basics.mp4"
+    ]
+  },
+  {
+    "title": "Advanced JavaScript Techniques",
+    "markdownContent": "In this lesson, you'll explore advanced JavaScript features such as closures, callbacks, and async/await. Learn how to handle asynchronous code effectively and improve performance in web applications.",
+    "instructorNotes": "Focus on practical examples that showcase the power of async/await in modern JavaScript applications.",
+    "attachmentsUrls": [
+      "https://example.com/notes/advanced-js.pdf",
+      "https://example.com/videos/js-advanced.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Artificial Intelligence",
+    "markdownContent": "Artificial Intelligence is revolutionizing industries. In this lesson, you will explore the fundamentals of AI, including machine learning, neural networks, and the ethical considerations of AI implementation.",
+    "instructorNotes": "Discuss real-world applications of AI and the ethical concerns surrounding its rapid adoption.",
+    "attachmentsUrls": [
+      "https://example.com/notes/ai-intro.pdf",
+      "https://example.com/videos/ai-fundamentals.mp4"
+    ]
+  },
+  {
+    "title": "Deep Learning with TensorFlow",
+    "markdownContent": "Deep Learning is a subset of machine learning that uses neural networks with many layers. This lesson introduces TensorFlow, a popular library for building deep learning models, and how it simplifies complex computations.",
+    "instructorNotes": "Provide examples of building simple neural networks in TensorFlow and demonstrate its use in image classification.",
+    "attachmentsUrls": [
+      "https://example.com/notes/tensorflow.pdf",
+      "https://example.com/videos/tensorflow-intro.mp4"
+    ]
+  },
+  {
+    "title": "Big Data Fundamentals",
+    "markdownContent": "Big data refers to the massive amounts of data generated every day. In this lesson, you'll learn about the technologies used to process and analyze big data, such as Hadoop and Spark, and the challenges of managing large datasets.",
+    "instructorNotes": "Focus on explaining the architecture of Hadoop and Spark and their use cases in big data processing.",
+    "attachmentsUrls": [
+      "https://example.com/notes/big-data.pdf",
+      "https://example.com/videos/big-data-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to DevOps",
+    "markdownContent": "DevOps combines development and operations to enable faster software delivery. This lesson introduces you to the key principles of DevOps, including continuous integration, continuous deployment, and automation.",
+    "instructorNotes": "Provide examples of CI/CD pipelines and explain the benefits of automation in the software development lifecycle.",
+    "attachmentsUrls": [
+      "https://example.com/notes/devops-basics.pdf",
+      "https://example.com/videos/devops-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to UX/UI Design",
+    "markdownContent": "UX/UI design is about creating user-friendly and visually appealing interfaces. This lesson covers the basics of user experience and interface design, and how to conduct user research to build better products.",
+    "instructorNotes": "Highlight the importance of user research and testing in the design process.",
+    "attachmentsUrls": [
+      "https://example.com/notes/ux-ui-design.pdf",
+      "https://example.com/videos/ux-intro.mp4"
+    ]
+  },
+  {
+    "title": "Mobile App Development",
+    "markdownContent": "In this lesson, you will explore the fundamentals of mobile app development for iOS and Android. Learn about the mobile development lifecycle, the differences between native and hybrid apps, and the tools used to build them.",
+    "instructorNotes": "Provide examples of building simple apps using React Native or Flutter.",
+    "attachmentsUrls": [
+      "https://example.com/notes/mobile-development.pdf",
+      "https://example.com/videos/mobile-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Microservices",
+    "markdownContent": "Microservices architecture allows building systems as independent, loosely-coupled services. This lesson covers the key concepts behind microservices, their benefits, and challenges in building scalable applications.",
+    "instructorNotes": "Explain how microservices differ from monolithic architectures and provide real-world examples.",
+    "attachmentsUrls": [
+      "https://example.com/notes/microservices.pdf",
+      "https://example.com/videos/microservices-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Agile Methodology",
+    "markdownContent": "Agile is a flexible software development methodology that promotes iterative progress and collaboration. This lesson introduces the Agile principles, scrum roles, and sprints, and how Agile improves project management.",
+    "instructorNotes": "Discuss the benefits of Agile in dynamic environments and the importance of teamwork in Agile projects.",
+    "attachmentsUrls": [
+      "https://example.com/notes/agile-basics.pdf",
+      "https://example.com/videos/agile-intro.mp4"
+    ]
+  },
+  {
+    "title": "API Development with Node.js",
+    "markdownContent": "Node.js is a popular runtime for building scalable server-side applications. In this lesson, you will learn the basics of creating RESTful APIs using Node.js, Express, and MongoDB.",
+    "instructorNotes": "Show practical examples of building simple APIs and explain the importance of asynchronous operations in Node.js.",
+    "attachmentsUrls": [
+      "https://example.com/notes/node-api.pdf",
+      "https://example.com/videos/node-api-intro.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Docker",
+    "markdownContent": "Docker is a tool that simplifies application deployment by using containers. This lesson covers the basics of Docker, containers, and how to use Docker to deploy applications in a consistent environment.",
+    "instructorNotes": "Focus on demonstrating how containers work and their advantages over traditional virtual machines.",
+    "attachmentsUrls": [
+      "https://example.com/notes/docker-intro.pdf",
+      "https://example.com/videos/docker-basics.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to Kubernetes",
+    "markdownContent": "Kubernetes is a container orchestration platform that automates the deployment, scaling, and management of containerized applications. In this lesson, you'll learn how Kubernetes works and its key components like pods and services.",
+    "instructorNotes": "Provide hands-on examples of deploying containers with Kubernetes and explain how it helps manage large-scale applications.",
+    "attachmentsUrls": [
+      "https://example.com/notes/kubernetes-intro.pdf",
+      "https://example.com/videos/kubernetes-basics.mp4"
+    ]
+  },
+  {
+    "title": "Introduction to SQL",
+    "markdownContent": "SQL (Structured Query Language) is used to manage data in relational databases. This lesson introduces you to basic SQL commands such as SELECT, INSERT, UPDATE, and DELETE, and how to create and manipulate database tables.",
+    "instructorNotes": "Encourage students to practice writing queries on a sample database to reinforce the concepts.",
+    "attachmentsUrls": [
+      "https://example.com/notes/sql-basics.pdf",
+      "https://example.com/videos/sql-intro.mp4"
+    ]
+  }
+]
+
