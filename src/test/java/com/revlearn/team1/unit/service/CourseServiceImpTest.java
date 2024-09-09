@@ -16,6 +16,7 @@ import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.accessControl.AccessControlService;
 import com.revlearn.team1.service.course.CourseServiceImp;
+import com.revlearn.team1.service.programCourse.ProgramCourseService;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,6 +46,8 @@ public class CourseServiceImpTest {
     private CourseMapper courseMapper;
     @Mock
     private AccessControlService accessControlService;
+    @Mock
+    private ProgramCourseService programCourseService;
 
     @InjectMocks
     private CourseServiceImp courseService;
