@@ -1,7 +1,7 @@
 package com.revlearn.team1.controller;
 
-import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.user.UpdateUserRequest;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.user.UserDTO;
 import com.revlearn.team1.dto.user.DeleteUserResponse;
 import com.revlearn.team1.model.User;
@@ -100,17 +100,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}/enrolledCourses")
-    public List<CourseDTO> getEnrolledCourses(@PathVariable Long id) {
+    public List<CourseResDTO> getEnrolledCourses(@PathVariable Long id) {
         return userService.getEnrolledCourses(id);
     }
 
     @GetMapping("/{id}/taughtCourses")
-    public List<CourseDTO> getTaughtCourses(@PathVariable Long id) {
+    public List<CourseResDTO> getTaughtCourses(@PathVariable Long id) {
         return userService.getTaughtCourses(id);
     }
 
-//    @GetMapping("/{id}/institutionCourses")
-//    public List<CourseDTO> getInstitutionCourses(@PathVariable Long id) {
-//        return userService.getInstitutionCourses(id);
-//    }
 }

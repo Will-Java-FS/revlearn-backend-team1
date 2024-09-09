@@ -79,8 +79,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ExamResult> examResults;
 
-    @OneToMany(mappedBy = "institution")
-    private List<Program> programs;
+    @ManyToOne
+    @JoinColumn(name = "program_id")
+    private Program program;
 
     public User() {
         this.username = "default-user";
@@ -115,4 +116,12 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<DiscussionBoard> discussionBoards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<DiscussionPost> discussionPosts = new ArrayList<>();
 }

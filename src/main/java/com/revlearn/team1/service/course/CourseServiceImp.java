@@ -1,11 +1,12 @@
 package com.revlearn.team1.service.course;
 
-import com.revlearn.team1.dto.course.CourseDTO;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.course.response.CourseStudentResDTO;
-import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.exceptions.UserNotAuthorizedException;
@@ -17,6 +18,8 @@ import com.revlearn.team1.model.Course;
 import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
+import com.revlearn.team1.service.accessControl.AccessControlService;
+import com.revlearn.team1.service.programCourse.ProgramCourseService;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -31,9 +34,11 @@ public class CourseServiceImp implements CourseService {
     private final CourseMapper courseMapper;
     private final UserRepository userRepo;
     private final ModuleMapper moduleMapper;
+    private final AccessControlService accessControlService;
+    private final ProgramCourseService programCourseService;
 
     @Override
-    public List<CourseDTO> getAll() {
+    public List<CourseResDTO> getAll() {
         //TODO: Consider pagination instead of the return of every course
         //TODO: Add sort methods: alphabetical, by program
         try {
@@ -49,7 +54,7 @@ public class CourseServiceImp implements CourseService {
                 .orElseThrow(() -> new CourseNotFoundException("getAllStudentsByCourseId()", courseId));
 
         //Guard clause to verify user is authorized to access course
-        verifyStudentLevelAccess(course);
+        accessControlService.verifyStudentLevelAccess(course);
 
         return course.getStudents();
     }
@@ -61,24 +66,24 @@ public class CourseServiceImp implements CourseService {
                 .orElseThrow(() -> new CourseNotFoundException("getAllEducatorsByCourseId()", courseId));
 
         //Guard clause to verify user is authorized to access course
-        verifyStudentLevelAccess(course);
+        accessControlService.verifyStudentLevelAccess(course);
 
         return course.getEducators();
     }
 
     @Override
-    public CourseDTO getById(Long courseId) {
+    public CourseResDTO getById(Long courseId) {
         Course retrievedCourse = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("CourseService.getById()", courseId));
         return courseMapper.toDto(retrievedCourse);
     }
 
     @Override
-    public CourseDTO createCourse(CourseDTO courseDTO) {
+    public CourseResDTO createCourse(CourseReqDTO courseReqDTO) {
 
-        Course course = courseMapper.fromDto(courseDTO);
+        Course course = courseMapper.fromReqDto(courseReqDTO);
 
-        //Guard clause to verify user is authorized to create a course
+        //Guard: verify user is authorized to create a course
         Roles userRole = SecurityContextService.getUserRole();
         if (!userRole.equals(Roles.EDUCATOR) && !userRole.equals(Roles.INSTITUTION))
             throw new UserNotAuthorizedException("User is not authorized to create a course.  Must be an educator or institution.");
@@ -100,17 +105,17 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public CourseDTO updateCourse(CourseDTO courseDTO) {
+    public CourseResDTO updateCourse(Long courseId, CourseReqDTO courseReqDTO) {
 
         //Verify course already exists in database
-        Course course = courseRepo.findById(courseDTO.id()).orElseThrow(
-                () -> new CourseNotFoundException("CourseService.updateCourse()", courseDTO.id()));
+        Course course = courseRepo.findById(courseId).orElseThrow(
+                () -> new CourseNotFoundException("CourseService.updateCourse()", courseId));
 
         //verify user is authorized to update course
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
 
         //Update retrieved course object with courseDTO information
-        courseMapper.updateCourseFromDto(course, courseDTO);
+        courseMapper.updateCourseFromReqDto(course, courseReqDTO);
 
         //Save updated course to database
         Course savedCourse = courseRepo.save(course);
@@ -127,14 +132,16 @@ public class CourseServiceImp implements CourseService {
                 () -> new CourseNotFoundException("CourseServiceImp.deleteById()", id));
 
         //verify user is authorized to delete course
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
+
+        //Remove course from its program(s)
+        programCourseService.removeAllProgramsFromCourse(course);
 
         //delete
         courseRepo.deleteById(id);
 
         return String.format("Successfully deleted course %d.", id);
     }
-
 
     @Override
     public CourseStudentResDTO enrollStudent(CourseStudentDTO courseStudentDTO) {
@@ -152,10 +159,10 @@ public class CourseServiceImp implements CourseService {
         Long userId = SecurityContextService.getUserId();
         if (userId != student.getId()) {
             //Throws exception if user is not course educator or institution
-            verifyEducatorLevelAccess(course);
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to enroll this student in course.  Must be the student, course educator, or institution."
-            );
+            if (!accessControlService.verifyEducatorLevelAccess(course))
+                throw new UserNotAuthorizedException(
+                        "User is not authorized to enroll this student in course.  Must be the student, course educator, or institution."
+                );
         }
 
         // TODO: How does Stripe payment system interact with this?
@@ -182,10 +189,10 @@ public class CourseServiceImp implements CourseService {
         Long userId = SecurityContextService.getUserId();
         if (userId != student.getId()) {
             //Throws exception if user is not course educator or institution
-            verifyEducatorLevelAccess(course);
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to withdraw this student from course.  Must be the student, course educator, or institution."
-            );
+            if (!accessControlService.verifyEducatorLevelAccess(course))
+                throw new UserNotAuthorizedException(
+                        "User is not authorized to withdraw this student from course.  Must be the student, course educator, or institution."
+                );
         }
         // TODO: How does Stripe payment system interact with this?
 
@@ -211,7 +218,7 @@ public class CourseServiceImp implements CourseService {
         User educator = userRepo.findById(Math.toIntExact(courseEducatorDTO.educatorId())).orElseThrow(
                 () -> new UserNotFoundException(String.format("Could not find user by ID %d", courseEducatorDTO.educatorId())));
 
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
 
         course.getEducators().add(educator);
         educator.getTaughtCourses().add(course);
@@ -233,7 +240,7 @@ public class CourseServiceImp implements CourseService {
                         String.format("Educator by id %d does not teach course by id %d.", courseEducatorDTO.educatorId(), course.getId())));
 
         //TODO: Consider restriction of self-removal of educator from course
-        verifyEducatorLevelAccess(course);
+        accessControlService.verifyEducatorLevelAccess(course);
 
         course.getEducators().remove(educator);
         educator.getTaughtCourses().remove(course);
@@ -245,36 +252,15 @@ public class CourseServiceImp implements CourseService {
     }
 
     @Override
-    public List<ModuleDTO> getModulesByCourseId(Long courseId) {
+    public List<ModuleResDTO> getModulesByCourseId(Long courseId) {
 
         Course course = courseRepo.findById(courseId).orElseThrow(
                 () -> new CourseNotFoundException("Course not found", courseId));
 
-        verifyStudentLevelAccess(course);
+        accessControlService.verifyStudentLevelAccess(course);
 
-        return course.getCourseModules().stream().map(moduleMapper::toDto).toList();
+        return course.getModules().stream().map(moduleMapper::toResDto).toList();
     }
 
-    public void verifyStudentLevelAccess(Course course) {
 
-        Long userId = SecurityContextService.getUserId();
-        Roles userRole = SecurityContextService.getUserRole();
-
-        if (course.getStudents().stream().noneMatch(s -> s.getId() == userId)
-                && course.getEducators().stream().noneMatch(e -> e.getId() == userId)
-                && !userRole.equals(Roles.INSTITUTION))
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to access this course.  Must be enrolled student, assigned educator, or administrator.");
-    }
-
-    public void verifyEducatorLevelAccess(Course course) {
-
-        Long userId = SecurityContextService.getUserId();
-        Roles userRole = SecurityContextService.getUserRole();
-
-        if (course.getEducators().stream().noneMatch(e -> e.getId() == userId)
-                && !userRole.equals(Roles.INSTITUTION))
-            throw new UserNotAuthorizedException(
-                    "User is not authorized to access this course.  Must be assigned educator or administrator.");
-    }
 }

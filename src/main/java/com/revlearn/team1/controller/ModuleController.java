@@ -1,9 +1,12 @@
 package com.revlearn.team1.controller;
 
-import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.constants.AccessLevelDesc;
+import com.revlearn.team1.dto.module.ModuleReqDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
+import com.revlearn.team1.dto.page.PageResDTO;
 import com.revlearn.team1.model.Exam;
-import com.revlearn.team1.model.ModulePage;
 import com.revlearn.team1.service.module.ModuleService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,35 +19,37 @@ public class ModuleController {
     private final ModuleService moduleService;
 
     @GetMapping("/{moduleId}")
-    public ModuleDTO getModuleById(@PathVariable Long moduleId) {
-        //TODO: Secure so only course affiliated users can access (students, educators, & institution)
+    @Operation(summary = "Get Module", description = AccessLevelDesc.ENROLLED_STUDENT + "To get more detailed information of the module use module/{moduleId}/pages and module/{moduleId}/exams.", tags = {"module"})
+    public ModuleResDTO getModuleById(@PathVariable Long moduleId) {
         return moduleService.getModuleById(moduleId);
     }
 
-    @PostMapping
-    public ModuleDTO createModule(@RequestBody ModuleDTO moduleDTO) {
-        //TODO: Secure so only course owners (instructors and institutions) can create modules
-        return moduleService.createModule(moduleDTO);
+    @PostMapping("/course/{courseId}")
+    @Operation(summary = "Create Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR + "Once a module is created, pages and exams can be added to it through their respective controllers.", tags = {"module"})
+    public ModuleResDTO createModule(@PathVariable Long courseId, @RequestBody ModuleReqDTO moduleReqDTO) {
+        return moduleService.createModule(courseId, moduleReqDTO);
     }
 
     @PutMapping("/{moduleId}")
-    public ModuleDTO updateModule(@PathVariable Long moduleId, @RequestBody ModuleDTO moduleDTO) {
-        //TODO: Secure so only course owners (instructors and institutions) can update modules
-        return moduleService.updateModule(moduleId, moduleDTO);
+    @Operation(summary = "Update Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR, tags = {"module"})
+    public ModuleResDTO updateModule(@PathVariable Long moduleId, @RequestBody ModuleReqDTO moduleReqDTO) {
+        return moduleService.updateModule(moduleId, moduleReqDTO);
     }
 
     @DeleteMapping("{moduleId}")
+    @Operation(summary = "Delete Module", description = AccessLevelDesc.ASSIGNED_EDUCATOR, tags = {"module"})
     public String deleteModule(@PathVariable Long moduleId) {
-        //TODO: Secure so only course owners (instructors and institutions) can delete modules
         return moduleService.deleteModule(moduleId);
     }
 
     @GetMapping("/{moduleId}/pages")
-    public List<ModulePage> getModulePages(@PathVariable Long moduleId) {
+    @Operation(summary = "Get All Pages of a Module", description = AccessLevelDesc.ENROLLED_STUDENT, tags = {"module"})
+    public List<PageResDTO> getModulePages(@PathVariable Long moduleId) {
         return moduleService.getModulePages(moduleId);
     }
 
     @GetMapping("/{moduleId}/exams")
+    @Operation(summary = "Get All Exams of a Module", description = AccessLevelDesc.ENROLLED_STUDENT, tags = {"module"})
     public List<Exam> getExams(@PathVariable Long moduleId) {
         return moduleService.getExams(moduleId);
     }

@@ -41,7 +41,7 @@ public class Course {
     private Float price;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    private List<CourseModule> courseModules = new ArrayList<>();
+    private List<Module> modules = new ArrayList<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<DiscussionPost> discussionPosts = new ArrayList<>();
@@ -68,19 +68,14 @@ public class Course {
     )
     private List<User> students = new ArrayList<>();
 
-//    @ManyToOne
-//    @JoinColumn(name = "institution_id", nullable = true)
-//    @JsonIgnore
-//    private User institution;
-
     @OneToMany(mappedBy = "course")
     @JsonManagedReference("course-transactions")
     private List<TransactionModel> transactions;
 
     //Most courses will only have one program, but some might be part of more
     //ie Math 75 is required for Physics degrees and Computer Science degrees
-    @ManyToMany
-    private List<Program> programs;
+    @ManyToMany(mappedBy = "courses")
+    private List<Program> programs = new ArrayList<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;

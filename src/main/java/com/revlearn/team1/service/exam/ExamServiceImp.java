@@ -1,8 +1,11 @@
 package com.revlearn.team1.service.exam;
 
 import com.revlearn.team1.exceptions.ExamNotFoundException;
+import com.revlearn.team1.exceptions.ModuleNotFoundException;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.repository.ExamRepo;
+import com.revlearn.team1.repository.ModuleRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,22 +14,38 @@ import org.springframework.stereotype.Service;
 public class ExamServiceImp implements ExamService {
 
     private final ExamRepo examRepo;
+    private final ModuleRepo moduleRepo;
 
     @Override
     public Exam getById(Long examId) {
+        //TODO: Verify authenticated user is enrolled student, course owner, or admin account
+
         return examRepo.findById(examId)
                 .orElseThrow(() -> new ExamNotFoundException(examId));
     }
 
     @Override
-    public Exam createExam(Exam exam) {
+    public Exam createExam(Long moduleId, Exam exam) {
         //TODO Verify authenticated user is course owner or admin account
+        //verify that the module exists
+        Module module = moduleRepo.findById(moduleId)
+                .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
-        return examRepo.save(exam);
+        //Set the module for the exam
+        exam.setModule(module);
+        module.getExams().add(exam);
+
+        //Save the exam
+        Exam savedExam = examRepo.save(exam);
+        moduleRepo.save(module);
+
+        return savedExam;
     }
 
     @Override
     public Exam updateExam(Long examId, Exam exam) {
+        //TODO: Verify authenticated user is course owner or admin account
+
         //Ensure that the exam exists
         Exam retrievedExam = examRepo.findById(examId)
                 .orElseThrow(() -> new ExamNotFoundException(examId));
@@ -46,6 +65,8 @@ public class ExamServiceImp implements ExamService {
 
     @Override
     public String deleteExam(Long examId) {
+        //TODO: Verify authenticated user is course owner or admin account
+
         //Verify that the exam exists
         examRepo.findById(examId)
                 .orElseThrow(() -> new ExamNotFoundException(examId));

@@ -1,7 +1,8 @@
 package com.revlearn.team1.unit.controller;
 
 import com.revlearn.team1.controller.ModuleController;
-import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
+import com.revlearn.team1.dto.module.ModuleReqDTO;
 import com.revlearn.team1.service.module.ModuleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,16 +40,16 @@ public class ModuleControllerTest {
     @MockBean
     private ModuleService moduleService;
 
-    private ModuleDTO moduleDTO;
+    private ModuleResDTO moduleResDTO;
 
     @BeforeEach
     void setUp() {
-        moduleDTO = new ModuleDTO(1L, "Module 1", "Description", 1L, 1L);
+        moduleResDTO = new ModuleResDTO(1L, "Module 1", "Description", 1L, 1L);
     }
 
     @Test
     void getModuleById_ShouldReturnModuleDTO() throws Exception {
-        given(moduleService.getModuleById(1L)).willReturn(moduleDTO);
+        given(moduleService.getModuleById(1L)).willReturn(moduleResDTO);
 
         mockMvc.perform(get("/api/v1/module/1")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -62,11 +63,11 @@ public class ModuleControllerTest {
 
     @Test
     void createModule_ShouldReturnCreatedModuleDTO() throws Exception {
-        given(moduleService.createModule(any(ModuleDTO.class))).willReturn(moduleDTO);
+        given(moduleService.createModule(any(Long.class), any(ModuleReqDTO.class))).willReturn(moduleResDTO);
 
-        mockMvc.perform(post("/api/v1/module")
+        mockMvc.perform(post("/api/v1/module/course/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"Module 1\", \"description\": \"Description\", \"orderIndex\": 1, \"courseId\": 1}"))
+                        .content("{\"title\": \"Module 1\", \"description\": \"Description\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.title", is("Module 1")))
@@ -77,11 +78,11 @@ public class ModuleControllerTest {
 
     @Test
     void updateModule_ShouldReturnUpdatedModuleDTO() throws Exception {
-        given(moduleService.updateModule(eq(1L), any(ModuleDTO.class))).willReturn(moduleDTO);
+        given(moduleService.updateModule(eq(1L), any(ModuleReqDTO.class))).willReturn(moduleResDTO);
 
         mockMvc.perform(put("/api/v1/module/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"Module 1\", \"description\": \"Description\", \"orderIndex\": 1, \"courseId\": 1}"))
+                        .content("{\"title\": \"Module 1\", \"description\": \"Description\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.title", is("Module 1")))

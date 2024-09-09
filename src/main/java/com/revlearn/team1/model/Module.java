@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class CourseModule {
+public class Module {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,11 @@ public class CourseModule {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<ModulePage> modulePages = new ArrayList<>();
+    private List<Page> pages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "courseModule", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Exam> exams = new ArrayList<>();
 

@@ -1,22 +1,23 @@
 package com.revlearn.team1.service.module;
 
-import com.revlearn.team1.dto.module.ModuleDTO;
+import com.revlearn.team1.dto.module.ModuleReqDTO;
+import com.revlearn.team1.dto.module.ModuleResDTO;
+import com.revlearn.team1.dto.page.PageResDTO;
 import com.revlearn.team1.model.Exam;
-import com.revlearn.team1.model.ModulePage;
 
 import java.util.List;
 
 public interface ModuleService {
 
-    ModuleDTO getModuleById(Long moduleId);
+    ModuleResDTO getModuleById(Long moduleId);
 
-    ModuleDTO createModule(ModuleDTO moduleDTO);
+    ModuleResDTO createModule(Long CourseId, ModuleReqDTO moduleReqDTO);
 
-    ModuleDTO updateModule(Long moduleId, ModuleDTO moduleDTO);
+    ModuleResDTO updateModule(Long moduleId, ModuleReqDTO moduleReqDTO);
 
     String deleteModule(Long moduleId);
 
-    List<ModulePage> getModulePages(Long moduleId);
+    List<PageResDTO> getModulePages(Long moduleId);
 
     List<Exam> getExams(Long moduleId);
 }

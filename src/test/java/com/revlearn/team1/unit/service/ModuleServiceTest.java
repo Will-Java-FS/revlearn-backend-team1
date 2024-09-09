@@ -1,30 +1,33 @@
 package com.revlearn.team1.unit.service;
 
+import com.revlearn.team1.dto.module.ModuleResDTO;
+import com.revlearn.team1.dto.module.ModuleReqDTO;
+import com.revlearn.team1.exceptions.ModuleNotFoundException;
+import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
+import com.revlearn.team1.exceptions.course.CourseNotFoundException;
+import com.revlearn.team1.mapper.ModuleMapper;
+import com.revlearn.team1.model.Course;
+import com.revlearn.team1.model.Module;
+import com.revlearn.team1.repository.CourseRepo;
+import com.revlearn.team1.repository.ModuleRepo;
+import com.revlearn.team1.service.accessControl.AccessControlService;
+import com.revlearn.team1.service.module.ModuleService;
+import com.revlearn.team1.service.module.ModuleServiceImp;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import org.mockito.MockitoAnnotations;
-
-import com.revlearn.team1.dto.module.ModuleDTO;
-import com.revlearn.team1.exceptions.ModuleNotFoundException;
-import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
-import com.revlearn.team1.mapper.ModuleMapper;
-import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.CourseModule;
-import com.revlearn.team1.repository.ModuleRepo;
-import com.revlearn.team1.service.module.ModuleService;
-import com.revlearn.team1.service.module.ModuleServiceImp;
 
 class ModuleServiceTest {
 
@@ -33,30 +36,37 @@ class ModuleServiceTest {
 
     @Mock
     private ModuleMapper moduleMapper;
-
+    @Mock
+    private CourseRepo courseRepo;
+    @Mock
+    private AccessControlService accessControlService;
     @InjectMocks
     private ModuleServiceImp moduleServiceImp;
 
     private ModuleService moduleService;
 
-    private ModuleDTO moduleDTO;
-    private CourseModule courseModule;
+    private ModuleResDTO moduleResDTO;
+    private ModuleReqDTO moduleReqDTO;
+
+    private Module module;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         // Initialize a sample ModuleDTO and CourseModule for the tests
-        moduleDTO = new ModuleDTO(1L, "Module 1", "Description", 1L, 1L);
-        courseModule = new CourseModule();
-        courseModule.setId(1L);
-        courseModule.setTitle("Module 1");
-        courseModule.setDescription("Description");
-        courseModule.setOrderIndex(1L);
+        moduleResDTO = new ModuleResDTO(1L, "Module 1", "Description", 1L, 1L);
+
+        moduleReqDTO = new ModuleReqDTO("Module 1", "Description");
+        module = new Module();
+        module.setId(1L);
+        module.setTitle("Module 1");
+        module.setDescription("Description");
+        module.setOrderIndex(1L);
 
         Course course = new Course();
-        course.setCourseModules(List.of(courseModule));
-        courseModule.setCourse(course);
+        course.setModules(List.of(module));
+        module.setCourse(course);
 
         // Assign the implementation to the interface reference
         moduleService = moduleServiceImp;
@@ -65,15 +75,15 @@ class ModuleServiceTest {
     @Test
     void getModuleById_ShouldReturnModuleDTO_WhenModuleExists() {
         // Arrange
-        given(moduleRepo.findById(1L)).willReturn(Optional.of(courseModule));
-        given(moduleMapper.toDto(courseModule)).willReturn(moduleDTO);
+        given(moduleRepo.findById(1L)).willReturn(Optional.of(module));
+        given(moduleMapper.toResDto(module)).willReturn(moduleResDTO);
 
         // Act
-        ModuleDTO result = moduleService.getModuleById(1L);
+        ModuleResDTO result = moduleService.getModuleById(1L);
 
         // Assert
         assertNotNull(result);
-        assertEquals(moduleDTO, result);
+        assertEquals(moduleResDTO, result);
     }
 
     @Test
@@ -93,29 +103,47 @@ class ModuleServiceTest {
     @Test
     void createModule_ShouldReturnModuleDTO_WhenSaveIsSuccessful() {
         // Arrange
-        given(moduleMapper.toEntity(moduleDTO)).willReturn(courseModule);
-        given(moduleRepo.save(any(CourseModule.class))).willReturn(courseModule);
-        given(moduleMapper.toDto(courseModule)).willReturn(moduleDTO);
+        long courseId = 1;
+        Course course = new Course();
+
+        given(moduleMapper.toEntityFromReqDto(moduleReqDTO)).willReturn(module);
+        given(moduleRepo.save(any(Module.class))).willReturn(module);
+        given(courseRepo.findById(1L)).willReturn(Optional.of(course));
+        given(moduleMapper.toResDto(module)).willReturn(moduleResDTO);
 
 
         // Act
-        ModuleDTO result = moduleService.createModule(moduleDTO);
+        ModuleResDTO result = moduleService.createModule(courseId, moduleReqDTO);
 
         // Assert
         assertNotNull(result);
-        assertEquals(moduleDTO, result);
+        assertEquals(moduleResDTO, result);
+    }
+
+    @Test
+    void createModule_ShouldThrowCourseNotFoundException_WhenCourseDoesNotExist() {
+        // Arrange
+        long courseId = 1;
+        given(moduleMapper.toEntityFromReqDto(moduleReqDTO)).willReturn(module);
+        given(courseRepo.findById(anyLong())).willReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(CourseNotFoundException.class, () -> moduleService.createModule(courseId, moduleReqDTO));
     }
 
     @Test
     void createModule_ShouldThrowServiceLayerDataAccessException_WhenSaveFails() {
         // Arrange
-        given(moduleMapper.toEntity(moduleDTO)).willReturn(courseModule);
-        given(moduleRepo.save(any(CourseModule.class))).willThrow(new RuntimeException());
+        long courseId = 1;
+        Course course = new Course();
+        given(moduleMapper.toEntityFromReqDto(moduleReqDTO)).willReturn(module);
+        given(courseRepo.findById(1L)).willReturn(Optional.of(course));
+        given(moduleRepo.save(any(Module.class))).willThrow(new RuntimeException());
 
         // Act & Assert
         ServiceLayerDataAccessException thrownException = assertThrows(
                 ServiceLayerDataAccessException.class,
-                () -> moduleService.createModule(moduleDTO),
+                () -> moduleService.createModule(courseId, moduleReqDTO),
                 "Expected createModule() to throw ServiceLayerDataAccessException, but it didn't");
 
         assertEquals("Failed to create module", thrownException.getMessage());
@@ -124,17 +152,17 @@ class ModuleServiceTest {
     @Test
     void updateModule_ShouldReturnUpdatedModuleDTO_WhenUpdateIsSuccessful() {
         // Arrange
-        given(moduleRepo.findById(1L)).willReturn(Optional.of(courseModule));
-        doNothing().when(moduleMapper).updateEntityFromDto(courseModule, moduleDTO);
-        given(moduleRepo.save(courseModule)).willReturn(courseModule);
-        given(moduleMapper.toDto(courseModule)).willReturn(moduleDTO);
+        given(moduleRepo.findById(1L)).willReturn(Optional.of(module));
+        doNothing().when(moduleMapper).updateEntityFromReqDto(module, moduleReqDTO);
+        given(moduleRepo.save(module)).willReturn(module);
+        given(moduleMapper.toResDto(module)).willReturn(moduleResDTO);
 
         // Act
-        ModuleDTO result = moduleService.updateModule(1L, moduleDTO);
+        ModuleResDTO result = moduleService.updateModule(1L, moduleReqDTO);
 
         // Assert
         assertNotNull(result);
-        assertEquals(moduleDTO, result);
+        assertEquals(moduleResDTO, result);
     }
 
     @Test
@@ -145,7 +173,7 @@ class ModuleServiceTest {
         // Act & Assert
         ModuleNotFoundException thrownException = assertThrows(
                 ModuleNotFoundException.class,
-                () -> moduleService.updateModule(1L, moduleDTO),
+                () -> moduleService.updateModule(1L, moduleReqDTO),
                 "Expected updateModule() to throw ModuleNotFoundException, but it didn't");
 
         assertEquals("Module by id 1 not found.", thrownException.getMessage());
@@ -154,14 +182,14 @@ class ModuleServiceTest {
     @Test
     void updateModule_ShouldThrowServiceLayerDataAccessException_WhenUpdateFails() {
         // Arrange
-        given(moduleRepo.findById(1L)).willReturn(Optional.of(courseModule));
-        doNothing().when(moduleMapper).updateEntityFromDto(courseModule, moduleDTO);
-        given(moduleRepo.save(courseModule)).willThrow(new RuntimeException());
+        given(moduleRepo.findById(1L)).willReturn(Optional.of(module));
+        doNothing().when(moduleMapper).updateEntityFromReqDto(module, moduleReqDTO);
+        given(moduleRepo.save(module)).willThrow(new RuntimeException());
 
         // Act & Assert
         ServiceLayerDataAccessException thrownException = assertThrows(
                 ServiceLayerDataAccessException.class,
-                () -> moduleService.updateModule(1L, moduleDTO),
+                () -> moduleService.updateModule(1L, moduleReqDTO),
                 "Expected updateModule() to throw ServiceLayerDataAccessException, but it didn't");
 
         assertEquals("Failed to update module", thrownException.getMessage());
@@ -170,8 +198,8 @@ class ModuleServiceTest {
     @Test
     void deleteModule_ShouldReturnSuccessMessage_WhenDeleteIsSuccessful() {
         // Arrange
-        given(moduleRepo.findById(1L)).willReturn(Optional.of(courseModule));
-        doNothing().when(moduleRepo).delete(courseModule);
+        given(moduleRepo.findById(1L)).willReturn(Optional.of(module));
+        doNothing().when(moduleRepo).delete(module);
 
         // Act
         String result = moduleService.deleteModule(1L);
@@ -197,8 +225,8 @@ class ModuleServiceTest {
     @Test
     void deleteModule_ShouldThrowServiceLayerDataAccessException_WhenDeleteFails() {
         // Arrange
-        given(moduleRepo.findById(1L)).willReturn(Optional.of(courseModule));
-        doThrow(new RuntimeException()).when(moduleRepo).delete(courseModule);
+        given(moduleRepo.findById(1L)).willReturn(Optional.of(module));
+        doThrow(new RuntimeException()).when(moduleRepo).delete(module);
 
         // Act & Assert
         ServiceLayerDataAccessException thrownException = assertThrows(

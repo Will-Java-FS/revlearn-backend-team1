@@ -1,10 +1,10 @@
 package com.revlearn.team1.unit.mapper;
 
-import com.revlearn.team1.dto.module.ModuleDTO;
-import com.revlearn.team1.exceptions.course.CourseNotFoundException;
+import com.revlearn.team1.dto.module.ModuleResDTO;
+import com.revlearn.team1.dto.module.ModuleReqDTO;
 import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.CourseModule;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.repository.CourseRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
 class ModuleMapperTest {
@@ -26,8 +25,10 @@ class ModuleMapperTest {
     @InjectMocks
     private ModuleMapper moduleMapper;
 
-    private CourseModule courseModule;
-    private ModuleDTO moduleDTO;
+    private Module module;
+    private ModuleResDTO moduleResDTO;
+    private ModuleReqDTO moduleReqDTO;
+
     private Course course;
 
     @BeforeEach
@@ -38,30 +39,31 @@ class ModuleMapperTest {
         course = new Course();
         course.setId(1L);
 
-        courseModule = new CourseModule();
-        courseModule.setId(1L);
-        courseModule.setTitle("Module 1");
-        courseModule.setDescription("Description");
-        courseModule.setOrderIndex(1L);
-        courseModule.setCourse(course);
+        module = new Module();
+        module.setId(1L);
+        module.setTitle("Module 1");
+        module.setDescription("Description");
+        module.setOrderIndex(1L);
+        module.setCourse(course);
 
-        moduleDTO = new ModuleDTO(1L, "Module 1", "Description", 1L, 1L);
+        moduleResDTO = new ModuleResDTO(1L, "Module 1", "Description", 1L, 1L);
+        moduleReqDTO = new ModuleReqDTO("Module 1", "Description");
     }
 
     @Test
     void toDto_ShouldMapCourseModuleToModuleDTO() {
         // Act
-        ModuleDTO result = moduleMapper.toDto(courseModule);
+        ModuleResDTO result = moduleMapper.toResDto(module);
 
         // Assert
         assertNotNull(result);
-        assertEquals(moduleDTO, result);
+        assertEquals(moduleResDTO, result);
     }
 
     @Test
     void toDto_ShouldReturnNull_WhenCourseModuleIsNull() {
         // Act
-        ModuleDTO result = moduleMapper.toDto(null);
+        ModuleResDTO result = moduleMapper.toResDto(null);
 
         // Assert
         assertNull(result);
@@ -73,30 +75,18 @@ class ModuleMapperTest {
         given(courseRepo.findById(1L)).willReturn(Optional.of(course));
 
         // Act
-        CourseModule result = moduleMapper.toEntity(moduleDTO);
+        Module result = moduleMapper.toEntityFromReqDto(moduleReqDTO);
 
         // Assert
         assertNotNull(result);
-        assertEquals(courseModule.getId(), result.getId());
-        assertEquals(courseModule.getTitle(), result.getTitle());
-        assertEquals(courseModule.getDescription(), result.getDescription());
-        assertEquals(courseModule.getOrderIndex(), result.getOrderIndex());
-        assertEquals(courseModule.getCourse().getId(), result.getCourse().getId());
-    }
-
-    @Test
-    void toEntity_ShouldThrowCourseNotFoundException_WhenCourseDoesNotExist() {
-        // Arrange
-        given(courseRepo.findById(anyLong())).willReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(CourseNotFoundException.class, () -> moduleMapper.toEntity(moduleDTO));
+        assertEquals(module.getTitle(), result.getTitle());
+        assertEquals(module.getDescription(), result.getDescription());
     }
 
     @Test
     void toEntity_ShouldReturnNull_WhenModuleDTOIsNull() {
         // Act
-        CourseModule result = moduleMapper.toEntity(null);
+        Module result = moduleMapper.toEntityFromReqDto(null);
 
         // Assert
         assertNull(result);
@@ -105,23 +95,23 @@ class ModuleMapperTest {
     @Test
     void updateEntityFromDto_ShouldUpdateCourseModule_WhenValidInputs() {
         // Act
-        moduleMapper.updateEntityFromDto(courseModule, moduleDTO);
+        moduleMapper.updateEntityFromReqDto(module, moduleReqDTO);
 
         // Assert
-        assertEquals(moduleDTO.title(), courseModule.getTitle());
-        assertEquals(moduleDTO.description(), courseModule.getDescription());
-        assertEquals(moduleDTO.orderIndex(), courseModule.getOrderIndex());
+        assertEquals(moduleResDTO.title(), module.getTitle());
+        assertEquals(moduleResDTO.description(), module.getDescription());
+        assertEquals(moduleResDTO.orderIndex(), module.getOrderIndex());
     }
 
     @Test
     void updateEntityFromDto_ShouldThrowIllegalArgumentException_WhenCourseModuleIsNull() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> moduleMapper.updateEntityFromDto(null, moduleDTO));
+        assertThrows(IllegalArgumentException.class, () -> moduleMapper.updateEntityFromReqDto(null, moduleReqDTO));
     }
 
     @Test
     void updateEntityFromDto_ShouldThrowIllegalArgumentException_WhenModuleDTOIsNull() {
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> moduleMapper.updateEntityFromDto(courseModule, null));
+        assertThrows(IllegalArgumentException.class, () -> moduleMapper.updateEntityFromReqDto(module, null));
     }
 }

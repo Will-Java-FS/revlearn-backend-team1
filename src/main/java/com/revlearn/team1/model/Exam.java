@@ -36,7 +36,7 @@ public class Exam {
     @ManyToOne
     @JoinColumn(name = "course_module_id", nullable = false)
     @JsonIgnore
-    private CourseModule courseModule;
+    private Module module;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

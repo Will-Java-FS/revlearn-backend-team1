@@ -1,6 +1,6 @@
 package com.revlearn.team1.service.user;
 
-import com.revlearn.team1.dto.course.CourseDTO;
+import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.user.UpdateUserRequest;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.UserNotFoundException;
@@ -107,7 +107,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<CourseDTO> getEnrolledCourses(Long studentId) {
+    public List<CourseResDTO> getEnrolledCourses(Long studentId) {
         // TODO: Secure so only specified student or admin-like account ("counselor"?) can retrieve data.
         // Will probably use Security context to obtain student id instead of path variable
 
@@ -118,7 +118,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<CourseDTO> getTaughtCourses(Long educatorId) {
+    public List<CourseResDTO> getTaughtCourses(Long educatorId) {
         // TODO: Secure so only specified educator can retrieve data.
         // Will probably use Security context to obtain educator id instead of path variable
 
