@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revlearn.team1.dto.discussionPost.DiscussionPostResponseDTO;
-import com.revlearn.team1.service.discussionPost.DiscussionPostServiceImp;
+import com.revlearn.team1.service.discussionPost.DiscussionPostService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DiscussionPostController {
 
-    private final DiscussionPostServiceImp discussionPostService;
+    private final DiscussionPostService discussionPostService;
 
 
 
