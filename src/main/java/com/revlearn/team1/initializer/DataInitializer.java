@@ -58,8 +58,9 @@ public class DataInitializer implements ApplicationRunner {
 //        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
 //        createInitialTransactions(loadJson("transactions"));
 
+        JsonNode coursesNode = getAllCourses();
         //Add courses to program(s)
-        addCoursesToProgram(getAllCourses(), jwt);
+        addCoursesToProgram(coursesNode, jwt);
 //        addModulestoCourse()
         //Add modules to course(s)
 
@@ -69,7 +70,8 @@ public class DataInitializer implements ApplicationRunner {
         //add students to courses
         addStudentsToCourses(usersNode, jwt);
         //remove admin (institution) user from courses
-//        removeAdminFromCourses(usersNode, jwt);
+        removeAdminFromCourses(coursesNode, jwt);
+
 
 
         logger.info("Data initialization complete.");
@@ -93,6 +95,7 @@ public class DataInitializer implements ApplicationRunner {
             );
         }
     }
+
     private void addEducatorsToCourses(JsonNode usersNode, String jwt) {
 
         Long courseId = 1L;
@@ -145,6 +148,23 @@ public class DataInitializer implements ApplicationRunner {
                     courseStudentCount = 0;
                 }
             }
+        }
+    }
+    private void removeAdminFromCourses(JsonNode coursesNode, String jwt) {
+        for(JsonNode courseNode : coursesNode){
+            long courseId = courseNode.get("id").asLong();
+            String requestUrl = apiUrl + "/course/educator/remove";
+            CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId,1L);
+            logger.info(
+                    webClient.patch()
+                            .uri(requestUrl)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+                            .bodyValue(courseEducatorDTO)
+                            .retrieve()
+                            .bodyToMono(JsonNode.class)
+                            .block()
+                            .toString()
+            );
         }
     }
 
