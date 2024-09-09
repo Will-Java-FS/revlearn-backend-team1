@@ -1,6 +1,7 @@
 package com.revlearn.team1.service.user;
 
 import com.revlearn.team1.dto.course.response.CourseResDTO;
+import com.revlearn.team1.dto.user.UpdateUserRequest;
 import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.UserNotFoundException;
 import com.revlearn.team1.mapper.CourseMapper;
@@ -58,6 +59,36 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public User updateUser(int id, UpdateUserRequest updateUserRequest)
+    {
+        Optional<User> existingUser = userRepository.findById(id);
+        if(existingUser.isEmpty())
+        {
+            throw new RuntimeException("User Not Found");
+        }
+
+        if(updateUserRequest.getOldPassword() != null && !passwordEncoder.matches(updateUserRequest.getOldPassword(), existingUser.get().getPassword()))
+        {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        if(updateUserRequest.getOldPassword() != null && !updateUserRequest.getNewPassword().trim().isEmpty())
+        {
+            existingUser.get().setPassword(passwordEncoder.encode(updateUserRequest.getNewPassword()));
+        }
+
+        if(updateUserRequest.getFirstName() != null)
+        {
+            existingUser.get().setFirstName(updateUserRequest.getFirstName());
+        }
+
+        if(updateUserRequest.getLastName() != null)
+        {
+            existingUser.get().setLastName(updateUserRequest.getLastName());
+        }
+        return userRepository.save(existingUser.get());
     }
 
     @Override
