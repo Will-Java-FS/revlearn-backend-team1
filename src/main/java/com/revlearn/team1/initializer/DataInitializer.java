@@ -58,10 +58,12 @@ public class DataInitializer implements ApplicationRunner {
 //        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
 //        createInitialTransactions(loadJson("transactions"));
 
+        //Get all courses from a request because they will have ids
         JsonNode coursesNode = getAllCourses();
         //Add courses to program(s)
         addCoursesToProgram(coursesNode, jwt);
 
+        //Get all users from a request because they will have ids
         JsonNode usersNode = getAllUsers();
         //add educators to courses
         addEducatorsToCourses(usersNode, jwt);

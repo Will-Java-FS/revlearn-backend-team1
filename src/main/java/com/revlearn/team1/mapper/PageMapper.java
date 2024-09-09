@@ -22,11 +22,11 @@ public class PageMapper {
         );
     }
 
+    //TODO: Handle page number (index) in the future
     public Page toPage(PageReqDTO pageReqDTO) {
         Page page = new Page();
         page.setTitle(pageReqDTO.title());
         page.setMarkdownContent(pageReqDTO.markdownContent());
-        page.setPageNumber(pageReqDTO.pageNumber());
         page.setInstructorNotes(pageReqDTO.instructorNotes());
         page.setAttachmentsUrls(pageReqDTO.attachmentsUrls());
         return page;
