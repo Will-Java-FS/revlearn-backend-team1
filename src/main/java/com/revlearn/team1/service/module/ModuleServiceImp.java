@@ -2,14 +2,15 @@ package com.revlearn.team1.service.module;
 
 import com.revlearn.team1.dto.module.ModuleReqDTO;
 import com.revlearn.team1.dto.module.ModuleResDTO;
+import com.revlearn.team1.dto.page.PageResDTO;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.ServiceLayerDataAccessException;
 import com.revlearn.team1.exceptions.course.CourseNotFoundException;
 import com.revlearn.team1.mapper.ModuleMapper;
+import com.revlearn.team1.mapper.PageMapper;
 import com.revlearn.team1.model.Course;
-import com.revlearn.team1.model.Module;
 import com.revlearn.team1.model.Exam;
-import com.revlearn.team1.model.Page;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.ModuleRepo;
 import com.revlearn.team1.service.accessControl.AccessControlService;
@@ -25,6 +26,7 @@ public class ModuleServiceImp implements ModuleService {
     private final ModuleRepo moduleRepo;
     private final ModuleMapper moduleMapper;
     private final AccessControlService accessControlService;
+    private final PageMapper pageMapper;
 
     @Override
     public ModuleResDTO getModuleById(Long moduleId) {
@@ -106,7 +108,7 @@ public class ModuleServiceImp implements ModuleService {
     }
 
     @Override
-    public List<Page> getModulePages(Long moduleId) {
+    public List<PageResDTO> getModulePages(Long moduleId) {
         //Verify module exists
         Module module = moduleRepo.findById(moduleId).orElseThrow(
                 () -> new ModuleNotFoundException(moduleId));
@@ -116,7 +118,7 @@ public class ModuleServiceImp implements ModuleService {
         accessControlService.verifyStudentLevelAccess(course);
 
         //TODO: convert to DTOs
-        return module.getPages();
+        return module.getPages().stream().map(pageMapper::toPageResDTO).toList();
     }
 
     @Override
