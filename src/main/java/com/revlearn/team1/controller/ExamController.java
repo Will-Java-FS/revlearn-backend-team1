@@ -1,9 +1,15 @@
 package com.revlearn.team1.controller;
 
+import com.revlearn.team1.dto.MessageDTO;
+import com.revlearn.team1.dto.exam.ExamReqDTO;
+import com.revlearn.team1.dto.exam.ExamResDTO;
 import com.revlearn.team1.model.Exam;
+import com.revlearn.team1.model.ExamQuestion;
 import com.revlearn.team1.service.exam.ExamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/exam")
@@ -12,22 +18,27 @@ public class ExamController {
 
     private final ExamService examService;
     @GetMapping("/{examId}")
-    public Exam getExamById(@PathVariable Long examId) {
+    public ExamResDTO getExamById(@PathVariable Long examId) {
         return examService.getById(examId);
     }
 
+    @GetMapping("/{examId}/questions")
+    public List<ExamQuestion> getQuestionsByExamId(@PathVariable Long examId) {
+        return examService.getQuestionsByExamId(examId);
+    }
+
     @PostMapping("/module/{moduleId}")
-    public Exam createExam(@PathVariable Long moduleId, @RequestBody Exam exam) {
-        return examService.createExam(moduleId, exam);
+    public ExamResDTO createExam(@PathVariable Long moduleId, @RequestBody ExamReqDTO examReqDTO) {
+        return examService.createExam(moduleId, examReqDTO);
     }
 
     @PutMapping("/{examId}")
-    public Exam updateExam(@PathVariable Long examId, @RequestBody Exam exam) {
-        return examService.updateExam(examId, exam);
+    public ExamResDTO updateExam(@PathVariable Long examId, @RequestBody ExamReqDTO examReqDTO) {
+        return examService.updateExam(examId, examReqDTO);
     }
 
     @DeleteMapping("/{examId}")
-    public String deleteExam(@PathVariable Long examId) {
+    public MessageDTO deleteExam(@PathVariable Long examId) {
         return examService.deleteExam(examId);
     }
 }
