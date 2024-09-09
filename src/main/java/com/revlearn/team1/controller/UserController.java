@@ -1,5 +1,6 @@
 package com.revlearn.team1.controller;
 
+import com.revlearn.team1.dto.user.UpdateUserRequest;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.user.UserDTO;
 import com.revlearn.team1.dto.user.DeleteUserResponse;
@@ -50,6 +51,18 @@ public class UserController {
         response.put("accessToken", "Bearer " + token);
         response.put("tokenType", "Bearer");
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") int id,
+                                           @RequestBody UpdateUserRequest updateUserRequest) {
+        try {
+            User updatedUser = userService.updateUser(id, updateUserRequest);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            // Handle specific exceptions or provide more detailed error responses
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/register")
