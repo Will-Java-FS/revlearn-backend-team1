@@ -38,11 +38,18 @@ class ProgramControllerTest {
     private ProgramController programController;
 
     private MockMvc mockMvc;
+    private List<UserResDTO> educators;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(programController).build();
+
+        List<UserResDTO> educators = List.of(
+                new UserResDTO(1, "johnDoe", "john.doe@example.com", Roles.EDUCATOR, "John", "Doe"),
+                new UserResDTO(2, "janeSmith", "jane.smith@example.com", Roles.EDUCATOR, "Jane", "Smith"),
+                new UserResDTO(3, "michaelBrown", "michael.brown@example.com", Roles.EDUCATOR, "Michael", "Brown")
+        );
     }
 
     @Test
@@ -79,8 +86,8 @@ class ProgramControllerTest {
     @Test
     void getProgramCourses_ReturnsCoursesList() throws Exception {
         List<CourseResDTO> courses = Arrays.asList(
-                new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse1", "A course to test methods", 44.32F),
-                new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse2", "A course to test methods", 44.32F)
+                new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse1", "A course to test methods", 44.32F, educators),
+                new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse2", "A course to test methods", 44.32F, educators)
         );
 
         when(programService.getProgramCourses(1L)).thenReturn(courses);

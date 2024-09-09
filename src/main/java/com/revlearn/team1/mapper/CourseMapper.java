@@ -11,11 +11,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CourseMapper {
     private final UserRepository userRepository;
-
-    //These methods do not return or set students or educators.
-    //That is a separate method
+    private final UserMapper userMapper;
 
     public CourseResDTO toDto(Course course) {
+
         return new CourseResDTO(
                 course.getId(),
                 course.getStartDate(),
@@ -23,7 +22,8 @@ public class CourseMapper {
                 course.getAttendanceMethod(),
                 course.getName(),
                 course.getDescription(),
-                course.getPrice()
+                course.getPrice(),
+                (course.getEducators().isEmpty() ? null : course.getEducators().stream().map(userMapper::toResDTO).toList())
         );
     }
 
