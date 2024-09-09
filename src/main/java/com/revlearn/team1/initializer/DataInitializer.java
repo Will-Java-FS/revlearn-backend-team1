@@ -56,6 +56,9 @@ public class DataInitializer implements ApplicationRunner {
         createInitialModules(loadJson("modules.json"), jwt);
         createInitialPrograms(loadJson("programs.json"), jwt);
         createInitialPages(loadJson("pages.json"), jwt);
+        createInitialExams(loadJson("exams.json"), jwt);
+        createInitialDiscussionBoards(loadJson("discussion-boards.json"), jwt);
+        createInitialDiscussionPosts(loadJson("discussion-posts.json"), jwt);
 //        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
 //        createInitialTransactions(loadJson("transactions"));
 
@@ -75,6 +78,20 @@ public class DataInitializer implements ApplicationRunner {
 
 
         logger.info("Data initialization complete.");
+    }
+
+    private void createInitialDiscussionPosts(JsonNode discussionPostsNode, String jwt) {
+        for(JsonNode discussionPostNode : discussionPostsNode) {
+            String requestUrl = apiUrl + "/discussion";
+            sendAdminRequest(requestUrl, HttpMethod.POST, discussionPostNode, jwt);
+        }
+    }
+
+    private void createInitialDiscussionBoards(JsonNode discussionBoardsNode, String jwt) {
+        for(JsonNode discussionBoardNode : discussionBoardsNode) {
+            String requestUrl = apiUrl + "/discussion_board";
+            sendAdminRequest(requestUrl, HttpMethod.POST, discussionBoardNode, jwt);
+        }
     }
 
     private void addCoursesToProgram(JsonNode coursesNode, String jwt) {
@@ -197,13 +214,13 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
+
 //    private void createInitialTransactions(JsonNode transactionsNode) {
 //        String requestUrl = apiUrl + "/transaction";
 //        for (JsonNode transactionNode : transactionsNode) {
 //            sendRequest(requestUrl, HttpMethod.POST, transactionNode);
 //        }
 //    }
-
     private void createInitialModules(JsonNode modulesNode, String jwt) {
         int courseId = 1;
         int modulesCount = 0;
@@ -236,6 +253,14 @@ public class DataInitializer implements ApplicationRunner {
                 moduleId++;
                 pagesCount = 0;
             }
+        }
+    }
+
+    private void createInitialExams(JsonNode jsonNode, String jwt) {
+        int moduleId = 1;
+        for(JsonNode examNode : jsonNode) {
+            String requestUrl = apiUrl + "/exam/module/" + moduleId++;
+            sendAdminRequest(requestUrl, HttpMethod.POST, examNode, jwt);
         }
     }
 
