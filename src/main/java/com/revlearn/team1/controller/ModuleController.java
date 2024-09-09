@@ -1,10 +1,10 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.constants.AccessLevelDesc;
+import com.revlearn.team1.dto.exam.ExamResDTO;
 import com.revlearn.team1.dto.module.ModuleReqDTO;
 import com.revlearn.team1.dto.module.ModuleResDTO;
 import com.revlearn.team1.dto.page.PageResDTO;
-import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.service.module.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class ModuleController {
 
     @GetMapping("/{moduleId}/exams")
     @Operation(summary = "Get All Exams of a Module", description = AccessLevelDesc.ENROLLED_STUDENT, tags = {"module"})
-    public List<Exam> getExams(@PathVariable Long moduleId) {
+    public List<ExamResDTO> getExams(@PathVariable Long moduleId) {
         return moduleService.getExams(moduleId);
     }
 }
