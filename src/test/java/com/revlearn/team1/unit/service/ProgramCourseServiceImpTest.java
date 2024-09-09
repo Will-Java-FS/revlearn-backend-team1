@@ -4,6 +4,8 @@ import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
 import com.revlearn.team1.dto.program.ProgramReqDTO;
 import com.revlearn.team1.dto.program.ProgramResDTO;
+import com.revlearn.team1.dto.user.UserResDTO;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.ProgramNotFoundException;
 import com.revlearn.team1.exceptions.UserNotAuthorizedException;
 import com.revlearn.team1.mapper.CourseMapper;
@@ -41,6 +43,7 @@ class ProgramCourseServiceImpTest {
 
     @InjectMocks
     private ProgramCourseServiceImp programCourseServiceImp;
+    private List<UserResDTO> educators;
 
     private Program program;
     private Course course1;
@@ -62,13 +65,19 @@ class ProgramCourseServiceImpTest {
 
         course1 = new Course();
         course1.setId(123L);
+
+        List<UserResDTO> educators = List.of(
+                new UserResDTO(1, "johnDoe", "john.doe@example.com", Roles.EDUCATOR, "John", "Doe"),
+                new UserResDTO(2, "janeSmith", "jane.smith@example.com", Roles.EDUCATOR, "Jane", "Smith"),
+                new UserResDTO(3, "michaelBrown", "michael.brown@example.com", Roles.EDUCATOR, "Michael", "Brown")
+        );
     }
 
     @Test
     void getProgramCourses_ShouldReturnListOfCourses() {
 
         program.getCourses().add(new Course());
-        when(courseMapper.toDto(any())).thenReturn(new CourseResDTO(1L, null, null, null, "Course 1", null, null));
+        when(courseMapper.toDto(any())).thenReturn(new CourseResDTO(1L, null, null, null, "Course 1", null, null, null));
 
         List<CourseResDTO> courses = programCourseServiceImp.getProgramCourses(program);
 

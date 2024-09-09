@@ -112,7 +112,7 @@ class CourseControllerIntegrationTest {
     void postCourse_ShouldCreateNewCourse() throws Exception {
         // Arrange
         CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
-        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.now(), LocalDate.now().plusMonths(3), AttendanceMethod.HYBRID, "New Course", "New Description", 99.32F, null);
 
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);
@@ -140,7 +140,7 @@ class CourseControllerIntegrationTest {
         course.setName("Updated Course Name");
         long courseId = course.getId();
         CourseReqDTO courseReqDTO = new CourseReqDTO(course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
-        CourseResDTO courseResDTO = new CourseResDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice());
+        CourseResDTO courseResDTO = new CourseResDTO(course.getId(), course.getStartDate(), course.getEndDate(), course.getAttendanceMethod(), course.getName(), course.getDescription(), course.getPrice(), null);
 
         MockedStatic<SecurityContextService> securityContextServiceMockedStatic = Mockito.mockStatic(SecurityContextService.class);
         securityContextServiceMockedStatic.when(SecurityContextService::getUserRole).thenReturn(Roles.INSTITUTION);

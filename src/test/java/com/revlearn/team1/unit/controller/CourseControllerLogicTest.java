@@ -5,7 +5,9 @@ import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import com.revlearn.team1.dto.course.request.CourseReqDTO;
 import com.revlearn.team1.dto.course.response.CourseEducatorResDTO;
 import com.revlearn.team1.dto.course.response.CourseResDTO;
+import com.revlearn.team1.dto.user.UserResDTO;
 import com.revlearn.team1.enums.AttendanceMethod;
+import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.service.course.CourseServiceImp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,16 +31,24 @@ public class CourseControllerLogicTest {
 
     @InjectMocks
     private CourseController courseController;
+    private List<UserResDTO> educators;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        List<UserResDTO> educators = List.of(
+                new UserResDTO(1, "johnDoe", "john.doe@example.com", Roles.EDUCATOR, "John", "Doe"),
+                new UserResDTO(2, "janeSmith", "jane.smith@example.com", Roles.EDUCATOR, "Jane", "Smith"),
+                new UserResDTO(3, "michaelBrown", "michael.brown@example.com", Roles.EDUCATOR, "Michael", "Brown")
+        );
     }
 
     @Test
     public void testGetAllCourses() {
         // Arrange
-        List<CourseResDTO> courses = Arrays.asList(new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 24.33F), new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 66.54F));
+        List<CourseResDTO> courses = Arrays.asList(
+                new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 24.33F, educators),
+                new CourseResDTO(2L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.IN_PERSON, "TestCourse2", "A second course to test methods", 66.54F, educators));
         when(courseService.getAll()).thenReturn(courses);
 
         // Act
@@ -52,7 +62,7 @@ public class CourseControllerLogicTest {
     @Test
     public void testGetCourseById() {
         // Arrange
-        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 43.53F);  // Initialize with actual data
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 43.53F, educators);  // Initialize with actual data
         when(courseService.getById(1L)).thenReturn(courseResDTO);
 
         // Act
@@ -67,7 +77,7 @@ public class CourseControllerLogicTest {
     public void testPostCourse() {
         // Arrange
         CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 22.33F);
-        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 22.33F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 22.33F, educators);
 
         when(courseService.createCourse(any(CourseReqDTO.class))).thenReturn(courseResDTO);
 
@@ -84,7 +94,7 @@ public class CourseControllerLogicTest {
         // Arrange
         Long courseId = 1L;
         CourseReqDTO courseReqDTO = new CourseReqDTO(LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
-        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, LocalDate.of(2024, 5, 27), LocalDate.of(2024, 8, 27), AttendanceMethod.HYBRID, "TestCourse", "A course to test methods", 99.32F, educators);
 
         when(courseService.updateCourse(any(Long.class), any(CourseReqDTO.class))).thenReturn(courseResDTO);
 

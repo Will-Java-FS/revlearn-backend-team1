@@ -104,7 +104,7 @@ class ProgramServiceImpTest {
     void getProgramCourses_ShouldReturnListOfCourses() {
 
         //Arrange
-        CourseResDTO courseResDTO = new CourseResDTO(1L, null, null, null, "Course 1", null, null);
+        CourseResDTO courseResDTO = new CourseResDTO(1L, null, null, null, "Course 1", null, null, null);
         program.getCourses().add(new Course());
         when(programRepo.findById(1L)).thenReturn(Optional.of(program));
         when(programCourseService.getProgramCourses(program)).thenReturn(List.of(courseResDTO));

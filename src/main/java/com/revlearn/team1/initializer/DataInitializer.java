@@ -2,6 +2,8 @@ package com.revlearn.team1.initializer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +58,17 @@ public class DataInitializer implements ApplicationRunner {
 //        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
 //        createInitialTransactions(loadJson("transactions"));
 
+        JsonNode coursesNode = getAllCourses();
         //Add courses to program(s)
-        addCoursesToProgram(getAllCourses(), jwt);
-        //Add modules to course(s)
+        addCoursesToProgram(coursesNode, jwt);
+
+        JsonNode usersNode = getAllUsers();
+        //add educators to courses
+        addEducatorsToCourses(usersNode, jwt);
+        //add students to courses
+        addStudentsToCourses(usersNode, jwt);
+        //remove admin (institution) user from courses
+        removeAdminFromCourses(coursesNode, jwt);
 
 
         logger.info("Data initialization complete.");
@@ -66,15 +76,96 @@ public class DataInitializer implements ApplicationRunner {
 
     private void addCoursesToProgram(JsonNode coursesNode, String jwt) {
 
+        int programId = 1;
+        int coursesCount = 0;
         for (JsonNode courseNode : coursesNode) {
             long courseId = courseNode.get("id").asLong();
             //TODO: Verify program with ID 1 exists
-            String requestUrl = apiUrl + "/program/1/addCourse/" + courseId;
+            String requestUrl = apiUrl + "/program/" +  programId + "/addCourse/" + courseId;
             logger.info(
                     webClient.patch()
                             .uri(requestUrl)
                             .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
                             .body(null)
+                            .retrieve()
+                            .bodyToMono(JsonNode.class)
+                            .block()
+                            .toString()
+            );
+            coursesCount++;
+            if (coursesCount == 6) {
+                programId++;
+                coursesCount = 0;
+            }
+        }
+    }
+
+    private void addEducatorsToCourses(JsonNode usersNode, String jwt) {
+
+        Long courseId = 1L;
+        int courseEducatorCount = 0;
+        for (JsonNode userNode : usersNode) {
+            if (userNode.get("role").asText().equals("EDUCATOR")) {
+                long educatorId = userNode.get("id").asLong();
+                String requestUrl = apiUrl + "/course/educator/add";
+                CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId, educatorId);
+                logger.info(
+                        webClient.patch()
+                                .uri(requestUrl)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+                                .bodyValue(courseEducatorDTO)
+                                .retrieve()
+                                .bodyToMono(JsonNode.class)
+                                .block()
+                                .toString()
+                );
+                courseEducatorCount++;
+                if (courseEducatorCount == 2) {
+                    courseId++;
+                    courseEducatorCount = 0;
+                }
+            }
+        }
+    }
+
+    private void addStudentsToCourses(JsonNode usersNode, String jwt) {
+
+        Long courseId = 1L;
+        int courseStudentCount = 0;
+        for (JsonNode userNode : usersNode) {
+            if (userNode.get("role").asText().equals("STUDENT")) {
+                long studentId = userNode.get("id").asLong();
+                String requestUrl = apiUrl + "/course/student/add";
+                CourseStudentDTO courseStudentDTO = new CourseStudentDTO(courseId, studentId);
+                logger.info(
+                        webClient.patch()
+                                .uri(requestUrl)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+                                .bodyValue(courseStudentDTO)
+                                .retrieve()
+                                .bodyToMono(JsonNode.class)
+                                .block()
+                                .toString()
+                );
+                courseStudentCount++;
+                if (courseStudentCount == 10) {
+                    courseId++;
+                    courseStudentCount = 0;
+                }
+            }
+        }
+    }
+
+    private void removeAdminFromCourses(JsonNode coursesNode, String jwt) {
+        for (JsonNode courseNode : coursesNode) {
+            long courseId = courseNode.get("id").asLong();
+            String requestUrl = apiUrl + "/course/educator/remove";
+            CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId, 1L);
+            logger.info(
+                    webClient.patch()
+                            .uri(requestUrl)
+                            .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+                            .bodyValue(courseEducatorDTO)
                             .retrieve()
                             .bodyToMono(JsonNode.class)
                             .block()
@@ -111,10 +202,16 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void createInitialModules(JsonNode modulesNode, String jwt) {
-        String requestUrl = apiUrl + "/module/course/3";
+        int courseId = 1;
+        int modulesCount = 0;
         for (JsonNode moduleNode : modulesNode) {
-            //TODO: Make admin requests after service class is secured
+            String requestUrl = apiUrl + "/module/course/" + courseId;
             sendAdminRequest(requestUrl, HttpMethod.POST, moduleNode, jwt);
+            modulesCount++;
+            if (modulesCount == 6) {
+                courseId++;
+                modulesCount = 0;
+            }
         }
     }
 
@@ -148,6 +245,24 @@ public class DataInitializer implements ApplicationRunner {
         String requestUrl = apiUrl + "/course";
         try {
             logger.info("Sending getAllCourses request to URL: " + requestUrl);
+            ResponseEntity<JsonNode> response = restTemplate.exchange(requestUrl, HttpMethod.GET, null, JsonNode.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                logger.info("Request successful: " + response.getBody().toPrettyString());
+                return response.getBody();
+            } else {
+                logger.error(
+                        "Error in request: " + response.getStatusCode() + ", Response body: " + response.getBody());
+            }
+        } catch (Exception e) {
+            logger.error("Exception occurred while sending request: ", e);
+        }
+        return null;
+    }
+
+    private JsonNode getAllUsers() {
+        String requestUrl = apiUrl + "/user";
+        try {
+            logger.info("Sending getAllUsers request to URL: " + requestUrl);
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestUrl, HttpMethod.GET, null, JsonNode.class);
             if (response.getStatusCode().is2xxSuccessful()) {
                 logger.info("Request successful: " + response.getBody().toPrettyString());
