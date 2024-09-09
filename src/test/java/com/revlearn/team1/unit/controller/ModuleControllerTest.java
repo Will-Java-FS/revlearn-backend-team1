@@ -80,7 +80,7 @@ public class ModuleControllerTest {
     void updateModule_ShouldReturnUpdatedModuleDTO() throws Exception {
         given(moduleService.updateModule(eq(1L), any(ModuleReqDTO.class))).willReturn(moduleResDTO);
 
-        mockMvc.perform(put("/api/v1/module/1/course/1")
+        mockMvc.perform(put("/api/v1/module/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"title\": \"Module 1\", \"description\": \"Description\"}"))
                 .andExpect(status().isOk())
