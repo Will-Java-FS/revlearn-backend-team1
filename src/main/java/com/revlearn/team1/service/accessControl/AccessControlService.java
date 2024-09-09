@@ -6,4 +6,6 @@ public interface AccessControlService {
     boolean verifyStudentLevelAccess(Course course);
     boolean verifyEducatorLevelAccess(Course course);
 
+    void verifyInstitutionAccess();
+
     }

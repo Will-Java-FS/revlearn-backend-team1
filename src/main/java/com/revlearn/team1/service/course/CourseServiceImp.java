@@ -19,6 +19,7 @@ import com.revlearn.team1.model.User;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.UserRepository;
 import com.revlearn.team1.service.accessControl.AccessControlService;
+import com.revlearn.team1.service.programCourse.ProgramCourseService;
 import com.revlearn.team1.service.securityContext.SecurityContextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -34,6 +35,7 @@ public class CourseServiceImp implements CourseService {
     private final UserRepository userRepo;
     private final ModuleMapper moduleMapper;
     private final AccessControlService accessControlService;
+    private final ProgramCourseService programCourseService;
 
     @Override
     public List<CourseResDTO> getAll() {
@@ -131,6 +133,9 @@ public class CourseServiceImp implements CourseService {
 
         //verify user is authorized to delete course
         accessControlService.verifyEducatorLevelAccess(course);
+
+        //Remove course from its program(s)
+        programCourseService.removeAllProgramsFromCourse(course);
 
         //delete
         courseRepo.deleteById(id);
