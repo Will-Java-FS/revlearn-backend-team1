@@ -3,6 +3,7 @@ package com.revlearn.team1.initializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
+import com.revlearn.team1.dto.course.request.CourseStudentDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,10 +63,13 @@ public class DataInitializer implements ApplicationRunner {
 //        addModulestoCourse()
         //Add modules to course(s)
 
+        JsonNode usersNode = getAllUsers();
         //add educators to courses
-        addEducatorsToCourses(getAllUsers(), jwt);
+        addEducatorsToCourses(usersNode, jwt);
         //add students to courses
+        addStudentsToCourses(usersNode, jwt);
         //remove admin (institution) user from courses
+//        removeAdminFromCourses(usersNode, jwt);
 
 
         logger.info("Data initialization complete.");
@@ -115,7 +119,33 @@ public class DataInitializer implements ApplicationRunner {
                 }
             }
         }
+    }
+    private void addStudentsToCourses(JsonNode usersNode, String jwt) {
 
+        Long courseId = 1L;
+        int courseStudentCount = 0;
+        for (JsonNode userNode : usersNode) {
+            if (userNode.get("role").asText().equals("STUDENT")) {
+                long studentId = userNode.get("id").asLong();
+                String requestUrl = apiUrl + "/course/student/add";
+                CourseStudentDTO courseStudentDTO = new CourseStudentDTO(courseId,studentId);
+                logger.info(
+                        webClient.patch()
+                                .uri(requestUrl)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+                                .bodyValue(courseStudentDTO)
+                                .retrieve()
+                                .bodyToMono(JsonNode.class)
+                                .block()
+                                .toString()
+                );
+                courseStudentCount++;
+                if (courseStudentCount == 10) {
+                    courseId++;
+                    courseStudentCount = 0;
+                }
+            }
+        }
     }
 
     private void createInitialUsers(JsonNode usersNode) {
