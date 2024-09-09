@@ -2,6 +2,7 @@ package com.revlearn.team1.initializer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revlearn.team1.dto.course.request.CourseEducatorDTO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,13 @@ public class DataInitializer implements ApplicationRunner {
 
         //Add courses to program(s)
         addCoursesToProgram(getAllCourses(), jwt);
+//        addModulestoCourse()
         //Add modules to course(s)
+
+        //add educators to courses
+        addEducatorsToCourses(getAllUsers(), jwt);
+        //add students to courses
+        //remove admin (institution) user from courses
 
 
         logger.info("Data initialization complete.");
@@ -81,6 +88,34 @@ public class DataInitializer implements ApplicationRunner {
                             .toString()
             );
         }
+    }
+    private void addEducatorsToCourses(JsonNode usersNode, String jwt) {
+
+        Long courseId = 1L;
+        int courseEducatorCount = 0;
+        for (JsonNode userNode : usersNode) {
+            if (userNode.get("role").asText().equals("EDUCATOR")) {
+                long educatorId = userNode.get("id").asLong();
+                String requestUrl = apiUrl + "/course/educator/add";
+                CourseEducatorDTO courseEducatorDTO = new CourseEducatorDTO(courseId,educatorId);
+                logger.info(
+                        webClient.patch()
+                                .uri(requestUrl)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
+                                .bodyValue(courseEducatorDTO)
+                                .retrieve()
+                                .bodyToMono(JsonNode.class)
+                                .block()
+                                .toString()
+                );
+                courseEducatorCount++;
+                if (courseEducatorCount == 2) {
+                    courseId++;
+                    courseEducatorCount = 0;
+                }
+            }
+        }
+
     }
 
     private void createInitialUsers(JsonNode usersNode) {
@@ -111,9 +146,8 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private void createInitialModules(JsonNode modulesNode, String jwt) {
-        String requestUrl = apiUrl + "/module/course/3";
+        String requestUrl = apiUrl + "/module/course/1";
         for (JsonNode moduleNode : modulesNode) {
-            //TODO: Make admin requests after service class is secured
             sendAdminRequest(requestUrl, HttpMethod.POST, moduleNode, jwt);
         }
     }
@@ -148,6 +182,24 @@ public class DataInitializer implements ApplicationRunner {
         String requestUrl = apiUrl + "/course";
         try {
             logger.info("Sending getAllCourses request to URL: " + requestUrl);
+            ResponseEntity<JsonNode> response = restTemplate.exchange(requestUrl, HttpMethod.GET, null, JsonNode.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                logger.info("Request successful: " + response.getBody().toPrettyString());
+                return response.getBody();
+            } else {
+                logger.error(
+                        "Error in request: " + response.getStatusCode() + ", Response body: " + response.getBody());
+            }
+        } catch (Exception e) {
+            logger.error("Exception occurred while sending request: ", e);
+        }
+        return null;
+    }
+
+    private JsonNode getAllUsers(){
+        String requestUrl = apiUrl + "/user";
+        try {
+            logger.info("Sending getAllUsers request to URL: " + requestUrl);
             ResponseEntity<JsonNode> response = restTemplate.exchange(requestUrl, HttpMethod.GET, null, JsonNode.class);
             if (response.getStatusCode().is2xxSuccessful()) {
                 logger.info("Request successful: " + response.getBody().toPrettyString());
