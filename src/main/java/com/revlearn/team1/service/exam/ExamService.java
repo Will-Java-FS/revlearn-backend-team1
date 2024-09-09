@@ -1,13 +1,21 @@
 package com.revlearn.team1.service.exam;
 
+import com.revlearn.team1.dto.MessageDTO;
+import com.revlearn.team1.dto.exam.ExamReqDTO;
+import com.revlearn.team1.dto.exam.ExamResDTO;
 import com.revlearn.team1.model.Exam;
+import com.revlearn.team1.model.ExamQuestion;
+
+import java.util.List;
 
 public interface ExamService {
-    Exam getById(Long examId);
+    ExamResDTO getById(Long examId);
 
-    Exam createExam(Long moduleId, Exam exam);
+    ExamResDTO createExam(Long moduleId, ExamReqDTO examReqDTO);
 
-    Exam updateExam(Long examId, Exam exam);
+    ExamResDTO updateExam(Long examId, ExamReqDTO examReqDTO);
 
-    String deleteExam(Long examId);
+    MessageDTO deleteExam(Long examId);
+
+    List<ExamQuestion> getQuestionsByExamId(Long examId);
 }
