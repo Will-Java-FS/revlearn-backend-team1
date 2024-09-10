@@ -40,7 +40,7 @@ public class PageServiceImp implements PageService {
         //verify module is owned by requester or requester is an institution (admin) account
         Long requesterId = SecurityContextService.getUserId();
         Roles userRole = SecurityContextService.getUserRole();
-        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().anyMatch(e -> e.getId() == (requesterId))) {
+        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().noneMatch(e -> e.getId() == (requesterId))) {
             throw new UserNotAuthorizedException("User not authorized to create page for module.  Must be assigned educator, or institution (admin) account.");
         }
 
@@ -69,7 +69,7 @@ public class PageServiceImp implements PageService {
         //verify module is owned by requester or requester is an institution (admin) account
         Long requesterId = SecurityContextService.getUserId();
         Roles userRole = SecurityContextService.getUserRole();
-        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().anyMatch(e -> e.getId() == (requesterId))) {
+        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().noneMatch(e -> e.getId() == (requesterId))) {
             throw new UserNotAuthorizedException("User not authorized to update page for module.  Must be assigned educator, or institution (admin) account.");
         }
 
@@ -96,7 +96,7 @@ public class PageServiceImp implements PageService {
         //verify module is owned by requester or requester is an institution (admin) account
         Long requesterId = SecurityContextService.getUserId();
         Roles userRole = SecurityContextService.getUserRole();
-        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().anyMatch(e -> e.getId() == (requesterId))) {
+        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().noneMatch(e -> e.getId() == (requesterId))) {
             throw new UserNotAuthorizedException("User not authorized to delete page for module.  Must be assigned educator, or institution (admin) account.");
         }
 
