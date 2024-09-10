@@ -95,13 +95,26 @@ pipeline {
         stage('Deploy to Elastic Beanstalk') {
             steps {
                 script {
-                    echo 'Creating application version in Elastic Beanstalk...'
-                    withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
-                        sh '''
-                        aws elasticbeanstalk create-application-version --application-name "${BEANSTALK_APP_NAME}" \
-                        --version-label "v${BUILD_NUMBER}" \
-                        --source-bundle S3Bucket=${S3_BUCKET},S3Key=${JAR_NAME}
-                        '''
+                    def versionLabel = "v${BUILD_NUMBER}"
+                    def maxRetries = 10
+                    def retryInterval = 30 // seconds
+                    
+                    for (int i = 0; i < maxRetries; i++) {
+                        def status = sh(script: "aws elasticbeanstalk describe-application-versions --application-name ${BEANSTALK_APP_NAME} --version-label ${versionLabel} --query 'ApplicationVersions[0].Status' --output text", returnStdout: true).trim()
+                        
+                        echo "Current status of application version ${versionLabel}: ${status}"
+                        
+                        if (status == "Processed") {
+                            echo "Application version ${versionLabel} is processed."
+                            break
+                        } else {
+                            echo "Waiting for application version ${versionLabel} to be processed..."
+                            sleep retryInterval
+                        }
+                    }
+                    
+                    if (status != "Processed") {
+                        error "Application version ${versionLabel} did not become processed after ${maxRetries} retries."
                     }
                 }
             }
