@@ -16,12 +16,12 @@
     "lastName": "Smith"
   },
   {
-    "username": "TestStudent",
-    "password": "password",
-    "email": "TestStudent@test.com",
-    "role": "STUDENT",
-    "firstName": "TestStudentFirst",
-    "lastName": "TestLastLast"
+    "username": "alexbrown789",
+    "password": "Br0wnieS3cure",
+    "email": "alex.brown@example.com",
+    "role": "INSTITUTION",
+    "firstName": "Alex",
+    "lastName": "Brown"
   },
   {
     "username": "michaeljohnson001",
@@ -32,12 +32,12 @@
     "lastName": "Johnson"
   },
   {
-    "username": "TestEducator",
-    "password": "password",
-    "email": "TestEducator@example.com",
+    "username": "emilydavis002",
+    "password": "D@v1sEmily",
+    "email": "emily.davis@example.com",
     "role": "EDUCATOR",
-    "firstName": "TestEducatorFirst",
-    "lastName": "TestEducatorLast"
+    "firstName": "Emily",
+    "lastName": "Davis"
   },
   {
     "username": "sarahwilson003",

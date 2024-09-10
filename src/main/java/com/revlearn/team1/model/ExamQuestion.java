@@ -1,6 +1,5 @@
 package com.revlearn.team1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,6 +21,5 @@ public class ExamQuestion {
 
     @ManyToOne
     @JoinColumn(name = "exam_id", nullable = false)
-    @JsonIgnore
     private Exam exam;
 }

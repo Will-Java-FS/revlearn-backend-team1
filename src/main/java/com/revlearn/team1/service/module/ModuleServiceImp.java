@@ -11,6 +11,7 @@ import com.revlearn.team1.mapper.ExamMapper;
 import com.revlearn.team1.mapper.ModuleMapper;
 import com.revlearn.team1.mapper.PageMapper;
 import com.revlearn.team1.model.Course;
+import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.Module;
 import com.revlearn.team1.repository.CourseRepo;
 import com.revlearn.team1.repository.ModuleRepo;

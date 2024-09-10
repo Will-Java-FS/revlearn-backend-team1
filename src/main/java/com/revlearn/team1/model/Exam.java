@@ -20,11 +20,9 @@ public class Exam {
     private String title;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<ExamQuestion> questions;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<ExamResult> examResults;
 
     private String description;
