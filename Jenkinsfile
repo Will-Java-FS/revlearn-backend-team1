@@ -130,12 +130,12 @@ pipeline {
                     aws elasticbeanstalk update-environment --environment-name "${BEANSTALK_ENV_NAME}" \
                     --application-name "${BEANSTALK_APP_NAME}" \
                     --option-settings file://<(echo '[{"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_URL", "Value": "'${JDBC_URL}'"},
-                                             {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_USERNAME", "Value": "'${DB_USERNAME}'"},
-                                             {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_PASSWORD", "Value": "'${DB_PASSWORD}'"},
-                                             {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "KAFKA_URL", "Value": "'${KAFKA_URL}'"},
-                                             {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SECRET_KEY", "Value": "'${SECRET_KEY}'"},
-                                             {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "STRIPE_API_KEY", "Value": "'${STRIPE_API_KEY}'"},
-                                             {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "CLIENT_URL", "Value": "'${FRONTEND_URL}'"}]')
+                                                        {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_USERNAME", "Value": "'${DB_USERNAME}'"},
+                                                        {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_PASSWORD", "Value": "'${DB_PASSWORD}'"},
+                                                        {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "KAFKA_URL", "Value": "'${KAFKA_URL}'"},
+                                                        {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SECRET_KEY", "Value": "'${SECRET_KEY}'"},
+                                                        {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "STRIPE_API_KEY", "Value": "'${STRIPE_API_KEY}'"},
+                                                        {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "CLIENT_URL", "Value": "'${FRONTEND_URL}'"}]')
                     '''
                 }
             }
