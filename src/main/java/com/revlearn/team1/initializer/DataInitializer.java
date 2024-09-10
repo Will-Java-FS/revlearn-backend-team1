@@ -59,6 +59,7 @@ public class DataInitializer implements ApplicationRunner {
         createInitialExams(loadJson("exams.json"), jwt);
         createInitialDiscussionBoards(loadJson("discussion-boards.json"), jwt);
         createInitialDiscussionPosts(loadJson("discussion-posts.json"), jwt);
+        createInitialQuestions(loadJson("questions.json"), jwt);
 //        TODO: Investigate current implementation of transactions.  It is not clear what is stored in database, now.
 //        createInitialTransactions(loadJson("transactions"));
 
@@ -78,6 +79,21 @@ public class DataInitializer implements ApplicationRunner {
 
 
         logger.info("Data initialization complete.");
+    }
+
+    private void createInitialQuestions(JsonNode jsonNode, String jwt) {
+        int examId = 1;
+        int questionCount = 0;
+        for(JsonNode questionNode : jsonNode) {
+            String requestUrl = apiUrl + "/question/exam/" + examId;
+            sendAdminRequest(requestUrl, HttpMethod.POST, questionNode, jwt);
+
+            questionCount++;
+            if(questionCount == 5) {
+                examId++;
+                questionCount = 0;
+            }
+        }
     }
 
     private void createInitialDiscussionPosts(JsonNode discussionPostsNode, String jwt) {

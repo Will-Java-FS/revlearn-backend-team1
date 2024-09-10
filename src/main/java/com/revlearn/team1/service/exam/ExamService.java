@@ -3,6 +3,7 @@ package com.revlearn.team1.service.exam;
 import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.exam.ExamReqDTO;
 import com.revlearn.team1.dto.exam.ExamResDTO;
+import com.revlearn.team1.dto.examquestion.ExamQuestionResDTO;
 import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.ExamQuestion;
 
@@ -17,5 +18,5 @@ public interface ExamService {
 
     MessageDTO deleteExam(Long examId);
 
-    List<ExamQuestion> getQuestionsByExamId(Long examId);
+    List<ExamQuestionResDTO> getQuestionsByExamId(Long examId);
 }
