@@ -94,13 +94,42 @@ pipeline {
 
         stage('Deploy to Elastic Beanstalk') {
             steps {
-                echo 'Deploying to Elastic Beanstalk...'
+                script {
+                    echo 'Creating application version in Elastic Beanstalk...'
+                    withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
+                        sh '''
+                        aws elasticbeanstalk create-application-version --application-name "${BEANSTALK_APP_NAME}" \
+                        --version-label "v${BUILD_NUMBER}" \
+                        --source-bundle S3Bucket=${S3_BUCKET},S3Key=${JAR_NAME}
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Wait for Application Version') {
+            steps {
+                script {
+                    def isReady = false
+                    while (!isReady) {
+                        sleep(time: 30, unit: 'SECONDS') // Wait 30 seconds before checking again
+                        def status = sh(script: 'aws elasticbeanstalk describe-application-versions --application-name "${BEANSTALK_APP_NAME}" --version-labels v${BUILD_NUMBER} --query "ApplicationVersions[0].Status" --output text', returnStdout: true).trim()
+                        if (status == 'READY') {
+                            isReady = true
+                            echo "Application version v${BUILD_NUMBER} is now ready."
+                        } else {
+                            echo "Current status of application version v${BUILD_NUMBER}: ${status}. Waiting for it to be ready..."
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Update Elastic Beanstalk Environment') {
+            steps {
+                echo 'Updating Elastic Beanstalk environment...'
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
                     sh '''
-                    aws elasticbeanstalk create-application-version --application-name "${BEANSTALK_APP_NAME}" \
-                    --version-label "v${BUILD_NUMBER}" \
-                    --source-bundle S3Bucket=${S3_BUCKET},S3Key=${JAR_NAME}
-
                     aws elasticbeanstalk update-environment --application-name "${BEANSTALK_APP_NAME}" \
                     --environment-name "${BEANSTALK_ENV_NAME}" \
                     --version-label "v${BUILD_NUMBER}"
