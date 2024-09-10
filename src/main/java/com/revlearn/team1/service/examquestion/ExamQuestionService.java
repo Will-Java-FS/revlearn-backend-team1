@@ -1,6 +1,6 @@
 package com.revlearn.team1.service.examquestion;
 
-import com.revlearn.team1.controller.ExamQuestionReqDTO;
+import com.revlearn.team1.dto.examquestion.ExamQuestionReqDTO;
 import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.examquestion.ExamQuestionResDTO;
 

@@ -1,6 +1,7 @@
 package com.revlearn.team1.controller;
 
 import com.revlearn.team1.dto.MessageDTO;
+import com.revlearn.team1.dto.examquestion.ExamQuestionReqDTO;
 import com.revlearn.team1.dto.examquestion.ExamQuestionResDTO;
 import com.revlearn.team1.service.examquestion.ExamQuestionService;
 import lombok.RequiredArgsConstructor;

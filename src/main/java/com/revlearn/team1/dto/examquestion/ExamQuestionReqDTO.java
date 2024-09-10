@@ -1,4 +1,4 @@
-package com.revlearn.team1.controller;
+package com.revlearn.team1.dto.examquestion;
 
 import java.util.List;
 
