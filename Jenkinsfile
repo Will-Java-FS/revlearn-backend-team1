@@ -13,6 +13,7 @@ pipeline {
         DB_PORT = '5432'
         DB_NAME = 'revlearn'
         KAFKA_PORT = '9093'
+        SPRING_PORT = '8080'
     }
 
     tools {
@@ -144,7 +145,8 @@ pipeline {
                                                  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SECRET_KEY", "Value": "'${SECRET_KEY}'"},
                                                  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "STRIPE_API_KEY", "Value": "'${STRIPE_API_KEY}'"},
                                                  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "CLIENT_URL", "Value": "'${FRONTEND_URL}'"},
-                                                 {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_API_URL", "Value": "'${BACKEND_URL}'"}]')
+                                                 {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_API_URL", "Value": "'${BACKEND_URL}'"},
+                                                 {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "PORT", "Value": "'${SPRING_PORT}'"}]')
                     '''
                 }
             }
