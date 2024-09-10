@@ -3,16 +3,14 @@ package com.revlearn.team1.service.page;
 import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.page.PageReqDTO;
 import com.revlearn.team1.dto.page.PageResDTO;
-import com.revlearn.team1.enums.Roles;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.exceptions.PageNotFoundException;
-import com.revlearn.team1.exceptions.UserNotAuthorizedException;
 import com.revlearn.team1.mapper.PageMapper;
 import com.revlearn.team1.model.Module;
 import com.revlearn.team1.model.Page;
 import com.revlearn.team1.repository.ModuleRepo;
 import com.revlearn.team1.repository.PageRepo;
-import com.revlearn.team1.service.securityContext.SecurityContextService;
+import com.revlearn.team1.service.accessControl.AccessControlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +20,7 @@ public class PageServiceImp implements PageService {
     private final PageRepo pageRepo;
     private final ModuleRepo moduleRepo;
     private final PageMapper pageMapper;
+    private final AccessControlService accessControlService;
 
     @Override
     public PageResDTO getPageById(Long pageId) {
@@ -38,11 +37,7 @@ public class PageServiceImp implements PageService {
                 .orElseThrow(() -> new ModuleNotFoundException(moduleId));
 
         //verify module is owned by requester or requester is an institution (admin) account
-        Long requesterId = SecurityContextService.getUserId();
-        Roles userRole = SecurityContextService.getUserRole();
-        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().noneMatch(e -> e.getId() == (requesterId))) {
-            throw new UserNotAuthorizedException("User not authorized to create page for module.  Must be assigned educator, or institution (admin) account.");
-        }
+        accessControlService.verifyEducatorLevelAccess(module.getCourse());
 
         Page page = pageMapper.toPage(pageReqDTO);
         page.setPageNumber((long) module.getPages().size());
@@ -67,11 +62,7 @@ public class PageServiceImp implements PageService {
         Module module = existingPage.getModule();
 
         //verify module is owned by requester or requester is an institution (admin) account
-        Long requesterId = SecurityContextService.getUserId();
-        Roles userRole = SecurityContextService.getUserRole();
-        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().noneMatch(e -> e.getId() == (requesterId))) {
-            throw new UserNotAuthorizedException("User not authorized to update page for module.  Must be assigned educator, or institution (admin) account.");
-        }
+        accessControlService.verifyEducatorLevelAccess(module.getCourse());
 
         //update page
         existingPage.setTitle(pageReqDTO.title());
@@ -94,11 +85,7 @@ public class PageServiceImp implements PageService {
         Module module = existingPage.getModule();
 
         //verify module is owned by requester or requester is an institution (admin) account
-        Long requesterId = SecurityContextService.getUserId();
-        Roles userRole = SecurityContextService.getUserRole();
-        if (userRole != Roles.INSTITUTION && module.getCourse().getEducators().stream().noneMatch(e -> e.getId() == (requesterId))) {
-            throw new UserNotAuthorizedException("User not authorized to delete page for module.  Must be assigned educator, or institution (admin) account.");
-        }
+        accessControlService.verifyEducatorLevelAccess(module.getCourse());
 
         //delete page
         pageRepo.delete(existingPage);
