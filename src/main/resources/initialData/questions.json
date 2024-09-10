@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is the capital of France?",
+    "options": ["Paris", "London", "Berlin", "Madrid"],
+    "answer": "Paris"
+  },
+  {
+    "question": "Which planet is known as the Red Planet?",
+    "options": ["Earth", "Mars", "Jupiter", "Venus"],
+    "answer": "Mars"
+  },
+  {
+    "question": "What is the largest mammal in the world?",
+    "options": ["Elephant", "Blue Whale", "Giraffe", "Shark"],
+    "answer": "Blue Whale"
+  },
+  {
+    "question": "Who wrote 'Romeo and Juliet'?",
+    "options": ["William Shakespeare", "Mark Twain", "J.K. Rowling", "Charles Dickens"],
+    "answer": "William Shakespeare"
+  },
+  {
+    "question": "What is the hardest natural substance on Earth?",
+    "options": ["Gold", "Iron", "Diamond", "Silver"],
+    "answer": "Diamond"
+  },
+  {
+    "question": "What is the chemical symbol for water?",
+    "options": ["H2O", "O2", "CO2", "N2O"],
+    "answer": "H2O"
+  },
+  {
+    "question": "Which ocean is the largest?",
+    "options": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+    "answer": "Pacific Ocean"
+  },
+  {
+    "question": "In which year did World War II end?",
+    "options": ["1939", "1945", "1918", "1965"],
+    "answer": "1945"
+  },
+  {
+    "question": "Who painted the Mona Lisa?",
+    "options": ["Leonardo da Vinci", "Pablo Picasso", "Vincent van Gogh", "Claude Monet"],
+    "answer": "Leonardo da Vinci"
+  },
+  {
+    "question": "Which gas do plants absorb from the atmosphere?",
+    "options": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Helium"],
+    "answer": "Carbon Dioxide"
+  },
+  {
+    "question": "Which country is the largest by area?",
+    "options": ["United States", "China", "Russia", "Canada"],
+    "answer": "Russia"
+  },
+  {
+    "question": "Who developed the theory of relativity?",
+    "options": ["Isaac Newton", "Albert Einstein", "Galileo Galilei", "Nikola Tesla"],
+    "answer": "Albert Einstein"
+  },
+  {
+    "question": "What is the capital of Japan?",
+    "options": ["Seoul", "Beijing", "Tokyo", "Bangkok"],
+    "answer": "Tokyo"
+  },
+  {
+    "question": "Which element has the atomic number 1?",
+    "options": ["Oxygen", "Hydrogen", "Carbon", "Helium"],
+    "answer": "Hydrogen"
+  },
+  {
+    "question": "Who was the first person to walk on the moon?",
+    "options": ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "Michael Collins"],
+    "answer": "Neil Armstrong"
+  },
+  {
+    "question": "What is the smallest prime number?",
+    "options": ["1", "2", "3", "5"],
+    "answer": "2"
+  },
+  {
+    "question": "Which city hosted the 2016 Summer Olympics?",
+    "options": ["Tokyo", "Rio de Janeiro", "London", "Beijing"],
+    "answer": "Rio de Janeiro"
+  },
+  {
+    "question": "What is the square root of 64?",
+    "options": ["6", "7", "8", "9"],
+    "answer": "8"
+  },
+  {
+    "question": "Which organ in the human body is responsible for pumping blood?",
+    "options": ["Liver", "Heart", "Kidney", "Brain"],
+    "answer": "Heart"
+  },
+  {
+    "question": "What is the freezing point of water in Celsius?",
+    "options": ["0°C", "32°C", "-10°C", "100°C"],
+    "answer": "0°C"
+  }
+]

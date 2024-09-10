@@ -3,6 +3,7 @@ package com.revlearn.team1.controller;
 import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.exam.ExamReqDTO;
 import com.revlearn.team1.dto.exam.ExamResDTO;
+import com.revlearn.team1.dto.examquestion.ExamQuestionResDTO;
 import com.revlearn.team1.model.Exam;
 import com.revlearn.team1.model.ExamQuestion;
 import com.revlearn.team1.service.exam.ExamService;
@@ -26,7 +27,7 @@ public class ExamController {
 
     @GetMapping("/{examId}/questions")
     @Operation(summary = "Get Questions of Exam", description = "", tags = { "exam" })
-    public List<ExamQuestion> getQuestionsByExamId(@PathVariable Long examId) {
+    public List<ExamQuestionResDTO> getQuestionsByExamId(@PathVariable Long examId) {
         return examService.getQuestionsByExamId(examId);
     }
 

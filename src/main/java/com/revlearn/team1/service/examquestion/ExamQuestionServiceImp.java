@@ -23,7 +23,11 @@ public class ExamQuestionServiceImp implements ExamQuestionService {
 
     @Override
     public ExamQuestionResDTO getById(Long questionId) {
-        return examQuestionRepo.findById(questionId).map(examQuestionMapper::toExamQuestionResDTO).orElse(null);
+        //Verify question exists
+        ExamQuestion examQuestion = examQuestionRepo.findById(questionId).orElseThrow(
+                () -> new QuestionNotFoundException(questionId));
+
+        return examQuestionMapper.toExamQuestionResDTO(examQuestion);
     }
 
     @Override

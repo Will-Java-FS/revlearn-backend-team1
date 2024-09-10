@@ -3,12 +3,13 @@ package com.revlearn.team1.service.exam;
 import com.revlearn.team1.dto.MessageDTO;
 import com.revlearn.team1.dto.exam.ExamReqDTO;
 import com.revlearn.team1.dto.exam.ExamResDTO;
+import com.revlearn.team1.dto.examquestion.ExamQuestionResDTO;
 import com.revlearn.team1.exceptions.ExamNotFoundException;
 import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.mapper.ExamMapper;
-import com.revlearn.team1.model.ExamQuestion;
-import com.revlearn.team1.model.Module;
+import com.revlearn.team1.mapper.ExamQuestionMapper;
 import com.revlearn.team1.model.Exam;
+import com.revlearn.team1.model.Module;
 import com.revlearn.team1.repository.ExamRepo;
 import com.revlearn.team1.repository.ModuleRepo;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ExamServiceImp implements ExamService {
     private final ExamRepo examRepo;
     private final ModuleRepo moduleRepo;
     private final ExamMapper examMapper;
+    private final ExamQuestionMapper examQuestionMapper;
 
     @Override
     public ExamResDTO getById(Long examId) {
@@ -87,7 +89,7 @@ public class ExamServiceImp implements ExamService {
     }
 
     @Override
-    public List<ExamQuestion> getQuestionsByExamId(Long examId) {
+    public List<ExamQuestionResDTO> getQuestionsByExamId(Long examId) {
         //TODO: Verify authenticated user is enrolled student, course owner, or admin account
         // TODO: Consider other restrictions on student access to questions like exam start time, end time, previous attempts, content completion, etc.
 
@@ -96,6 +98,7 @@ public class ExamServiceImp implements ExamService {
                 .orElseThrow(() -> new ExamNotFoundException(examId));
 
         //Return the questions
-        return exam.getQuestions();
+        return exam.getQuestions().stream().map(examQuestionMapper::toExamQuestionResDTO)
+                .toList();
     }
 }
