@@ -95,6 +95,21 @@ pipeline {
         stage('Deploy to Elastic Beanstalk') {
             steps {
                 script {
+                    echo 'Creating application version in Elastic Beanstalk...'
+                    withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
+                        sh '''
+                        aws elasticbeanstalk create-application-version --application-name "${BEANSTALK_APP_NAME}" \
+                        --version-label "v${BUILD_NUMBER}" \
+                        --source-bundle S3Bucket=${S3_BUCKET},S3Key=${JAR_NAME}
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Wait for Application Version') {
+            steps {
+                script {
                     def versionLabel = "v${BUILD_NUMBER}"
                     def maxRetries = 10
                     def retryInterval = 30 // seconds
@@ -115,24 +130,6 @@ pipeline {
                     
                     if (status != "Processed") {
                         error "Application version ${versionLabel} did not become processed after ${maxRetries} retries."
-                    }
-                }
-            }
-        }
-
-        stage('Wait for Application Version') {
-            steps {
-                script {
-                    def isReady = false
-                    while (!isReady) {
-                        sleep(time: 30, unit: 'SECONDS') // Wait 30 seconds before checking again
-                        def status = sh(script: 'aws elasticbeanstalk describe-application-versions --application-name "${BEANSTALK_APP_NAME}" --version-labels v${BUILD_NUMBER} --query "ApplicationVersions[0].Status" --output text', returnStdout: true).trim()
-                        if (status == 'READY') {
-                            isReady = true
-                            echo "Application version v${BUILD_NUMBER} is now ready."
-                        } else {
-                            echo "Current status of application version v${BUILD_NUMBER}: ${status}. Waiting for it to be ready..."
-                        }
                     }
                 }
             }
