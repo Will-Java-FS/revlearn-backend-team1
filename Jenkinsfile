@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-east-1'  // Adjust your region
-        GIT_CREDENTIALS = 'github-api-token' // Replace with the ID of your GitLab credentials in Jenkins
+        AWS_REGION = 'us-east-1'
+        GIT_CREDENTIALS = 'github-api-token'
         GIT_URL = 'https://github.com/Will-Java-FS/revlearn-backend-team1'
-        S3_BUCKET_PREFIX = 'elasticbeanstalk'  // Replace with your S3 bucket name
-        JAR_NAME = 'team1-0.0.1-SNAPSHOT.jar'  // This should align with the profile name
-        AWS_CREDENTIALS_ID = 'aws-credentials-id'  // The AWS credentials ID in Jenkins
+        S3_BUCKET_PREFIX = 'elasticbeanstalk'
+        JAR_NAME = 'team1-0.0.1-SNAPSHOT.jar'
+        AWS_CREDENTIALS_ID = 'aws-credentials-id'
         BEANSTALK_ENV_NAME = 'revlearn-springboot-env'
         BEANSTALK_APP_NAME = 'revlearn-springboot-app'
         DB_PORT = '5432'
@@ -18,6 +18,7 @@ pipeline {
     tools {
         maven 'maven'
     }
+
     triggers {
         githubPush()
     }
@@ -26,7 +27,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 script {
-                    // Checkout main repository
+                    // Checkout from GitHub
                     checkout([$class: 'GitSCM',
                             branches: [[name: 'develop']],
                             userRemoteConfigs: [[url: "${GIT_URL}", credentialsId: "${GIT_CREDENTIALS}"]]])
@@ -52,21 +53,37 @@ pipeline {
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
                     script {
                         // Fetch Kafka URL
-                        def kafkaUrl = sh(script: 'aws secretsmanager get-secret-value --secret-id revlearn/urls --query SecretString --output text | jq -r .kafka_url', returnStdout: true).trim()
-                        env.KAFKA_URL = kafkaUrl + ':' + KAFKA_PORT
+                        env.KAFKA_URL = sh(script: '''
+                            aws secretsmanager get-secret-value --secret-id revlearn/urls \
+                            --query SecretString --output text | jq -r .kafka_url
+                        ''', returnStdout: true).trim() + ":${KAFKA_PORT}"
 
-                        def dbUrl = sh(script: 'aws secretsmanager get-secret-value --secret-id revlearn/urls --query SecretString --output text | jq -r .rds_url', returnStdout: true).trim()
-                        env.DB_URL = dbUrl
+                        // Fetch Database URL and Credentials
+                        env.DB_URL = sh(script: '''
+                            aws secretsmanager get-secret-value --secret-id revlearn/urls \
+                            --query SecretString --output text | jq -r .rds_url
+                        ''', returnStdout: true).trim()
 
-                        // Construct JDBC URL
-                        def jdbcUrl = "jdbc:postgresql://${env.DB_URL}:${env.DB_PORT}/${env.DB_NAME}"
-                        env.JDBC_URL = jdbcUrl
-                        echo "JDBC URL: ${env.JDBC_URL}"
+                        env.JDBC_URL = "jdbc:postgresql://${DB_URL}:${DB_PORT}/${DB_NAME}"
 
-                        // Fetch DB credentials
-                        def dbCredentials = sh(script: 'aws secretsmanager get-secret-value --secret-id revlearn/db_creds --query SecretString --output text | jq -r .username,.password', returnStdout: true).trim().split('\n')
+                        def dbCredentials = sh(script: '''
+                            aws secretsmanager get-secret-value --secret-id revlearn/db_creds \
+                            --query SecretString --output text | jq -r '.username,.password'
+                        ''', returnStdout: true).trim().split('\n')
+
                         env.DB_USERNAME = dbCredentials[0]
                         env.DB_PASSWORD = dbCredentials[1]
+
+                        // Fetch application secrets (SECRET_KEY and STRIPE_API_KEY)
+                        env.SECRET_KEY = sh(script: '''
+                            aws secretsmanager get-secret-value --secret-id revlearn/spring_env \
+                            --query SecretString --output text | jq -r .secret_key
+                        ''', returnStdout: true).trim()
+
+                        env.STRIPE_API_KEY = sh(script: '''
+                            aws secretsmanager get-secret-value --secret-id revlearn/spring_env \
+                            --query SecretString --output text | jq -r .stripe_key
+                        ''', returnStdout: true).trim()
                     }
                 }
             }
@@ -75,8 +92,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project with production profile...'
-                sh 'mvn validate -Pprod'
-                sh 'mvn clean package -Pprod -DskipTests'  // Using the 'prod' profile
+                sh 'mvn clean package -Pprod -DskipTests'
             }
         }
 
@@ -84,7 +100,6 @@ pipeline {
             steps {
                 echo 'Uploading JAR to S3...'
                 script {
-                    // Check if the JAR file exists before attempting to upload
                     def jarFile = "target/${JAR_NAME}"
                     if (fileExists(jarFile)) {
                         echo "JAR file exists: ${jarFile}, proceeding with upload."
@@ -105,10 +120,12 @@ pipeline {
                     sh '''
                     aws elasticbeanstalk update-environment --environment-name "${BEANSTALK_ENV_NAME}" \
                     --application-name "${BEANSTALK_APP_NAME}" \
-                    --option-settings Namespace=aws:elasticbeanstalk:application:environment,OptionName=SPRING_DATASOURCE_URL,Value=${JDBC_URL} \
-                    Namespace=aws:elasticbeanstalk:application:environment,OptionName=SPRING_DATASOURCE_USERNAME,Value=${DB_USERNAME} \
-                    Namespace=aws:elasticbeanstalk:application:environment,OptionName=SPRING_DATASOURCE_PASSWORD,Value=${DB_PASSWORD} \
-                    Namespace=aws:elasticbeanstalk:application:environment,OptionName=KAFKA_URL,Value=${KAFKA_URL}
+                    --option-settings file://<(echo '[{"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_URL", "Value": "'${JDBC_URL}'"},
+                                                     {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_USERNAME", "Value": "'${DB_USERNAME}'"},
+                                                     {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_DATASOURCE_PASSWORD", "Value": "'${DB_PASSWORD}'"},
+                                                     {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "KAFKA_URL", "Value": "'${KAFKA_URL}'"},
+                                                     {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SECRET_KEY", "Value": "'${SECRET_KEY}'"},
+                                                     {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "STRIPE_API_KEY", "Value": "'${STRIPE_API_KEY}'"}]')
                     '''
                 }
             }
