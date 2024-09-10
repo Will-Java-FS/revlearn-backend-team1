@@ -65,6 +65,7 @@ pipeline {
                         ''', returnStdout: true).trim()
 
                         env.JDBC_URL = "jdbc:postgresql://${DB_URL}:${DB_PORT}/${DB_NAME}"
+                        echo "JDBC URL: ${env.JDBC_URL}"
 
                         def dbCredentials = sh(script: '''
                             aws secretsmanager get-secret-value --secret-id revlearn/db_creds \
