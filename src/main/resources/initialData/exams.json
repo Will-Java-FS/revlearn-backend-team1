@@ -1,0 +1,142 @@
+[
+  {
+    "title": "Introduction to Computer Science",
+    "description": "This exam covers the fundamental concepts of computer science, including algorithms, data structures, and problem-solving techniques.",
+    "instructions": "Read each question carefully. Answer all multiple-choice questions by selecting the best option. Short answer questions should be concise and relevant.",
+    "duration": 90,
+    "type": "mixed"
+  },
+  {
+    "title": "Advanced Mathematics",
+    "description": "The exam will test your knowledge of advanced calculus, linear algebra, and differential equations.",
+    "instructions": "You may use a calculator, but no other aids. Show your work for all short answer and fill-in-the-blank questions.",
+    "duration": 120,
+    "type": "short answer"
+  },
+  {
+    "title": "Data Structures and Algorithms",
+    "description": "This exam focuses on key data structures like arrays, linked lists, trees, and graph algorithms.",
+    "instructions": "Answer all questions to the best of your ability. Make sure to explain your reasoning for short answer and fill-in-the-blank questions.",
+    "duration": 100,
+    "type": "mixed"
+  },
+  {
+    "title": "Software Engineering",
+    "description": "The exam evaluates your understanding of software development life cycles, Agile methodologies, and design patterns.",
+    "instructions": "Answer all multiple-choice and short answer questions. The use of notes is not permitted.",
+    "duration": 75,
+    "type": "multiple choice"
+  },
+  {
+    "title": "Database Management Systems",
+    "description": "Test your knowledge of SQL, relational database design, and normalization in this comprehensive exam.",
+    "instructions": "Complete all questions. Write SQL queries for the fill-in-the-blank section. Diagrams may be used for certain questions.",
+    "duration": 90,
+    "type": "fill-in-blank"
+  },
+  {
+    "title": "Operating Systems",
+    "description": "This exam covers topics including process management, memory management, and file systems.",
+    "instructions": "Ensure you understand all questions before answering. For short answer questions, explain each concept clearly.",
+    "duration": 85,
+    "type": "short answer"
+  },
+  {
+    "title": "Introduction to Networking",
+    "description": "An exam on network protocols, IP addressing, and TCP/IP models.",
+    "instructions": "Answer all questions thoroughly. Multiple choice questions require only one correct answer.",
+    "duration": 60,
+    "type": "multiple choice"
+  },
+  {
+    "title": "Machine Learning",
+    "description": "This exam tests your understanding of supervised, unsupervised learning, and algorithms like regression and clustering.",
+    "instructions": "Please answer all questions carefully. Make sure your answers are supported with examples for short answer questions.",
+    "duration": 110,
+    "type": "mixed"
+  },
+  {
+    "title": "Introduction to AI",
+    "description": "This exam covers foundational concepts in Artificial Intelligence, including search algorithms and neural networks.",
+    "instructions": "Multiple choice and fill-in-the-blank questions must be completed within the time limit.",
+    "duration": 95,
+    "type": "fill-in-blank"
+  },
+  {
+    "title": "Cybersecurity Basics",
+    "description": "The exam covers key topics such as encryption, network security, and ethical hacking.",
+    "instructions": "No external references allowed. All answers should be concise, particularly for short answer questions.",
+    "duration": 70,
+    "type": "short answer"
+  },
+  {
+    "title": "Web Development",
+    "description": "Test your knowledge on HTML, CSS, JavaScript, and responsive web design in this exam.",
+    "instructions": "Read all questions carefully. Provide code snippets for the fill-in-the-blank section where required.",
+    "duration": 80,
+    "type": "mixed"
+  },
+  {
+    "title": "Cloud Computing Fundamentals",
+    "description": "This exam will cover cloud computing models such as IaaS, PaaS, and SaaS, and cloud security principles.",
+    "instructions": "Ensure you have reviewed all lessons on cloud models. Answer all multiple-choice and fill-in-the-blank questions.",
+    "duration": 65,
+    "type": "multiple choice"
+  },
+  {
+    "title": "Software Testing",
+    "description": "The exam focuses on unit testing, integration testing, and the use of automated testing tools.",
+    "instructions": "Answer each question to the best of your knowledge. Provide examples for short answer questions.",
+    "duration": 90,
+    "type": "short answer"
+  },
+  {
+    "title": "Mobile Application Development",
+    "description": "This exam will assess your knowledge of mobile development frameworks, native vs. hybrid apps, and UI/UX design.",
+    "instructions": "Code snippets are expected in the fill-in-the-blank section. Answer short answer questions clearly.",
+    "duration": 100,
+    "type": "mixed"
+  },
+  {
+    "title": "DevOps Fundamentals",
+    "description": "The exam covers continuous integration, continuous deployment, and automation in software development.",
+    "instructions": "Answer multiple-choice questions and provide concise answers for fill-in-the-blank questions.",
+    "duration": 90,
+    "type": "mixed"
+  },
+  {
+    "title": "Digital Marketing",
+    "description": "This exam tests your knowledge of SEO, content marketing, and social media strategies.",
+    "instructions": "Answer all questions completely. Ensure that your answers are practical and backed by examples where possible.",
+    "duration": 75,
+    "type": "multiple choice"
+  },
+  {
+    "title": "Data Science",
+    "description": "Test your knowledge of data science techniques, statistical analysis, and data visualization tools.",
+    "instructions": "Answer all questions, paying attention to the required format for short answer questions.",
+    "duration": 105,
+    "type": "short answer"
+  },
+  {
+    "title": "Blockchain Technology",
+    "description": "This exam covers blockchain basics, consensus mechanisms, and smart contracts.",
+    "instructions": "Read each question carefully and ensure thorough explanations for short answer questions.",
+    "duration": 90,
+    "type": "short answer"
+  },
+  {
+    "title": "Artificial Neural Networks",
+    "description": "The exam covers the theory and application of neural networks, including backpropagation and activation functions.",
+    "instructions": "Answer multiple-choice questions. For fill-in-the-blank questions, provide formulas where necessary.",
+    "duration": 110,
+    "type": "mixed"
+  },
+  {
+    "title": "Introduction to Statistics",
+    "description": "This exam covers basic statistical concepts such as probability, hypothesis testing, and regression analysis.",
+    "instructions": "Answer all multiple-choice questions and provide detailed solutions for short answer questions.",
+    "duration": 85,
+    "type": "short answer"
+  }
+]
