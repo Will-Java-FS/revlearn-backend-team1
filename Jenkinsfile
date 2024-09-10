@@ -5,7 +5,7 @@ pipeline {
         AWS_REGION = 'us-east-1'  // Adjust your region
         GIT_CREDENTIALS = 'github-api-token' // Replace with the ID of your GitLab credentials in Jenkins
         GIT_URL = 'https://github.com/Will-Java-FS/revlearn-backend-team1'
-        S3_BUCKET = 'revlearn-backend-beanstalk-bucket'  // Replace with your S3 bucket name
+        S3_BUCKET_PREFIX = 'elasticbeanstalk'  // Replace with your S3 bucket name
         JAR_NAME = 'team1-0.0.1-SNAPSHOT.jar'  // This should align with the profile name
         AWS_CREDENTIALS_ID = 'aws-credentials-id'  // The AWS credentials ID in Jenkins
         BEANSTALK_ENV_NAME = 'revlearn-springboot-env'
@@ -30,6 +30,18 @@ pipeline {
                     checkout([$class: 'GitSCM',
                             branches: [[name: 'develop']],
                             userRemoteConfigs: [[url: "${GIT_URL}", credentialsId: "${GIT_CREDENTIALS}"]]])
+                }
+            }
+        }
+
+        stage('Fetch Account ID') {
+            steps {
+                script {
+                    echo 'Fetching AWS Account ID...'
+                    def accountId = sh(script: 'aws sts get-caller-identity --query Account --output text', returnStdout: true).trim()
+                    env.ACCOUNT_ID = accountId
+                    env.S3_BUCKET_NAME = "${S3_BUCKET_PREFIX}-${AWS_REGION}-${ACCOUNT_ID}"
+                    echo "S3 Bucket Name: ${env.S3_BUCKET_NAME}"
                 }
             }
         }
@@ -71,7 +83,7 @@ pipeline {
             steps {
                 echo 'Uploading JAR to S3...'
                 withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
-                    sh 'aws s3 cp target/${JAR_NAME} s3://${S3_BUCKET}/ --region ${AWS_REGION}'
+                    sh 'aws s3 cp target/${JAR_NAME} s3://${S3_BUCKET_NAME}/ --region ${AWS_REGION}'
                 }
             }
         }
@@ -100,7 +112,7 @@ pipeline {
                         sh '''
                         aws elasticbeanstalk create-application-version --application-name "${BEANSTALK_APP_NAME}" \
                         --version-label "v${BUILD_NUMBER}" \
-                        --source-bundle S3Bucket=${S3_BUCKET},S3Key=${JAR_NAME}
+                        --source-bundle S3Bucket=${S3_BUCKET_NAME},S3Key=${JAR_NAME}
                         '''
                     }
                 }
