@@ -75,6 +75,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project with production profile...'
+                sh 'mvn validate -Pprod'
                 sh 'mvn clean package -Pprod -DskipTests'  // Using the 'prod' profile
             }
         }
