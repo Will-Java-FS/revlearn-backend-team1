@@ -15,6 +15,13 @@ pipeline {
         KAFKA_PORT = '9093'
     }
 
+    tools {
+        maven 'maven'
+    }
+    triggers {
+        githubPush()
+    }
+
     stages {
         stage('Checkout') {
             steps {
