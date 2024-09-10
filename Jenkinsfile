@@ -145,8 +145,7 @@ pipeline {
                                                  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SECRET_KEY", "Value": "'${SECRET_KEY}'"},
                                                  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "STRIPE_API_KEY", "Value": "'${STRIPE_API_KEY}'"},
                                                  {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "CLIENT_URL", "Value": "'${FRONTEND_URL}'"},
-                                                 {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_API_URL", "Value": "'${BACKEND_URL}'"},
-                                                 {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "PORT", "Value": "'${SPRING_PORT}'"}]')
+                                                 {"Namespace": "aws:elasticbeanstalk:application:environment", "OptionName": "SPRING_API_URL", "Value": "'${BACKEND_URL}'"}]')
                     '''
                 }
             }
