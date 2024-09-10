@@ -83,8 +83,17 @@ pipeline {
         stage('Upload to S3') {
             steps {
                 echo 'Uploading JAR to S3...'
-                withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
-                    sh 'aws s3 cp target/${JAR_NAME} s3://${S3_BUCKET_NAME}/ --region ${AWS_REGION}'
+                script {
+                    // Check if the JAR file exists before attempting to upload
+                    def jarFile = "target/${JAR_NAME}"
+                    if (fileExists(jarFile)) {
+                        echo "JAR file exists: ${jarFile}, proceeding with upload."
+                        withAWS(credentials: "${AWS_CREDENTIALS_ID}", region: "${AWS_REGION}") {
+                            sh "aws s3 cp ${jarFile} s3://${S3_BUCKET_NAME}/${JAR_NAME} --region ${AWS_REGION}"
+                        }
+                    } else {
+                        error "JAR file does not exist: ${jarFile}, aborting upload."
+                    }
                 }
             }
         }
@@ -115,34 +124,6 @@ pipeline {
                         --version-label "v${BUILD_NUMBER}" \
                         --source-bundle S3Bucket=${S3_BUCKET_NAME},S3Key=${JAR_NAME}
                         '''
-                    }
-                }
-            }
-        }
-
-        stage('Wait for Application Version') {
-            steps {
-                script {
-                    def versionLabel = "v${BUILD_NUMBER}"
-                    def maxRetries = 10
-                    def retryInterval = 30 // seconds
-                    
-                    for (int i = 0; i < maxRetries; i++) {
-                        def status = sh(script: "aws elasticbeanstalk describe-application-versions --application-name ${BEANSTALK_APP_NAME} --version-label ${versionLabel} --query 'ApplicationVersions[0].Status' --output text", returnStdout: true).trim()
-                        
-                        echo "Current status of application version ${versionLabel}: ${status}"
-                        
-                        if (status == "Processed") {
-                            echo "Application version ${versionLabel} is processed."
-                            break
-                        } else {
-                            echo "Waiting for application version ${versionLabel} to be processed..."
-                            sleep retryInterval
-                        }
-                    }
-                    
-                    if (status != "Processed") {
-                        error "Application version ${versionLabel} did not become processed after ${maxRetries} retries."
                     }
                 }
             }
