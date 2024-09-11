@@ -9,7 +9,7 @@ pipeline {
         AWS_CREDENTIALS_ID = 'aws-credentials-id'
         KAFKA_PORT = '9093'
         SPRING_PORT = '8080'
-        INIT_DATA = false
+        INIT_DATA = true
         DOCKER_IMAGE = 'revlearn-springboot'
         ECR_REPO = 'revlearn-springboot'
         SPRINGBOOT_TAG = 'springboot-ec2'
