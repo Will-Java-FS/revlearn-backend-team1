@@ -110,7 +110,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project with production profile...'
-                sh 'mvn clean package -Pprod -DskipTests'
+                sh 'mvn clean package -Pprod -DskipTests -Dspring.profiles.active=prod'
             }
         }
 
