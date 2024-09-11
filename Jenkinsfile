@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     checkout([$class: 'GitSCM',
-                            branches: [[name: 'develop']],
+                            branches: [[name: 'main']],
                             userRemoteConfigs: [[url: "${GIT_URL}", credentialsId: "${GIT_CREDENTIALS}"]]])
                 }
             }
