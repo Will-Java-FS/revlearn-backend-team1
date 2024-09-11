@@ -59,7 +59,7 @@ pipeline {
 
                     def secrets = readJSON(text: secretsJson)
 
-                    env.SPRING_API_URL = secrets.backend_url + '/api/v1'
+                    env.SPRING_API_URL = secrets.backend_url + ':8080/api/v1'
                     env.CLIENT_URL = secrets.frontend_url
                     env.KAFKA_BROKER = "${secrets.kafka_url}:${env.KAFKA_PORT}"
                     
