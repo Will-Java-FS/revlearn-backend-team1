@@ -19,6 +19,7 @@ pipeline {
 
     tools {
         maven 'maven'
+        dockerTool 'docker'
     }
 
     triggers {
@@ -50,6 +51,7 @@ pipeline {
                 }
             }
         }
+
         stage('Fetch Account ID') {
             steps {
                 script {
