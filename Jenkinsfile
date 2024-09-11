@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     checkout([$class: 'GitSCM',
-                            branches: [[name: 'develop']],
+                            branches: [[name: 'main']],
                             userRemoteConfigs: [[url: "${GIT_URL}", credentialsId: "${GIT_CREDENTIALS}"]]])
                 }
             }
@@ -191,7 +191,7 @@ pipeline {
                                 sudo docker stop ${env.DOCKER_IMAGE} || true
                                 sudo docker rm ${env.DOCKER_IMAGE} || true
                                 sudo docker run -d --name ${env.DOCKER_IMAGE} \\
-                                    -p ${env.SPRING_PORT}:8080 \\
+                                    -p 80:8080 \\
                                     -e SPRING_DATASOURCE_URL=${env.SPRING_DATASOURCE_URL} \\
                                     -e SPRING_DATASOURCE_USERNAME=${env.POSTGRES_USER} \\
                                     -e SPRING_DATASOURCE_PASSWORD=${env.POSTGRES_PASSWORD} \\
