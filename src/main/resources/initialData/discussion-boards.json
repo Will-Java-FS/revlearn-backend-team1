@@ -1,0 +1,62 @@
+[
+  {
+    "courseId": 1,
+    "userId": 3,
+    "discussionBoardTitle": "Introduction to Algorithms Discussion",
+    "discussionBoardDescription": "This board is dedicated to discussing concepts from the Introduction to Algorithms course, including sorting algorithms, searching techniques, and problem-solving strategies."
+  },
+  {
+    "courseId": 1,
+    "userId": 3,
+    "discussionBoardTitle": "Data Structures and Their Applications",
+    "discussionBoardDescription": "This discussion board is focused on the practical applications of various data structures such as arrays, linked lists, trees, and graphs."
+  },
+  {
+    "courseId": 1,
+    "userId": 3,
+    "discussionBoardTitle": "Understanding Object-Oriented Programming",
+    "discussionBoardDescription": "In this discussion, we'll explore key concepts of Object-Oriented Programming (OOP), such as inheritance, polymorphism, encapsulation, and abstraction."
+  },
+  {
+    "courseId": 1,
+    "userId": 3,
+    "discussionBoardTitle": "Introduction to Database Management Systems",
+    "discussionBoardDescription": "This board is dedicated to discussions about relational databases, SQL queries, and database design principles."
+  },
+  {
+    "courseId": 1,
+    "userId": 3,
+    "discussionBoardTitle": "Exploring Web Development Technologies",
+    "discussionBoardDescription": "Join the discussion to talk about HTML, CSS, JavaScript, and modern frameworks used in web development."
+  },
+  {
+    "courseId": 2,
+    "userId": 9,
+    "discussionBoardTitle": "Advanced Algorithms Discussion",
+    "discussionBoardDescription": "This board will focus on advanced algorithmic techniques such as dynamic programming, greedy algorithms, and graph algorithms."
+  },
+  {
+    "courseId": 2,
+    "userId": 9,
+    "discussionBoardTitle": "Recursion vs Iteration",
+    "discussionBoardDescription": "A discussion about the advantages and disadvantages of recursion and iteration in programming, and when to use each approach."
+  },
+  {
+    "courseId": 2,
+    "userId": 9,
+    "discussionBoardTitle": "Sorting Algorithms",
+    "discussionBoardDescription": "This board is dedicated to comparing different sorting algorithms like quicksort, mergesort, and bubble sort, discussing their time and space complexities."
+  },
+  {
+    "courseId": 2,
+    "userId": 9,
+    "discussionBoardTitle": "Graph Theory and Applications",
+    "discussionBoardDescription": "Join the discussion on graph theory, its algorithms, and how it is applied in real-world scenarios like networking and AI."
+  },
+  {
+    "courseId": 2,
+    "userId": 9,
+    "discussionBoardTitle": "Algorithm Complexity Analysis",
+    "discussionBoardDescription": "This board focuses on understanding Big-O, Big-Theta, and Big-Omega notations for analyzing the time and space complexity of algorithms."
+  }
+]

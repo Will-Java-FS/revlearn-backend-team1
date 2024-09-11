@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,9 +21,11 @@ public class Exam {
     private String title;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
-    private List<ExamQuestion> questions;
+    @JsonIgnore
+    private List<ExamQuestion> questions = new ArrayList<>();
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<ExamResult> examResults;
 
     private String description;

@@ -31,7 +31,9 @@ public class CorsConfig {
                 "http://api.revaturelearn.com", //This is just to query a development build from the production swagger ui
                 "https://api.revaturelearn.com",//This is just to query a development build from the production swagger ui
                 "http://revaturelearn.com",
-                "https://revaturelearn.com");
+                "https://revaturelearn.com",
+                "http://frontend.revaturelearn.com",
+                "https://frontend.revaturelearn.com");
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(allowedOrigins);
