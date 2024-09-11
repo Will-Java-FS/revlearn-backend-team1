@@ -200,7 +200,7 @@ pipeline {
                                     -e KAFKA_BROKER=${env.KAFKA_BROKER} \\
                                     -e STRIPE_API_KEY=${env.STRIPE_API_KEY} \\
                                     -e CLIENT_URL=${env.CLIENT_URL} \\
-                                    ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}:${env.BUILD_ID}
+                                    ${env.PUBLIC_ECR_REPO}:${env.BUILD_ID}
                                 EOF
                             """
                         }
