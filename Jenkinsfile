@@ -49,12 +49,6 @@ pipeline {
                 script {
                     def dockerImage = "${DOCKER_IMAGE}:${env.BUILD_ID}"
                     echo "Building Docker image: ${dockerImage}"
-
-                    // Print Docker version and info
-                    sh 'docker --version'
-                    sh 'docker info'
-
-                    // Build Docker image using sh step as an alternative
                     sh """
                     docker build -t ${dockerImage} .
                     """
@@ -75,8 +69,12 @@ pipeline {
         stage('Push Docker Image to ECR') {
             steps {
                 withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS_ID}") {
+                    // Fetch ECR login password
+                    def loginPassword = sh(script: 'aws ecr get-login-password --region ${AWS_REGION}', returnStdout: true).trim()
+
+                    // Login to ECR
                     sh """
-                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+                        echo ${loginPassword} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
                         docker tag ${DOCKER_IMAGE}:${env.BUILD_ID} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${env.BUILD_ID}
                         docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${env.BUILD_ID}
                     """
