@@ -161,7 +161,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to EC2') {
+       stage('Deploy to EC2') {
             steps {
                 script {
                     echo 'Deploying Docker container to EC2 instance...'
@@ -183,21 +183,20 @@ pipeline {
                         ]) {
                             sh """
                                 ssh -i ${env.PEM_FILE_PATH} ec2-user@${env.SPRING_BOOT_PUBLIC_DNS} << 'EOF'
-                                $(aws ecr get-login-password --region ${env.AWS_REGION} | docker login --username AWS --password-stdin ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com)
                                 sudo docker pull ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}:${env.BUILD_ID}
                                 sudo docker stop ${env.DOCKER_IMAGE} || true
                                 sudo docker rm ${env.DOCKER_IMAGE} || true
-                                sudo docker run -d --name ${env.DOCKER_IMAGE} \
-                                    -p ${env.SPRING_PORT}:8080 \
-                                    -e SPRING_DATASOURCE_URL=${env.SPRING_DATASOURCE_URL} \
-                                    -e SPRING_DATASOURCE_USERNAME=${env.POSTGRES_USER} \
-                                    -e SPRING_DATASOURCE_PASSWORD=${env.POSTGRES_PASSWORD} \
-                                    -e SPRING_API_URL=${env.SPRING_API_URL} \
-                                    -e SECRET_KEY=${env.SECRET_KEY} \
-                                    -e INIT_DATA=${env.INIT_DATA} \
-                                    -e KAFKA_BROKER=${env.KAFKA_BROKER} \
-                                    -e STRIPE_API_KEY=${env.STRIPE_API_KEY} \
-                                    -e CLIENT_URL=${env.CLIENT_URL} \
+                                sudo docker run -d --name ${env.DOCKER_IMAGE} \\
+                                    -p ${env.SPRING_PORT}:8080 \\
+                                    -e SPRING_DATASOURCE_URL=${env.SPRING_DATASOURCE_URL} \\
+                                    -e SPRING_DATASOURCE_USERNAME=${env.POSTGRES_USER} \\
+                                    -e SPRING_DATASOURCE_PASSWORD=${env.POSTGRES_PASSWORD} \\
+                                    -e SPRING_API_URL=${env.SPRING_API_URL} \\
+                                    -e SECRET_KEY=${env.SECRET_KEY} \\
+                                    -e INIT_DATA=${env.INIT_DATA} \\
+                                    -e KAFKA_BROKER=${env.KAFKA_BROKER} \\
+                                    -e STRIPE_API_KEY=${env.STRIPE_API_KEY} \\
+                                    -e CLIENT_URL=${env.CLIENT_URL} \\
                                     ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}:${env.BUILD_ID}
                                 EOF
                             """
