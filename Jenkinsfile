@@ -168,6 +168,7 @@ pipeline {
                         ]) {
                             sh """
                                 ssh -i ${env.PEM_FILE_PATH} ec2-user@${env.SPRING_BOOT_PUBLIC_DNS} << 'EOF'
+                                aws ecr get-login-password --region ${env.AWS_REGION} | docker login --username AWS --password-stdin ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com
                                 sudo docker pull ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}:${env.BUILD_ID}
                                 sudo docker stop ${env.DOCKER_IMAGE} || true
                                 sudo docker rm ${env.DOCKER_IMAGE} || true
