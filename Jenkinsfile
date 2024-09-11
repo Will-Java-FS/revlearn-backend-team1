@@ -184,8 +184,9 @@ pipeline {
                             "STRIPE_API_KEY=${env.STRIPE_API_KEY}",
                             "CLIENT_URL=${env.CLIENT_URL}"
                         ]) {
-                            sh """
-                                ssh -i ${env.PEM_FILE_PATH} ec2-user@${env.SPRING_BOOT_PUBLIC_DNS} << 'EOF'
+                            // Create a temporary script file with deployment commands
+                            writeFile file: 'deploy.sh', text: """
+                                #!/bin/bash
                                 sudo docker pull ${env.PUBLIC_ECR_REPO}:${env.BUILD_ID}
                                 sudo docker stop ${env.DOCKER_IMAGE} || true
                                 sudo docker rm ${env.DOCKER_IMAGE} || true
@@ -201,7 +202,12 @@ pipeline {
                                     -e STRIPE_API_KEY=${env.STRIPE_API_KEY} \\
                                     -e CLIENT_URL=${env.CLIENT_URL} \\
                                     ${env.PUBLIC_ECR_REPO}:${env.BUILD_ID}
-                                EOF
+                            """
+
+                            // Transfer the script to the EC2 instance and execute it
+                            sh """
+                                scp -i ${env.PEM_FILE_PATH} deploy.sh ec2-user@${env.SPRING_BOOT_PUBLIC_DNS}:/home/ec2-user/deploy.sh
+                                ssh -i ${env.PEM_FILE_PATH} ec2-user@${env.SPRING_BOOT_PUBLIC_DNS} 'bash /home/ec2-user/deploy.sh'
                             """
                         }
                     }
