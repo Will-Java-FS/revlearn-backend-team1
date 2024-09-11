@@ -6,7 +6,7 @@ public record ExamQuestionResDTO(
     Long id,
     String question,
     List<String> options,
-    Long answer,
+    String answer,
     Long examId
 ) {
 }

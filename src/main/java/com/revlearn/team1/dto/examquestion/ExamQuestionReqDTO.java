@@ -5,6 +5,6 @@ import java.util.List;
 public record ExamQuestionReqDTO(
     String question,
     List<String> options,
-    Long answer
+    String answer
 ) {
 }

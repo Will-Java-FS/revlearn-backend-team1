@@ -18,7 +18,7 @@ public class ExamQuestion {
 
     private List<String> options;
 
-    private Long answer;
+    private String answer;
 
     @ManyToOne
     @JoinColumn(name = "exam_id", nullable = false)
