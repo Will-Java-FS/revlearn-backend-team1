@@ -186,7 +186,7 @@ pipeline {
                         ]) {
                             sh """
                                 ssh -i ${env.PEM_FILE_PATH} ec2-user@${env.SPRING_BOOT_PUBLIC_DNS} << 'EOF'
-                                sudo docker pull public.ecr.aws/${env.PUBLIC_ECR_REPO}:${env.BUILD_ID}
+                                sudo docker pull ${env.PUBLIC_ECR_REPO}:${env.BUILD_ID}
                                 sudo docker stop ${env.DOCKER_IMAGE} || true
                                 sudo docker rm ${env.DOCKER_IMAGE} || true
                                 sudo docker run -d --name ${env.DOCKER_IMAGE} \\
