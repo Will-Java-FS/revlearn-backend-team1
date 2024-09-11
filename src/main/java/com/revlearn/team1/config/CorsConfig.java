@@ -34,7 +34,7 @@ public class CorsConfig {
                 "https://revaturelearn.com",
                 "http://frontend.revaturelearn.com",
                 "http://frontend.revaturelearn.com.s3-website-us-east-1.amazonaws.com",
-                        "https://frontend.revaturelearn.com");
+                "https://frontend.revaturelearn.com");
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(allowedOrigins);
