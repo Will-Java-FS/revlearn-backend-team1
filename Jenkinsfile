@@ -151,26 +151,41 @@ pipeline {
                 script {
                     echo 'Deploying Docker container to EC2 instance...'
                     withCredentials([file(credentialsId: 'springboot-pem', variable: 'PEM_FILE_PATH')]) {
-                        def sshCommand = """
-                            ssh -i ${PEM_FILE_PATH} ec2-user@${env.SPRING_BOOT_PUBLIC_DNS} << 'EOF'
-                            sudo docker pull ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${env.BUILD_ID}
-                            sudo docker stop ${DOCKER_IMAGE} || true
-                            sudo docker rm ${DOCKER_IMAGE} || true
-                            sudo docker run -d --name ${DOCKER_IMAGE} \\
-                                -p ${SPRING_PORT}:8080 \\
-                                -e SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL} \\
-                                -e SPRING_DATASOURCE_USERNAME=${POSTGRES_USER} \\
-                                -e SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD} \\
-                                -e SPRING_API_URL=${SPRING_API_URL} \\
-                                -e SECRET_KEY=${SECRET_KEY} \\
-                                -e INIT_DATA=${INIT_DATA} \\
-                                -e KAFKA_BROKER=${KAFKA_BROKER} \\
-                                -e STRIPE_API_KEY=${STRIPE_API_KEY} \\
-                                -e CLIENT_URL=${CLIENT_URL} \\
-                                ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${env.BUILD_ID}
-                            EOF
-                        """
-                        sh(script: sshCommand)
+                        // Add EC2 instance's SSH key to known hosts
+                        sh "ssh-keyscan -H ${env.SPRING_BOOT_PUBLIC_DNS} >> ~/.ssh/known_hosts"
+                        
+                        // Define environment variables securely
+                        withEnv([
+                            "SPRING_DATASOURCE_URL=${env.SPRING_DATASOURCE_URL}",
+                            "SPRING_DATASOURCE_USERNAME=${env.POSTGRES_USER}",
+                            "SPRING_DATASOURCE_PASSWORD=${env.POSTGRES_PASSWORD}",
+                            "SPRING_API_URL=${env.SPRING_API_URL}",
+                            "SECRET_KEY=${env.SECRET_KEY}",
+                            "INIT_DATA=${env.INIT_DATA}",
+                            "KAFKA_BROKER=${env.KAFKA_BROKER}",
+                            "STRIPE_API_KEY=${env.STRIPE_API_KEY}",
+                            "CLIENT_URL=${env.CLIENT_URL}"
+                        ]) {
+                            sh """
+                                ssh -i ${env.PEM_FILE_PATH} ec2-user@${env.SPRING_BOOT_PUBLIC_DNS} << 'EOF'
+                                sudo docker pull ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}:${env.BUILD_ID}
+                                sudo docker stop ${env.DOCKER_IMAGE} || true
+                                sudo docker rm ${env.DOCKER_IMAGE} || true
+                                sudo docker run -d --name ${env.DOCKER_IMAGE} \\
+                                    -p ${env.SPRING_PORT}:8080 \\
+                                    -e SPRING_DATASOURCE_URL=${env.SPRING_DATASOURCE_URL} \\
+                                    -e SPRING_DATASOURCE_USERNAME=${env.POSTGRES_USER} \\
+                                    -e SPRING_DATASOURCE_PASSWORD=${env.POSTGRES_PASSWORD} \\
+                                    -e SPRING_API_URL=${env.SPRING_API_URL} \\
+                                    -e SECRET_KEY=${env.SECRET_KEY} \\
+                                    -e INIT_DATA=${env.INIT_DATA} \\
+                                    -e KAFKA_BROKER=${env.KAFKA_BROKER} \\
+                                    -e STRIPE_API_KEY=${env.STRIPE_API_KEY} \\
+                                    -e CLIENT_URL=${env.CLIENT_URL} \\
+                                    ${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com/${env.ECR_REPO}:${env.BUILD_ID}
+                                EOF
+                            """
+                        }
                     }
                 }
             }
