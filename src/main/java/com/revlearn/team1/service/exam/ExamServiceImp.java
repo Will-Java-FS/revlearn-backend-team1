@@ -9,13 +9,16 @@ import com.revlearn.team1.exceptions.ModuleNotFoundException;
 import com.revlearn.team1.mapper.ExamMapper;
 import com.revlearn.team1.mapper.ExamQuestionMapper;
 import com.revlearn.team1.model.Exam;
+import com.revlearn.team1.model.ExamQuestion;
 import com.revlearn.team1.model.Module;
 import com.revlearn.team1.repository.ExamRepo;
 import com.revlearn.team1.repository.ModuleRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +50,13 @@ public class ExamServiceImp implements ExamService {
         //Set the module for the exam
         exam.setModule(module);
         module.getExams().add(exam);
+
+        //Add any questions to the exam
+        List<ExamQuestion> questions = Optional.ofNullable(examReqDTO.questions()).orElse(Collections.emptyList())
+                .stream()
+                .map(examQuestionMapper::toExamQuestion).peek(q->q.setExam(exam))
+                .toList();
+        exam.getQuestions().addAll(questions);
 
         //Save the exam
         Exam savedExam = examRepo.save(exam);
