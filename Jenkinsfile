@@ -117,13 +117,16 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image to ECR Public') {
+       stage('Push Docker Image to ECR Public') {
             steps {
                 script {
-                    // Replace the public registry URL and repository details as needed
+                    // Define public ECR repository URL and name
                     def publicEcrRegistryUrl = 'public.ecr.aws/e2q7w1u7'
                     def repositoryName = 'revlearn/springboot'
                     def imageTag = "${env.BUILD_ID}"
+
+                    // Set environment variable for the public ECR repository
+                    env.PUBLIC_ECR_REPO = "${publicEcrRegistryUrl}/${repositoryName}"
 
                     withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS_ID}") {
                         sh """
@@ -134,10 +137,10 @@ pipeline {
                             docker build -t ${repositoryName}:latest .
 
                             # Tag the Docker image
-                            docker tag ${repositoryName}:latest ${publicEcrRegistryUrl}/${repositoryName}:${imageTag}
+                            docker tag ${repositoryName}:latest ${PUBLIC_ECR_REPO}:${imageTag}
 
                             # Push the Docker image to the public ECR registry
-                            docker push ${publicEcrRegistryUrl}/${repositoryName}:${imageTag}
+                            docker push ${PUBLIC_ECR_REPO}:${imageTag}
                         """
                     }
                 }
