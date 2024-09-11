@@ -49,7 +49,15 @@ pipeline {
                 script {
                     def dockerImage = "${DOCKER_IMAGE}:${env.BUILD_ID}"
                     echo "Building Docker image: ${dockerImage}"
-                    docker.build(dockerImage)
+
+                    // Print Docker version and info
+                    sh 'docker --version'
+                    sh 'docker info'
+
+                    // Build Docker image using sh step as an alternative
+                    sh """
+                    docker build -t ${dockerImage} .
+                    """
                 }
             }
         }
