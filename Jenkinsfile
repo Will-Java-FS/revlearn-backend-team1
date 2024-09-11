@@ -117,14 +117,29 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image to ECR') {
+        stage('Push Docker Image to ECR Public') {
             steps {
-                withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS_ID}") {
-                    sh """
-                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-                        docker tag ${DOCKER_IMAGE}:${env.BUILD_ID} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${env.BUILD_ID}
-                        docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${env.BUILD_ID}
-                    """
+                script {
+                    // Replace the public registry URL and repository details as needed
+                    def publicEcrRegistryUrl = 'public.ecr.aws/e2q7w1u7'
+                    def repositoryName = 'revlearn/springboot'
+                    def imageTag = "${env.BUILD_ID}"
+
+                    withAWS(region: "${AWS_REGION}", credentials: "${AWS_CREDENTIALS_ID}") {
+                        sh """
+                            # Authenticate Docker to the public ECR registry
+                            aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${publicEcrRegistryUrl}
+
+                            # Build the Docker image
+                            docker build -t ${repositoryName}:latest .
+
+                            # Tag the Docker image
+                            docker tag ${repositoryName}:latest ${publicEcrRegistryUrl}/${repositoryName}:${imageTag}
+
+                            # Push the Docker image to the public ECR registry
+                            docker push ${publicEcrRegistryUrl}/${repositoryName}:${imageTag}
+                        """
+                    }
                 }
             }
         }
