@@ -48,7 +48,7 @@ public class StripeService {
             // Define PriceData with the product information
             var priceData = SessionCreateParams.LineItem.PriceData.builder()
                     .setCurrency("usd")
-                    .setUnitAmount(request.price())
+                    .setUnitAmount(request.price() * 100)
                     .setProductData(productData)
                     .build();
 
