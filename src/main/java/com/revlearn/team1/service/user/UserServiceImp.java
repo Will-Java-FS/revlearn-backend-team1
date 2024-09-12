@@ -93,7 +93,17 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Invalid username."));
+        try {
+            // Your logic to load user
+            Optional<User> user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new UsernameNotFoundException("User not found");
+            }
+            return user.get();
+        } catch (Exception e) {
+            // Handle specific exceptions or log them
+            throw new RuntimeException("General authentication error", e);
+        }
     }
 
     @Override

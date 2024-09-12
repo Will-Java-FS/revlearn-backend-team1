@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -102,6 +103,64 @@ public class UserControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value("Bearer " + token))
                 .andExpect(jsonPath("$.tokenType").value("Bearer"));
+    }
+
+    @Test
+    public void testLoginFailIncorrectUsername() throws Exception {
+        User user = createUser("username4");
+        String userJson = objectMapper.writeValueAsString(user);
+        String rawPassword = "password";
+
+        // Set up mock behavior
+        when(userService.loadUserByUsername(user.getUsername())).thenThrow(new UsernameNotFoundException("User not found"));
+
+        // Perform the test
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson));
+
+        // Assert
+        resultActions.andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Invalid username or password."));
+    }
+
+    @Test
+    public void testLoginFailIncorrectPassword() throws Exception {
+        User user = createUser("username4");
+        String userJson = objectMapper.writeValueAsString(user);
+        String rawPassword = "incorrect_password";
+
+        // Set up mock behavior
+        when(userService.loadUserByUsername(user.getUsername())).thenReturn(user);
+        when(passwordEncoder.matches(rawPassword, user.getPassword())).thenReturn(false);
+
+        // Perform the test
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson));
+
+        // Assert
+        resultActions.andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Invalid username or password."));
+    }
+
+    @Test
+    public void testLoginFailOtherIssues() throws Exception {
+        User user = createUser("username4");
+        String userJson = objectMapper.writeValueAsString(user);
+        String rawPassword = "password";
+
+        // Set up mock behavior
+        when(userService.loadUserByUsername(user.getUsername())).thenThrow(new RuntimeException("General authentication error"));
+
+        // Perform the test
+        ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson));
+
+        // Assert
+        resultActions.andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("An unexpected error occurred."));
     }
 
     @Test

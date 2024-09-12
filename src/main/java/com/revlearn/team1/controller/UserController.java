@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,21 +37,34 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public @ResponseBody ResponseEntity<Map<String, Object>> login(@RequestBody UserDTO user) {
-        UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
-        if (!(userDetails instanceof User u)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid username or password."));
-        }
+    public ResponseEntity<Map<String, Object>> login(@RequestBody User user) {
+        try {
+            UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
+            if (!(userDetails instanceof User u)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("message", "Invalid username or password."));
+            }
 
-        String encodedPassword = u.getPassword();
-        if (!passwordEncoder.matches(user.getPassword(), encodedPassword)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid username or password."));
+            String encodedPassword = u.getPassword();
+            if (!passwordEncoder.matches(user.getPassword(), encodedPassword)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("message", "Invalid username or password."));
+            }
+
+            String token = jwtUtil.generateToken(u);
+            Map<String, Object> response = new HashMap<>();
+            response.put("accessToken", "Bearer " + token);
+            response.put("tokenType", "Bearer");
+            return ResponseEntity.ok(response);
+
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid username or password."));
+        } catch (Exception e) {
+            // Catch other exceptions and return a generic error message
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "An unexpected error occurred."));
         }
-        String token = jwtUtil.generateToken(u);
-        Map<String, Object> response = new HashMap<>();
-        response.put("accessToken", "Bearer " + token);
-        response.put("tokenType", "Bearer");
-        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
